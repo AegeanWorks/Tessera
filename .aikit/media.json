@@ -1,0 +1,46 @@
+{
+  "schema": 1,
+  "name": "tessera",
+  "repo": "Tessera",
+  "has_ui": true,
+  "ui_kind": "web",
+  "palette": [
+    "#070b14",
+    "#22d3ee",
+    "#a78bfa",
+    "#f472b6"
+  ],
+  "motif": "mosaic",
+  "layout": "grid",
+  "assets": {
+    "logo": {
+      "path": "assets/logo.svg",
+      "status": "approved",
+      "commit": "",
+      "generated_at": "2026-10-29T21:15:08",
+      "review": {
+        "status": "approved",
+        "reviewer": "agent:kilo",
+        "method": "structural",
+        "notes": "SVG parses as XML; 1024x1024 square; names Tessera; no scripts, no external references; palette and four-tile mark match src/theme.css and the studio wordmark.",
+        "score": 8,
+        "reviewed_at": "2026-10-29T23:53:37"
+      }
+    },
+    "social_preview": {
+      "path": "assets/social-preview.svg",
+      "status": "approved",
+      "commit": "",
+      "generated_at": "2026-10-29T21:15:08",
+      "review": {
+        "status": "approved",
+        "reviewer": "agent:kilo",
+        "method": "structural",
+        "notes": "SVG parses as XML; 1280x640; names Tessera; no scripts, no external references; wording and palette mirror index.html and the README promise.",
+        "score": 8,
+        "reviewed_at": "2026-10-29T23:53:38"
+      }
+    }
+  },
+  "screenshots": []
+}

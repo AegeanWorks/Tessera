@@ -1,0 +1,3 @@
+# Launchers keep the line endings their host shells expect.
+*.cmd text eol=crlf
+*.sh text eol=lf

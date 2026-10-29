@@ -1,0 +1,17 @@
+{
+  "name": "tessera",
+  "version": "0.1.0",
+  "private": true,
+  "license": "SEE LICENSE IN LICENSE",
+  "type": "module",
+  "description": "A seamless pattern studio: compose geometric tiles in the browser and export crisp SVG.",
+  "scripts": {
+    "start": "node scripts/serve.mjs --open",
+    "test": "node --test tests",
+    "ui:snapshot": "node scripts/ui-inventory.mjs",
+    "verify:static": "node scripts/verify-static.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

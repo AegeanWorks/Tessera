@@ -17,5 +17,12 @@
   "gates": {},
   "ui_required": false,
   "mechanics_required": false,
-  "created": "2026-10-29"
+  "created": "2026-10-29",
+  "has_ui": true,
+  "ui_kind": "web",
+  "ui_evidence": [
+    "index.html"
+  ],
+  "ui_checked_at": "2026-10-30",
+  "ui_source": "manual"
 }
