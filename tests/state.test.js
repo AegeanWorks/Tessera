@@ -81,6 +81,15 @@ test("encodeState round-trips through decodeSearch", () => {
   assert.equal(hasStateParams("?motif=wave"), true);
 });
 
+test("decodeSearch reports the raw patch so callers can layer it", () => {
+  const decoded = decodeSearch("?preset=sage-mosaic&guides=1&seed=42");
+  assert.equal(decoded.preset, "sage-mosaic");
+  assert.equal(decoded.hasState, true);
+  assert.deepEqual(decoded.patch, { guides: "1", seed: "42" });
+  assert.equal(decoded.state.motif, DEFAULTS.motif);
+  assert.equal(decoded.state.seed, 42);
+});
+
 test("every preset resolves to a valid state", () => {
   assert.ok(PRESETS.length >= 4);
   for (const preset of PRESETS) {

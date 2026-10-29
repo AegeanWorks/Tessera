@@ -360,12 +360,10 @@ function bindKeyboard() {
 
 function initialState() {
   const decoded = decodeSearch(window.location.search);
-  if (decoded.hasState) return decoded.state;
-  if (decoded.preset) {
-    const preset = presetState(decoded.preset);
-    if (preset) return preset;
-  }
-  return loadState(storage()) || normalizeState(DEFAULTS);
+  const preset = decoded.preset ? presetState(decoded.preset) : null;
+  const base = preset || loadState(storage()) || normalizeState(DEFAULTS);
+  if (decoded.hasState) return normalizeState({ ...base, ...decoded.patch });
+  return normalizeState(base);
 }
 
 function mount() {
