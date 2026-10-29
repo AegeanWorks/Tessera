@@ -1,0 +1,21 @@
+{
+  "schema": 1,
+  "name": "tessera",
+  "test_command": null,
+  "topics": [
+    "aikit",
+    "aikit-integrated",
+    "source-available",
+    "aegean-license",
+    "commercial-license",
+    "design-tool",
+    "generative-art",
+    "svg",
+    "zero-dependency",
+    "creative-coding"
+  ],
+  "gates": {},
+  "ui_required": false,
+  "mechanics_required": false,
+  "created": "2026-10-29"
+}
