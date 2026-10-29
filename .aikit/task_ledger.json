@@ -3,12 +3,13 @@
   "active_task": {
     "task_id": "tessera-v1",
     "last_phase": "phase 4",
-    "active_phase": 4,
-    "status": "in_progress",
+    "active_phase": 5,
+    "status": "completed",
     "updated_at": 1793310924.456921,
     "owner": "kilo:tessera",
     "started_by": "kilo:tessera",
-    "continuations": []
+    "continuations": [],
+    "completed_at": 1793315005.2572358
   },
   "checkpoints": [
     {
@@ -61,6 +62,16 @@
         "open": "AegeanWorks Live catalog validates AGL-1.1 only, Tessera is AL-1.1",
         "evidence": "npm test 74 pass, aikit check 4/4, matrix 108/108, site validate_source reports only the AGL-1.1 header mismatch."
       }
+    },
+    {
+      "task_id": "tessera-v1",
+      "phase": "completed",
+      "phase_num": 5,
+      "description": "Task 'tessera-v1' completed successfully.",
+      "status": "completed",
+      "timestamp": 1793315005.2572374,
+      "timestamp_str": "2026-10-30 02:03:25",
+      "agent": "kilo:tessera"
     }
   ]
 }
