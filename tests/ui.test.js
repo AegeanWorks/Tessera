@@ -53,6 +53,8 @@ test("every control in the markup is addressable and labelled", () => {
     "guides",
     "preset-list",
     "reset",
+    "png-size",
+    "export-png",
     "toast",
   ]) {
     assert.ok(html.includes(`id="${id}"`), `missing #${id}`);
@@ -60,6 +62,7 @@ test("every control in the markup is addressable and labelled", () => {
   for (const id of ["repeat", "weight", "warp"]) {
     assert.match(html, new RegExp(`<label class="range-row" for="${id}"`));
   }
+  assert.match(html, /<label class="select-label" for="png-size">/);
   assert.ok(html.includes("<output id=\"repeat-value\" for=\"repeat\">"));
   assert.ok(html.includes("<output id=\"weight-value\" for=\"weight\">"));
   assert.ok(html.includes("<output id=\"warp-value\" for=\"warp\">"));
@@ -96,11 +99,14 @@ test("the app imports only local studio modules", () => {
   assert.ok(app.includes("navigator.clipboard"));
   assert.ok(app.includes("URL.createObjectURL"));
   assert.ok(app.includes("localStorage"));
+  assert.ok(app.includes("svgToPng("));
+  assert.ok(app.includes("createImageBitmap"));
+  assert.ok(app.includes("renderExportSvg("));
 });
 
 test("keyboard shortcuts are wired without hijacking form fields", () => {
   const app = read("src/ui/app.js");
-  for (const key of ['key === "r"', 'key === "c"', 'key === "e"']) {
+  for (const key of ['key === "r"', 'key === "c"', 'key === "e"', 'key === "p"']) {
     assert.ok(app.includes(key));
   }
   assert.ok(app.includes("isContentEditable"));

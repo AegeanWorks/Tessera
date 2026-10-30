@@ -224,6 +224,7 @@ kbd {
 .motif-button:focus-visible,
 .palette-button:focus-visible,
 .preset-button:focus-visible,
+select:focus-visible,
 input:focus-visible {
   outline: 2px solid var(--focus);
   outline-offset: 2px;
@@ -700,6 +701,50 @@ input[type="range"]::-moz-range-thumb {
   text-transform: uppercase;
 }
 
+.select-field {
+  display: grid;
+  gap: 6px;
+}
+
+.select-label {
+  color: var(--text-soft);
+  font-size: 12px;
+}
+
+select {
+  width: 100%;
+  min-height: 38px;
+  padding: 0 10px;
+  border: 1px solid var(--line-strong);
+  border-radius: 10px;
+  color: var(--text);
+  background: var(--bg-raised);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  cursor: pointer;
+}
+
+select:hover {
+  border-color: var(--line-bright);
+}
+
+.export-png {
+  width: 100%;
+  margin-top: 12px;
+}
+
+.btn:disabled {
+  cursor: progress;
+  opacity: 0.55;
+}
+
+.control-note {
+  margin: 10px 0 0;
+  color: var(--muted-dim);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
 .footer {
   position: relative;
   z-index: 1;
@@ -806,10 +851,6 @@ input[type="range"]::-moz-range-thumb {
   .controls {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-
-  .control-block:last-child {
-    grid-column: 1 / -1;
-  }
 }
 
 @media (max-width: 640px) {
@@ -858,10 +899,6 @@ input[type="range"]::-moz-range-thumb {
 
   .controls {
     grid-template-columns: minmax(0, 1fr);
-  }
-
-  .control-block:last-child {
-    grid-column: auto;
   }
 
   .footer {

@@ -1,15 +1,15 @@
 {
   "version": 1,
   "active_task": {
-    "task_id": "tessera-v1",
+    "task_id": "tessera-png-export-v1",
     "last_phase": "phase 4",
     "active_phase": 5,
     "status": "completed",
-    "updated_at": 1793310924.456921,
-    "owner": "kilo:tessera",
-    "started_by": "kilo:tessera",
+    "updated_at": 1793344650.839873,
+    "owner": "opencode:tessera-png",
+    "started_by": "opencode:tessera-png",
     "continuations": [],
-    "completed_at": 1793315005.2572358
+    "completed_at": 1793344656.5745873
   },
   "checkpoints": [
     {
@@ -72,6 +72,50 @@
       "timestamp": 1793315005.2572374,
       "timestamp_str": "2026-10-30 02:03:25",
       "agent": "kilo:tessera"
+    },
+    {
+      "task_id": "tessera-png-export-v1",
+      "phase": "phase 2",
+      "phase_num": 2,
+      "description": "[1/3] Pure export-size table and PNG filename module; DOM-free raster orchestrator with injected canvas/image adapters; failing-first tests",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1793344174.5516639,
+      "timestamp_str": "2026-10-30 10:09:34",
+      "agent": "opencode:tessera-png",
+      "impact_assessment": {
+        "why": "Tessera can export only 1600x1067 SVG; a pattern studio needs wallpaper and phone PNGs without a screenshot tool, and users cannot use the exported art as a wallpaper today.",
+        "benefits": "One click produces a crisp PNG at a stated size from the same seamless tile; sizes and filenames are data, so the raster path is testable in Node and stays independent of DOM code.",
+        "risks": "contract: new studio/export.js and studio/raster.js modules plus a new sidebar control; dependency: none (Canvas/Blob browser APIs, no new packages); concurrency: none, read-only state; state: no change to the versioned localStorage record or URL schema.",
+        "mitigation": "Keep raster.js free of DOM globals by injecting createCanvas/loadImage from app.js; validate dimensions against a 16.7 MP ceiling; failing-first tests for sizes, naming, draw calls and failure paths; static contract stays green."
+      }
+    },
+    {
+      "task_id": "tessera-png-export-v1",
+      "phase": "phase 4",
+      "phase_num": 4,
+      "description": "[3/3] PNG export shipped: frozen wallpaper/Full HD/4K/phone/square size table, DOM-free raster orchestrator with injected canvas/image adapters, sidebar export block with P shortcut, README and ADR-006, v0.2.0. 85 Node tests in budget, 4/4 project gates, static contract; Edge headless produced 1080x1080 and 3840x2160 PNGs plus the createImageBitmap fallback with zero console errors; no overflow at 320/390/768/1024/1440/1920 and the 768px two-column grid pairs cleanly. checklists: passed",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1793344650.839873,
+      "timestamp_str": "2026-10-30 10:17:30",
+      "agent": "opencode:tessera-png",
+      "handoff": {
+        "state": "all 11 project files are uncommitted on master",
+        "next": "commit feat(studio): add PNG wallpaper export",
+        "open": "AegeanWorks Live will pick up 0.2.0 on its next sync",
+        "evidence": "node --test tests 85/85, aikit check tessera 4/4, verify:static OK, headless PNG matrix and responsive sweep"
+      }
+    },
+    {
+      "task_id": "tessera-png-export-v1",
+      "phase": "completed",
+      "phase_num": 5,
+      "description": "Task 'tessera-png-export-v1' completed successfully.",
+      "status": "completed",
+      "timestamp": 1793344656.5745888,
+      "timestamp_str": "2026-10-30 10:17:36",
+      "agent": "opencode:tessera-png"
     }
   ]
 }

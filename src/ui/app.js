@@ -1,6 +1,15 @@
 import { getMotif, motifList } from "../studio/motifs.js";
 import { paletteList, getPalette } from "../studio/palettes.js";
 import { createRandom } from "../studio/random.js";
+import { svgToPng } from "../studio/raster.js";
+import {
+  DEFAULT_EXPORT_SIZE,
+  EXPORT_SIZES,
+  describeExportSize,
+  exportSize,
+  pngName,
+  renderExportSvg,
+} from "../studio/export.js";
 import { renderSvg } from "../studio/svg.js";
 import {
   DEFAULTS,
@@ -33,10 +42,13 @@ const stageMotif = document.getElementById("stage-motif");
 const stagePalette = document.getElementById("stage-palette");
 const stageRepeat = document.getElementById("stage-repeat");
 const stageSeed = document.getElementById("stage-seed");
+const pngSizeInput = document.getElementById("png-size");
+const exportPngButton = document.getElementById("export-png");
 const toast = document.getElementById("toast");
 
 let state = normalizeState(DEFAULTS);
 let lastPalette = state.palette;
+let pngSize = DEFAULT_EXPORT_SIZE;
 let toastTimer = 0;
 
 function storage() {
@@ -175,6 +187,21 @@ function buildPresetButtons() {
   }
 }
 
+function buildPngSizes() {
+  if (!pngSizeInput) return;
+  pngSizeInput.replaceChildren();
+  for (const size of EXPORT_SIZES) {
+    const option = document.createElement("option");
+    option.value = size.id;
+    option.textContent = describeExportSize(size);
+    pngSizeInput.appendChild(option);
+  }
+  pngSizeInput.value = pngSize;
+  pngSizeInput.addEventListener("change", () => {
+    pngSize = exportSize(pngSizeInput.value).id;
+  });
+}
+
 function syncInputs() {
   if (repeatInput) repeatInput.value = String(state.repeat);
   if (weightInput) weightInput.value = String(state.weight);
@@ -290,6 +317,65 @@ function exportSvg() {
   announce(`Exported ${link.download}.`);
 }
 
+function createCanvas(width, height) {
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+  return canvas;
+}
+
+async function loadSvgImage(blob) {
+  if (typeof createImageBitmap === "function") {
+    try {
+      return await createImageBitmap(blob);
+    } catch {
+      // Some browsers cannot decode SVG through createImageBitmap; use an <img>.
+    }
+  }
+  const url = URL.createObjectURL(blob);
+  try {
+    return await new Promise((resolve, reject) => {
+      const image = new Image();
+      image.onload = () => resolve(image);
+      image.onerror = () => reject(new Error("The SVG could not be decoded."));
+      image.src = url;
+    });
+  } finally {
+    URL.revokeObjectURL(url);
+  }
+}
+
+async function exportPng() {
+  if (exportPngButton?.disabled) return;
+  const size = exportSize(pngSize);
+  if (exportPngButton) {
+    exportPngButton.disabled = true;
+    exportPngButton.setAttribute("aria-busy", "true");
+  }
+  announce(`Rendering ${size.label} PNG…`);
+  try {
+    const svg = renderExportSvg(state, size.id, { guides: state.guides });
+    const png = await svgToPng(svg, size, { createCanvas, loadImage: loadSvgImage });
+    const url = URL.createObjectURL(png);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = pngName(state, size.id);
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+    announce(`Exported ${link.download}.`);
+  } catch (error) {
+    announce("PNG export is unavailable in this browser.");
+    if (window.console) window.console.error(error);
+  } finally {
+    if (exportPngButton) {
+      exportPngButton.disabled = false;
+      exportPngButton.removeAttribute("aria-busy");
+    }
+  }
+}
+
 function bindRange(input, key) {
   if (!input) return;
   input.addEventListener("input", () => {
@@ -326,6 +412,7 @@ function bindActions() {
 
   copy?.addEventListener("click", copySvg);
   exportButton?.addEventListener("click", exportSvg);
+  exportPngButton?.addEventListener("click", exportPng);
 
   bindRange(repeatInput, "repeat");
   bindRange(weightInput, "weight");
@@ -354,6 +441,9 @@ function bindKeyboard() {
     } else if (key === "e") {
       event.preventDefault();
       exportSvg();
+    } else if (key === "p") {
+      event.preventDefault();
+      exportPng();
     }
   });
 }
@@ -372,6 +462,7 @@ function mount() {
   buildMotifButtons();
   buildPaletteButtons();
   buildPresetButtons();
+  buildPngSizes();
   bindActions();
   bindKeyboard();
   update({ persist: false, url: false });

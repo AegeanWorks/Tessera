@@ -6,7 +6,7 @@ A seamless pattern studio: compose geometric tiles in the browser and export cri
 
 ![Tessera social preview](assets/social-preview.svg)
 
-Tessera is a zero-dependency static studio. Six motifs and six palettes generate endless seamless tiles entirely in the browser: tune repeats, line weight and warp, reroll a seed, then export a clean, editable SVG or copy it to the clipboard. No uploads, no tracking and no network at runtime.
+Tessera is a zero-dependency static studio. Six motifs and six palettes generate endless seamless tiles entirely in the browser: tune repeats, line weight and warp, reroll a seed, then export a clean, editable SVG, copy it to the clipboard, or download a wallpaper-sized PNG. No uploads, no tracking and no network at runtime.
 
 ## ⚡ 30-Second Cold-Start Quick Reference
 
@@ -41,6 +41,8 @@ Tessera is a zero-dependency static studio. Six motifs and six palettes generate
 | Presets | Load a curated motif and palette pairing |
 | Randomize `R` | Jump to a new motif, palette and seed |
 | Copy SVG `C` / Export SVG `E` | Copy the SVG source, or download it as a `.svg` file |
+| PNG size | Pick Wallpaper (2560 × 1440), Full HD, 4K, Phone or Square |
+| Export PNG `P` | Rasterize the current look at the selected size as a `.png` file |
 
 ## What Is Tessera
 
@@ -55,7 +57,7 @@ Every pattern is one tile drawn in a `100 × 100` coordinate space and repeated 
 | Arcade | Concentric rings on a diamond lattice |
 | Mosaic | A seeded tessera field with visible grout |
 
-Each motif reads three arguments — a seeded random source, a line weight and a warp amount — and returns a list of primitive elements. Colors are palette *roles* (`ink`, `accent`, `highlight`, `paper`, `bg`), so a palette swap recolors props without touching geometry. Settings live in a single versioned localStorage record under `tessera.studio.v1`, mirrored in the URL query so a look can be shared or captured.
+Each motif reads three arguments — a seeded random source, a line weight and a warp amount — and returns a list of primitive elements. Colors are palette *roles* (`ink`, `accent`, `highlight`, `paper`, `bg`), so a palette swap recolors props without touching geometry. Settings live in a single versioned localStorage record under `tessera.studio.v1`, mirrored in the URL query so a look can be shared or captured. PNG export draws the same SVG into a canvas at a stated wallpaper, phone or square size; the SVG stays the editable master.
 
 ## What's Inside
 
@@ -82,9 +84,11 @@ tessera/
 │   └── verify-static.mjs      <- the static embed contract, shared with the tests
 ├── src/
 │   ├── studio/
+│   │   ├── export.js          <- PNG size table and export names
 │   │   ├── motifs.js          <- six pure motif builders
 │   │   ├── palettes.js        <- six palettes as color roles
 │   │   ├── random.js          <- seeded mulberry32 generator
+│   │   ├── raster.js          <- DOM-free SVG-to-PNG orchestration
 │   │   ├── state.js           <- normalization, presets, URL codec
 │   │   ├── storage.js         <- one versioned localStorage record
 │   │   └── svg.js             <- pattern and SVG serialization
@@ -94,9 +98,11 @@ tessera/
 │   ├── styles.css             <- layout and motion using theme tokens
 │   └── theme.css              <- the only file with raw color values
 └── tests/
+    ├── export.test.js         <- sizes, fallback and PNG names
     ├── motifs.test.js         <- determinism, roles, tile ratios
     ├── palettes.test.js       <- complete role sets and fallbacks
     ├── random.test.js         <- replay, divergence, bounds
+    ├── raster.test.js         <- draw calls, size budget, failure paths
     ├── server.test.js         <- path containment, launchers, browser launch
     ├── state.test.js          <- clamping, presets, URL round-trips
     ├── static.test.js         <- the embed contract against fixtures
@@ -112,6 +118,7 @@ tessera/
 - **Roles, not colors.** Geometry names `ink`, `accent` and `highlight`; `palettes.js` resolves them. A palette swap cannot leave a stray hard-coded color behind, and a test proves it.
 - **Versioned, bounded state.** `normalizeState` clamps every number, rejects unknown motifs and palettes, and accepts boolean spellings, so a hand-edited URL or an old record cannot break the studio.
 - **Static by construction.** There is no API, no build step and no external asset. `index.html` and `src/` are the complete deployment payload.
+- **Raster is a projection of the SVG.** PNG export renders the same `renderSvg` output through a canvas instead of keeping a second drawing path. `raster.js` stays DOM-free by receiving its canvas and image loader from `app.js`, so the size budget and draw calls are covered in Node.
 - **Token-only styling.** Raw colors live in `src/theme.css`; `src/styles.css` reads custom properties, and a test rejects hex literals outside the theme.
 
 ## Screenshot QA

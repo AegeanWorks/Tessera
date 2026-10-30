@@ -46,3 +46,10 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Context**: The website copy refuses builds that fetch from the network, escape their frame or reference files that were not copied. That contract previously lived only in the website's Python sync tool.
 - **Decision**: Mirror the contract in `scripts/verify-static.mjs`, expose it as `npm run verify:static`, and test it against fixture trees so the rules themselves are covered.
 - **Consequences**: The project can fail fast before a website sync runs, and the rules are documented where the studio lives. The two copies must stay aligned; a drift is a test failure on the website side.
+
+### ADR-006: PNG export rasterizes the same SVG through a canvas
+- **Date**: 2026-10-30
+- **Status**: Accepted
+- **Context**: SVG is the editable master, but wallpaper and phone use wants a raster file. A second renderer would duplicate motif logic and let the PNG drift from the stage.
+- **Decision**: `src/studio/export.js` holds the frozen size table and filename, while `src/studio/raster.js` orchestrates Blob → image → canvas → PNG with `createCanvas` and `loadImage` injected by `src/ui/app.js`. Dimensions are validated against a 16.7 MP ceiling, and the PNG comes from the same `renderSvg` output at the selected width and height.
+- **Consequences**: The raster path is testable in Node without a DOM, while the UI owns browser globals and the `createImageBitmap` → `<img>` fallback. Export sizes are data, not state; they do not enter the URL or localStorage record. Adding a size costs one frozen record and one test expectation.
