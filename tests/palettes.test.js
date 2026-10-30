@@ -34,3 +34,10 @@ test("paletteList mirrors the ids", () => {
   const ids = paletteList().map((palette) => palette.id);
   assert.deepEqual(ids, PALETTE_IDS);
 });
+
+test("terra and iris are part of the catalogue", () => {
+  assert.ok(PALETTE_IDS.includes("terra"));
+  assert.ok(PALETTE_IDS.includes("iris"));
+  assert.equal(PALETTES.terra.colors.ink, "#e07a5f");
+  assert.equal(PALETTES.iris.colors.ink, "#5eead4");
+});

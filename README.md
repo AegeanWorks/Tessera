@@ -6,7 +6,7 @@ A seamless pattern studio: compose geometric tiles in the browser and export cri
 
 ![Tessera social preview](assets/social-preview.svg)
 
-Tessera is a zero-dependency static studio. Six motifs and six palettes generate endless seamless tiles entirely in the browser: tune repeats, line weight and warp, rotate or mirror the tile, reroll a seed, save a few looks, then export a clean, editable SVG, copy it to the clipboard, download a wallpaper-sized PNG, or share the exact state as a link. No uploads, no tracking and no network at runtime.
+Tessera is a zero-dependency static studio. Eight motifs and eight palettes generate endless seamless tiles entirely in the browser: tune repeats, line weight and warp, rotate or mirror the tile, reroll a seed, save a few looks, then export a clean, editable SVG, copy it to the clipboard, download a wallpaper-sized PNG, or share the exact state as a link. No uploads, no tracking and no network at runtime.
 
 ## ⚡ 30-Second Cold-Start Quick Reference
 
@@ -33,8 +33,8 @@ Tessera is a zero-dependency static studio. Six motifs and six palettes generate
 
 | Input | Action |
 |---|---|
-| Motif tiles | Switch between Wave, Ridge, Comb, Pinwheel, Arcade and Mosaic |
-| Palettes | Recolor with Aegean, Kilim, Riso, Nocturne, Sage or Ember |
+| Motif tiles | Switch between Wave, Ridge, Comb, Pinwheel, Arcade, Mosaic, Loom and Drift |
+| Palettes | Recolor with Aegean, Kilim, Riso, Nocturne, Sage, Ember, Terra or Iris |
 | Repeat / Line weight / Warp | Reshape the tile density, stroke weight and curvature |
 | Rotate / Flip | Turn the tile by 90° steps or mirror it horizontally or vertically |
 | New seed | Reroll the generated variation without changing the motif |
@@ -60,6 +60,8 @@ Every pattern is one tile drawn in a `100 × 100` coordinate space and repeated 
 | Pinwheel | Four folded sails around a bright core |
 | Arcade | Concentric rings on a diamond lattice |
 | Mosaic | A seeded tessera field with visible grout |
+| Loom | A woven lattice of over-and-under bands |
+| Drift | Dotted currents on a sine field |
 
 Each motif reads three arguments — a seeded random source, a line weight and a warp amount — and returns a list of primitive elements. Colors are palette *roles* (`ink`, `accent`, `highlight`, `paper`, `bg`), so a palette swap recolors props without touching geometry. Settings live in a versioned localStorage record under `tessera.studio.v1`, mirrored in the URL query so a look can be shared or captured. Tile transforms rotate the geometry in 90° steps and mirror it inside the tile; rectangular motifs swap their repeat dimensions at 90° and 270°, so the pattern stays seamless. PNG export draws the same SVG into a canvas at a stated wallpaper, phone or square size; the SVG stays the editable master.
 
@@ -94,8 +96,8 @@ tessera/
 │   ├── studio/
 │   │   ├── export.js          <- PNG size table and export names
 │   │   ├── gallery.js         <- saved looks, signature ids and the 12 cap
-│   │   ├── motifs.js          <- six pure motif builders
-│   │   ├── palettes.js        <- six palettes as color roles
+│   │   ├── motifs.js          <- eight pure motif builders
+│   │   ├── palettes.js        <- eight palettes as color roles
 │   │   ├── random.js          <- seeded mulberry32 generator
 │   │   ├── raster.js          <- DOM-free SVG-to-PNG orchestration
 │   │   ├── state.js           <- normalization, presets, URL codec
@@ -144,6 +146,8 @@ The studio accepts its full state as a query string, so any configuration can be
 | `/?preset=riso-comb` | Honeycomb on warm paper |
 | `/?preset=nocturne-pinwheel` | Pinwheel in lavender and ice |
 | `/?preset=sage-mosaic` | Mosaic with visible grout |
+| `/?motif=loom&palette=terra` | Woven loom in clay and sage |
+| `/?motif=drift&palette=iris` | Dotted currents in teal and indigo |
 | `/?motif=mosaic&palette=kilim&repeat=8&warp=80&seed=123` | Any explicit combination |
 | `/?motif=comb&rotate=90&flip=x&seed=123` | A quarter-turned, mirrored comb |
 | `/?guides=1` | Tile guides overlay |

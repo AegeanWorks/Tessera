@@ -64,6 +64,13 @@ test("the comb keeps its flat-top honeycomb ratio", () => {
   assert.ok(Math.abs(comb.tile.height - (2 / Math.sqrt(3)) * comb.tile.width) < 0.001);
 });
 
+test("loom and drift are part of the catalogue", () => {
+  assert.ok(MOTIF_IDS.includes("loom"));
+  assert.ok(MOTIF_IDS.includes("drift"));
+  assert.equal(getMotif("loom").tile.width, 100);
+  assert.equal(getMotif("drift").tile.width, 100);
+});
+
 test("motifList mirrors the ids in order", () => {
   assert.deepEqual(
     motifList().map((motif) => motif.id),
