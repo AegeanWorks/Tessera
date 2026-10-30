@@ -60,3 +60,10 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Context**: The studio could keep only one state, so comparing candidates or returning to a look after a reload meant copying URLs by hand. The site must stay static, with no accounts and no network.
 - **Decision**: Store up to 12 looks in `tessera.gallery.v1`; each entry keeps only the visual fields (motif, palette, repeat, weight, warp, seed), uses the visual signature as its id, and is normalized on every read. `gallery.js` is pure, `storage.js` owns the versioned record, and the UI restores an entry while preserving the current guides/motion toggles. Share links continue to encode the full studio state in the URL.
 - **Consequences**: Duplicate saves collapse and the oldest look falls off at the cap. An unsupported or corrupt record is refused rather than migrated. The gallery adds one localStorage key and no dependency; its thumbnails use the same pure motif/SVG path as the stage.
+
+### ADR-008: Tile transforms rotate and mirror inside the pattern
+- **Date**: 2026-10-30
+- **Status**: Accepted
+- **Context**: Every motif always faced the same way. Transforming the stage or the exported canvas would crop the repeat, and a 90° turn of the rectangular Comb tile would break the pattern's dimensions.
+- **Decision**: Add `rotate` (0/90/180/270) and `flip` (none/x/y) to the state record and apply them inside the SVG `<pattern>` as a nested group. A 90° or 270° turn swaps the tile width and height before the repeat scale. Flips mirror in the final tile bounds; presets preserve the user's transform; the gallery signature and entry state include both fields.
+- **Consequences**: Every transform preserves seamlessness by construction, and rectangular motifs stay seamless after a quarter turn. Old records and URLs without the fields default to 0/none. Randomize can produce a transform, while seed and preset changes keep the current one.

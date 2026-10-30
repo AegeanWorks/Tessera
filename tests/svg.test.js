@@ -8,6 +8,7 @@ import {
   renderSvg,
 } from "../src/studio/svg.js";
 import { getPalette } from "../src/studio/palettes.js";
+import { MOTIF_IDS } from "../src/studio/motifs.js";
 import { normalizeState } from "../src/studio/state.js";
 
 const BASE = normalizeState({ motif: "wave", palette: "aegean", seed: 7 });
@@ -96,6 +97,51 @@ test("the repeat option sets the pattern tile width", () => {
   const svg = renderSvg(BASE, { width: 1000, height: 500, repeat: 5 });
   assert.ok(svg.includes('width="1000" height="500"'));
   assert.ok(svg.includes('patternUnits="userSpaceOnUse" width="200"'));
+});
+
+test("rotation turns the tile and swaps a rectangular motif", () => {
+  const square = renderSvg(normalizeState({ ...BASE, rotate: 90 }), { width: 1000, height: 500, repeat: 5 });
+  assert.ok(square.includes('patternUnits="userSpaceOnUse" width="200" height="200"'));
+  assert.ok(square.includes("translate(100 0) rotate(90)"));
+
+  const rectangular = renderSvg(normalizeState({ ...BASE, motif: "comb", rotate: 90 }), {
+    width: 1000,
+    height: 500,
+    repeat: 5,
+  });
+  assert.ok(rectangular.includes('patternUnits="userSpaceOnUse" width="200" height="173.205"'));
+  assert.ok(rectangular.includes("translate(103.923 0) rotate(90)"));
+
+  const half = renderSvg(normalizeState({ ...BASE, rotate: 180 }), { width: 1000, height: 500, repeat: 5 });
+  assert.ok(half.includes("translate(100 100) rotate(180)"));
+  const quarter = renderSvg(normalizeState({ ...BASE, rotate: 270 }), { width: 1000, height: 500, repeat: 5 });
+  assert.ok(quarter.includes("translate(0 100) rotate(270)"));
+});
+
+test("flip mirrors the tile inside its bounds", () => {
+  const horizontal = renderSvg(normalizeState({ ...BASE, flip: "x" }), { width: 1000, height: 500, repeat: 5 });
+  assert.ok(horizontal.includes("translate(100 0) scale(-1 1)"));
+  const vertical = renderSvg(normalizeState({ ...BASE, flip: "y" }), { width: 1000, height: 500, repeat: 5 });
+  assert.ok(vertical.includes("translate(0 100) scale(1 -1)"));
+});
+
+test("every motif, rotation and flip renders finite pattern geometry", () => {
+  for (const motif of MOTIF_IDS) {
+    for (const rotate of [0, 90, 180, 270]) {
+      for (const flip of ["none", "x", "y"]) {
+        const svg = renderSvg(normalizeState({ ...BASE, motif, rotate, flip }), {
+          width: 900,
+          height: 600,
+          repeat: 4,
+        });
+        const label = `${motif}/${rotate}/${flip}`;
+        assert.ok(svg.includes("<pattern "), label);
+        assert.ok(!svg.includes("NaN"), label);
+        assert.ok(!svg.includes("Infinity"), label);
+        assert.ok(!svg.includes("undefined"), label);
+      }
+    }
+  }
 });
 
 test("custom ids keep two renders on one page apart", () => {

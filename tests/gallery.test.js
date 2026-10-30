@@ -24,16 +24,19 @@ const LOOK = normalizeState({
   seed: 13,
 });
 
-test("a visual signature ignores guides and motion", () => {
+test("a visual signature ignores guides and motion but keeps transforms", () => {
   const one = normalizeState({ ...LOOK, guides: true, motion: true });
   const two = normalizeState({ ...LOOK, guides: false, motion: false });
   assert.equal(stateSignature(one), stateSignature(two));
   assert.notEqual(stateSignature(one), stateSignature({ ...LOOK, seed: 14 }));
   assert.notEqual(stateSignature(one), stateSignature({ ...LOOK, weight: 3 }));
+  assert.notEqual(stateSignature(one), stateSignature({ ...LOOK, rotate: 90 }));
+  assert.notEqual(stateSignature(one), stateSignature({ ...LOOK, flip: "x" }));
 });
 
-test("entryName names the palette, the motif and the seed", () => {
+test("entryName names the palette, the motif, the seed and any transform", () => {
   assert.equal(entryName(LOOK), "Sage Mosaic · seed 13");
+  assert.equal(entryName({ ...LOOK, rotate: 90, flip: "x" }), "Sage Mosaic · seed 13 · 90° X");
   assert.equal(entryName({ motif: "nope", palette: "nope", seed: 99999 }), "Aegean Wave · seed 9999");
 });
 
@@ -42,7 +45,16 @@ test("normalizeEntry keeps only visual state and freezes the record", () => {
   assert.equal(entry.id, stateSignature(LOOK));
   assert.equal(entry.name, "Sage Mosaic · seed 13");
   assert.equal(entry.savedAt, "2026-10-30T00:00:00.000Z");
-  assert.deepEqual(Object.keys(entry.state).sort(), ["motif", "palette", "repeat", "seed", "warp", "weight"]);
+  assert.deepEqual(Object.keys(entry.state).sort(), [
+    "flip",
+    "motif",
+    "palette",
+    "repeat",
+    "rotate",
+    "seed",
+    "warp",
+    "weight",
+  ]);
   assert.ok(Object.isFrozen(entry));
   assert.ok(Object.isFrozen(entry.state));
   assert.equal(normalizeEntry(null), null);
@@ -107,9 +119,14 @@ test("removeEntry drops one look and leaves the rest in order", () => {
 
 test("restoreEntry brings back the look and keeps the current toggles", () => {
   const current = normalizeState({ ...LOOK, motif: "comb", guides: true, motion: true });
-  const restored = restoreEntry(normalizeEntry({ state: { ...LOOK, seed: 42 } }), current);
+  const restored = restoreEntry(
+    normalizeEntry({ state: { ...LOOK, seed: 42, rotate: 90, flip: "y" } }),
+    current,
+  );
   assert.equal(restored.motif, "mosaic");
   assert.equal(restored.seed, 42);
+  assert.equal(restored.rotate, 90);
+  assert.equal(restored.flip, "y");
   assert.equal(restored.guides, true);
   assert.equal(restored.motion, true);
   assert.deepEqual(restoreEntry(null, current), current);

@@ -6,7 +6,7 @@ A seamless pattern studio: compose geometric tiles in the browser and export cri
 
 ![Tessera social preview](assets/social-preview.svg)
 
-Tessera is a zero-dependency static studio. Six motifs and six palettes generate endless seamless tiles entirely in the browser: tune repeats, line weight and warp, reroll a seed, save a few looks, then export a clean, editable SVG, copy it to the clipboard, download a wallpaper-sized PNG, or share the exact state as a link. No uploads, no tracking and no network at runtime.
+Tessera is a zero-dependency static studio. Six motifs and six palettes generate endless seamless tiles entirely in the browser: tune repeats, line weight and warp, rotate or mirror the tile, reroll a seed, save a few looks, then export a clean, editable SVG, copy it to the clipboard, download a wallpaper-sized PNG, or share the exact state as a link. No uploads, no tracking and no network at runtime.
 
 ## ⚡ 30-Second Cold-Start Quick Reference
 
@@ -36,6 +36,7 @@ Tessera is a zero-dependency static studio. Six motifs and six palettes generate
 | Motif tiles | Switch between Wave, Ridge, Comb, Pinwheel, Arcade and Mosaic |
 | Palettes | Recolor with Aegean, Kilim, Riso, Nocturne, Sage or Ember |
 | Repeat / Line weight / Warp | Reshape the tile density, stroke weight and curvature |
+| Rotate / Flip | Turn the tile by 90° steps or mirror it horizontally or vertically |
 | New seed | Reroll the generated variation without changing the motif |
 | Glow drift / Tile guides | Animate hue subtly, or overlay the repeating tile grid |
 | Presets | Load a curated motif and palette pairing |
@@ -60,7 +61,7 @@ Every pattern is one tile drawn in a `100 × 100` coordinate space and repeated 
 | Arcade | Concentric rings on a diamond lattice |
 | Mosaic | A seeded tessera field with visible grout |
 
-Each motif reads three arguments — a seeded random source, a line weight and a warp amount — and returns a list of primitive elements. Colors are palette *roles* (`ink`, `accent`, `highlight`, `paper`, `bg`), so a palette swap recolors props without touching geometry. Settings live in a versioned localStorage record under `tessera.studio.v1`, mirrored in the URL query so a look can be shared or captured. PNG export draws the same SVG into a canvas at a stated wallpaper, phone or square size; the SVG stays the editable master.
+Each motif reads three arguments — a seeded random source, a line weight and a warp amount — and returns a list of primitive elements. Colors are palette *roles* (`ink`, `accent`, `highlight`, `paper`, `bg`), so a palette swap recolors props without touching geometry. Settings live in a versioned localStorage record under `tessera.studio.v1`, mirrored in the URL query so a look can be shared or captured. Tile transforms rotate the geometry in 90° steps and mirror it inside the tile; rectangular motifs swap their repeat dimensions at 90° and 270°, so the pattern stays seamless. PNG export draws the same SVG into a canvas at a stated wallpaper, phone or square size; the SVG stays the editable master.
 
 ## Saved Looks
 
@@ -128,6 +129,7 @@ tessera/
 - **Versioned, bounded state.** `normalizeState` clamps every number, rejects unknown motifs and palettes, and accepts boolean spellings, so a hand-edited URL or an old record cannot break the studio.
 - **Static by construction.** There is no API, no build step and no external asset. `index.html` and `src/` are the complete deployment payload.
 - **Raster is a projection of the SVG.** PNG export renders the same `renderSvg` output through a canvas instead of keeping a second drawing path. `raster.js` stays DOM-free by receiving its canvas and image loader from `app.js`, so the size budget and draw calls are covered in Node.
+- **Transforms stay in tile space.** Rotate and flip are applied inside the `<pattern>` as a nested SVG group, after the motif is drawn but before the repeat scale. A 90° or 270° turn swaps the tile width and height, so rectangular motifs like Comb stay seamless instead of being cropped.
 - **The gallery is local and bounded.** `gallery.js` has no DOM or storage access: it normalizes entries, derives an id from the visual signature, collapses duplicates and caps the list at 12. `storage.js` owns the versioned record, and the UI only renders and restores. A corrupt or unsupported record is refused, never repaired in place.
 - **Token-only styling.** Raw colors live in `src/theme.css`; `src/styles.css` reads custom properties, and a test rejects hex literals outside the theme.
 
@@ -143,6 +145,7 @@ The studio accepts its full state as a query string, so any configuration can be
 | `/?preset=nocturne-pinwheel` | Pinwheel in lavender and ice |
 | `/?preset=sage-mosaic` | Mosaic with visible grout |
 | `/?motif=mosaic&palette=kilim&repeat=8&warp=80&seed=123` | Any explicit combination |
+| `/?motif=comb&rotate=90&flip=x&seed=123` | A quarter-turned, mirrored comb |
 | `/?guides=1` | Tile guides overlay |
 
 ## Verification

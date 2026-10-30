@@ -2,8 +2,10 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
   DEFAULTS,
+  FLIPS,
   LIMITS,
   PRESETS,
+  ROTATIONS,
   applyPreset,
   decodeSearch,
   describeState,
@@ -61,6 +63,18 @@ test("normalizeState accepts boolean spellings", () => {
   assert.equal(normalizeState({ guides: "maybe" }).guides, DEFAULTS.guides);
 });
 
+test("normalizeState accepts only known rotations and flips", () => {
+  assert.equal(normalizeState({ rotate: "90" }).rotate, 90);
+  assert.equal(normalizeState({ rotate: 270 }).rotate, 270);
+  assert.equal(normalizeState({ rotate: 45 }).rotate, DEFAULTS.rotate);
+  assert.equal(normalizeState({ rotate: "nope" }).rotate, DEFAULTS.rotate);
+  assert.equal(normalizeState({ flip: "x" }).flip, "x");
+  assert.equal(normalizeState({ flip: "y" }).flip, "y");
+  assert.equal(normalizeState({ flip: "diagonal" }).flip, DEFAULTS.flip);
+  assert.deepEqual(ROTATIONS, [0, 90, 180, 270]);
+  assert.deepEqual(FLIPS, ["none", "x", "y"]);
+});
+
 test("encodeState round-trips through decodeSearch", () => {
   const state = normalizeState({
     motif: "mosaic",
@@ -69,6 +83,8 @@ test("encodeState round-trips through decodeSearch", () => {
     weight: 2,
     warp: 17,
     seed: 321,
+    rotate: 270,
+    flip: "y",
     guides: true,
     motion: true,
   });
@@ -101,13 +117,15 @@ test("every preset resolves to a valid state", () => {
   }
 });
 
-test("applyPreset keeps personal toggles", () => {
-  const current = normalizeState({ guides: true, motion: true, motif: "wave" });
+test("applyPreset keeps personal toggles and transforms", () => {
+  const current = normalizeState({ guides: true, motion: true, motif: "wave", rotate: 90, flip: "x" });
   const state = applyPreset("riso-comb", current);
   assert.equal(state.motif, "comb");
   assert.equal(state.palette, "riso");
   assert.equal(state.guides, true);
   assert.equal(state.motion, true);
+  assert.equal(state.rotate, 90);
+  assert.equal(state.flip, "x");
   assert.deepEqual(applyPreset("missing", current), current);
 });
 
@@ -122,6 +140,8 @@ test("randomizeState stays in bounds and changes the motif", () => {
     assert.ok(next.weight >= LIMITS.weight.min && next.weight <= LIMITS.weight.max);
     assert.ok(next.warp >= LIMITS.warp.min && next.warp <= LIMITS.warp.max);
     assert.ok(next.seed >= LIMITS.seed.min && next.seed <= LIMITS.seed.max);
+    assert.ok(ROTATIONS.includes(next.rotate));
+    assert.ok(FLIPS.includes(next.flip));
     state = next;
   }
 });
@@ -149,6 +169,22 @@ test("reseedState changes the seed and clamps it", () => {
 test("describeState and exportName read from the normalized record", () => {
   const state = normalizeState({ palette: "kilim", motif: "ridge", repeat: 5, seed: 11 });
   assert.equal(describeState(state), "Kilim ridge, 5 repeats across, seed 11");
+  assert.equal(
+    describeState(normalizeState({ ...state, rotate: 90, flip: "x" })),
+    "Kilim ridge, 5 repeats across, seed 11, rotated 90°, flipped horizontally",
+  );
+  assert.equal(
+    describeState(normalizeState({ ...state, flip: "y" })),
+    "Kilim ridge, 5 repeats across, seed 11, flipped vertically",
+  );
   assert.equal(exportName(state), "tessera-ridge-kilim-11.svg");
+  assert.equal(
+    exportName(normalizeState({ ...state, rotate: 90, flip: "x" })),
+    "tessera-ridge-kilim-11-r90-fx.svg",
+  );
+  assert.equal(
+    exportName(normalizeState({ ...state, flip: "y" })),
+    "tessera-ridge-kilim-11-fy.svg",
+  );
   assert.equal(exportName({ motif: "nope", palette: "nope", seed: "bad" }), `tessera-${DEFAULTS.motif}-${DEFAULTS.palette}-${DEFAULTS.seed}.svg`);
 });

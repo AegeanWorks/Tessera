@@ -44,6 +44,8 @@ test("every control in the markup is addressable and labelled", () => {
     "repeat",
     "weight",
     "warp",
+    "rotate",
+    "flip",
     "repeat-value",
     "weight-value",
     "warp-value",
@@ -66,6 +68,10 @@ test("every control in the markup is addressable and labelled", () => {
     assert.match(html, new RegExp(`<label class="range-row" for="${id}"`));
   }
   assert.match(html, /<label class="select-label" for="png-size">/);
+  assert.match(html, /<label class="select-label" for="rotate">/);
+  assert.match(html, /<label class="select-label" for="flip">/);
+  assert.match(html, /<option value="90">90°<\/option>/);
+  assert.match(html, /<option value="y">Vertical<\/option>/);
   assert.ok(html.includes("<output id=\"repeat-value\" for=\"repeat\">"));
   assert.ok(html.includes("<output id=\"weight-value\" for=\"weight\">"));
   assert.ok(html.includes("<output id=\"warp-value\" for=\"warp\">"));
@@ -109,6 +115,9 @@ test("the app imports only local studio modules", () => {
   assert.ok(app.includes("copyLink("));
   assert.ok(app.includes("renderGallery("));
   assert.ok(app.includes("loadGallery("));
+  assert.ok(app.includes("rotateInput"));
+  assert.ok(app.includes("flipInput"));
+  assert.ok(app.includes("bindSelect("));
 });
 
 test("keyboard shortcuts are wired without hijacking form fields", () => {

@@ -43,6 +43,10 @@ test("pngName carries the look, the seed and the pixel size", () => {
   );
   const name = pngName({ motif: "unknown", palette: "unknown", seed: 99999 }, "phone");
   assert.equal(name, "tessera-wave-aegean-9999-1170x2532.png");
+  assert.equal(
+    pngName({ motif: "comb", palette: "kilim", seed: 123, rotate: 270, flip: "x" }, "square"),
+    "tessera-comb-kilim-123-r270-fx-1080x1080.png",
+  );
 });
 
 test("renderExportSvg uses the selected size and the current repeat", () => {
