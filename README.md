@@ -6,7 +6,7 @@ A seamless pattern studio: compose geometric tiles in the browser and export cri
 
 ![Tessera social preview](assets/social-preview.svg)
 
-Tessera is a zero-dependency static studio. Six motifs and six palettes generate endless seamless tiles entirely in the browser: tune repeats, line weight and warp, reroll a seed, then export a clean, editable SVG, copy it to the clipboard, or download a wallpaper-sized PNG. No uploads, no tracking and no network at runtime.
+Tessera is a zero-dependency static studio. Six motifs and six palettes generate endless seamless tiles entirely in the browser: tune repeats, line weight and warp, reroll a seed, save a few looks, then export a clean, editable SVG, copy it to the clipboard, download a wallpaper-sized PNG, or share the exact state as a link. No uploads, no tracking and no network at runtime.
 
 ## ⚡ 30-Second Cold-Start Quick Reference
 
@@ -43,6 +43,9 @@ Tessera is a zero-dependency static studio. Six motifs and six palettes generate
 | Copy SVG `C` / Export SVG `E` | Copy the SVG source, or download it as a `.svg` file |
 | PNG size | Pick Wallpaper (2560 × 1440), Full HD, 4K, Phone or Square |
 | Export PNG `P` | Rasterize the current look at the selected size as a `.png` file |
+| Save look `S` | Store the current pattern in the local gallery (up to 12) |
+| Copy link `L` | Copy a URL that restores the current motif, palette and geometry |
+| Gallery | Click a thumbnail to restore a saved look; the × removes it |
 
 ## What Is Tessera
 
@@ -57,7 +60,11 @@ Every pattern is one tile drawn in a `100 × 100` coordinate space and repeated 
 | Arcade | Concentric rings on a diamond lattice |
 | Mosaic | A seeded tessera field with visible grout |
 
-Each motif reads three arguments — a seeded random source, a line weight and a warp amount — and returns a list of primitive elements. Colors are palette *roles* (`ink`, `accent`, `highlight`, `paper`, `bg`), so a palette swap recolors props without touching geometry. Settings live in a single versioned localStorage record under `tessera.studio.v1`, mirrored in the URL query so a look can be shared or captured. PNG export draws the same SVG into a canvas at a stated wallpaper, phone or square size; the SVG stays the editable master.
+Each motif reads three arguments — a seeded random source, a line weight and a warp amount — and returns a list of primitive elements. Colors are palette *roles* (`ink`, `accent`, `highlight`, `paper`, `bg`), so a palette swap recolors props without touching geometry. Settings live in a versioned localStorage record under `tessera.studio.v1`, mirrored in the URL query so a look can be shared or captured. PNG export draws the same SVG into a canvas at a stated wallpaper, phone or square size; the SVG stays the editable master.
+
+## Saved Looks
+
+The Gallery block stores up to 12 patterns in a second versioned record, `tessera.gallery.v1`. Entries are newest first, and the visual signature — motif, palette, repeat, weight, warp and seed — is the id, so saving the same look again only moves it to the front. Restoring a look preserves the current tile-guide and glow-drift toggles. **Copy link** writes the full state into the URL query, so a shared link restores the look without touching the recipient's gallery. A corrupt or unsupported record is refused instead of being repaired in place.
 
 ## What's Inside
 
@@ -85,12 +92,13 @@ tessera/
 ├── src/
 │   ├── studio/
 │   │   ├── export.js          <- PNG size table and export names
+│   │   ├── gallery.js         <- saved looks, signature ids and the 12 cap
 │   │   ├── motifs.js          <- six pure motif builders
 │   │   ├── palettes.js        <- six palettes as color roles
 │   │   ├── random.js          <- seeded mulberry32 generator
 │   │   ├── raster.js          <- DOM-free SVG-to-PNG orchestration
 │   │   ├── state.js           <- normalization, presets, URL codec
-│   │   ├── storage.js         <- one versioned localStorage record
+│   │   ├── storage.js         <- versioned state and gallery persistence
 │   │   └── svg.js             <- pattern and SVG serialization
 │   ├── ui/
 │   │   └── app.js             <- studio wiring, controls, export
@@ -99,6 +107,7 @@ tessera/
 │   └── theme.css              <- the only file with raw color values
 └── tests/
     ├── export.test.js         <- sizes, fallback and PNG names
+    ├── gallery.test.js        <- signatures, dedupe, cap and restore
     ├── motifs.test.js         <- determinism, roles, tile ratios
     ├── palettes.test.js       <- complete role sets and fallbacks
     ├── random.test.js         <- replay, divergence, bounds
@@ -119,6 +128,7 @@ tessera/
 - **Versioned, bounded state.** `normalizeState` clamps every number, rejects unknown motifs and palettes, and accepts boolean spellings, so a hand-edited URL or an old record cannot break the studio.
 - **Static by construction.** There is no API, no build step and no external asset. `index.html` and `src/` are the complete deployment payload.
 - **Raster is a projection of the SVG.** PNG export renders the same `renderSvg` output through a canvas instead of keeping a second drawing path. `raster.js` stays DOM-free by receiving its canvas and image loader from `app.js`, so the size budget and draw calls are covered in Node.
+- **The gallery is local and bounded.** `gallery.js` has no DOM or storage access: it normalizes entries, derives an id from the visual signature, collapses duplicates and caps the list at 12. `storage.js` owns the versioned record, and the UI only renders and restores. A corrupt or unsupported record is refused, never repaired in place.
 - **Token-only styling.** Raw colors live in `src/theme.css`; `src/styles.css` reads custom properties, and a test rejects hex literals outside the theme.
 
 ## Screenshot QA

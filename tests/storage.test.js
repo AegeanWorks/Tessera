@@ -1,12 +1,17 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
+  GALLERY_KEY,
   STORAGE_KEY,
   STORAGE_VERSION,
+  clearGallery,
   clearState,
+  loadGallery,
   loadState,
+  saveGallery,
   saveState,
 } from "../src/studio/storage.js";
+import { GALLERY_VERSION, addEntry, emptyGallery, stateSignature } from "../src/studio/gallery.js";
 import { normalizeState } from "../src/studio/state.js";
 
 function memoryStorage() {
@@ -81,4 +86,47 @@ test("a storage that throws never crashes the studio", () => {
   assert.equal(loadState(BROKEN), null);
   assert.equal(saveState(BROKEN, normalizeState({})), false);
   assert.equal(clearState(BROKEN), false);
+});
+
+test("a saved gallery loads back normalized and versioned", () => {
+  const storage = memoryStorage();
+  const state = normalizeState({ motif: "mosaic", palette: "sage", seed: 44 });
+  const record = addEntry(emptyGallery(), state, "2026-10-30T00:00:00.000Z");
+  assert.equal(saveGallery(storage, record), true);
+
+  const loaded = loadGallery(storage);
+  assert.equal(loaded.version, GALLERY_VERSION);
+  assert.equal(loaded.entries.length, 1);
+  assert.equal(loaded.entries[0].id, stateSignature(state));
+
+  const raw = JSON.parse(storage.getItem(GALLERY_KEY));
+  assert.equal(raw.version, GALLERY_VERSION);
+  assert.equal(raw.entries.length, 1);
+  assert.ok(raw.saved_at);
+});
+
+test("a missing, corrupt, unsupported or malformed gallery is refused", () => {
+  const storage = memoryStorage();
+  assert.equal(loadGallery(storage), null);
+  storage.setItem(GALLERY_KEY, "{oops");
+  assert.equal(loadGallery(storage), null);
+  storage.setItem(GALLERY_KEY, JSON.stringify({ version: GALLERY_VERSION + 1, entries: [] }));
+  assert.equal(loadGallery(storage), null);
+  storage.setItem(GALLERY_KEY, JSON.stringify({ version: GALLERY_VERSION }));
+  assert.equal(loadGallery(storage), null);
+  storage.setItem(GALLERY_KEY, JSON.stringify({ version: GALLERY_VERSION, entries: "nope" }));
+  assert.equal(loadGallery(storage), null);
+});
+
+test("clearGallery removes the record and tolerates a hostile store", () => {
+  const storage = memoryStorage();
+  saveGallery(storage, addEntry(emptyGallery(), normalizeState({ seed: 3 })));
+  assert.equal(clearGallery(storage), true);
+  assert.equal(loadGallery(storage), null);
+  assert.equal(loadGallery(null), null);
+  assert.equal(saveGallery(null, emptyGallery()), false);
+  assert.equal(clearGallery(null), false);
+  assert.equal(loadGallery(BROKEN), null);
+  assert.equal(saveGallery(BROKEN, emptyGallery()), false);
+  assert.equal(clearGallery(BROKEN), false);
 });

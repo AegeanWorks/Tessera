@@ -55,6 +55,9 @@ test("every control in the markup is addressable and labelled", () => {
     "reset",
     "png-size",
     "export-png",
+    "save-look",
+    "copy-link",
+    "gallery-list",
     "toast",
   ]) {
     assert.ok(html.includes(`id="${id}"`), `missing #${id}`);
@@ -102,11 +105,15 @@ test("the app imports only local studio modules", () => {
   assert.ok(app.includes("svgToPng("));
   assert.ok(app.includes("createImageBitmap"));
   assert.ok(app.includes("renderExportSvg("));
+  assert.ok(app.includes("saveLook("));
+  assert.ok(app.includes("copyLink("));
+  assert.ok(app.includes("renderGallery("));
+  assert.ok(app.includes("loadGallery("));
 });
 
 test("keyboard shortcuts are wired without hijacking form fields", () => {
   const app = read("src/ui/app.js");
-  for (const key of ['key === "r"', 'key === "c"', 'key === "e"', 'key === "p"']) {
+  for (const key of ['key === "r"', 'key === "c"', 'key === "e"', 'key === "p"', 'key === "s"', 'key === "l"']) {
     assert.ok(app.includes(key));
   }
   assert.ok(app.includes("isContentEditable"));

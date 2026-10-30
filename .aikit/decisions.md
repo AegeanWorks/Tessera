@@ -53,3 +53,10 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Context**: SVG is the editable master, but wallpaper and phone use wants a raster file. A second renderer would duplicate motif logic and let the PNG drift from the stage.
 - **Decision**: `src/studio/export.js` holds the frozen size table and filename, while `src/studio/raster.js` orchestrates Blob → image → canvas → PNG with `createCanvas` and `loadImage` injected by `src/ui/app.js`. Dimensions are validated against a 16.7 MP ceiling, and the PNG comes from the same `renderSvg` output at the selected width and height.
 - **Consequences**: The raster path is testable in Node without a DOM, while the UI owns browser globals and the `createImageBitmap` → `<img>` fallback. Export sizes are data, not state; they do not enter the URL or localStorage record. Adding a size costs one frozen record and one test expectation.
+
+### ADR-007: Saved looks are a bounded local record with signature ids
+- **Date**: 2026-10-30
+- **Status**: Accepted
+- **Context**: The studio could keep only one state, so comparing candidates or returning to a look after a reload meant copying URLs by hand. The site must stay static, with no accounts and no network.
+- **Decision**: Store up to 12 looks in `tessera.gallery.v1`; each entry keeps only the visual fields (motif, palette, repeat, weight, warp, seed), uses the visual signature as its id, and is normalized on every read. `gallery.js` is pure, `storage.js` owns the versioned record, and the UI restores an entry while preserving the current guides/motion toggles. Share links continue to encode the full studio state in the URL.
+- **Consequences**: Duplicate saves collapse and the oldest look falls off at the cap. An unsupported or corrupt record is refused rather than migrated. The gallery adds one localStorage key and no dependency; its thumbnails use the same pure motif/SVG path as the stage.
