@@ -1,6 +1,10 @@
 # Tessera
 
-[![Built with AIKit](https://img.shields.io/badge/built%20with-AIKit-6f42c1)](https://github.com/AegeanWorks/AIKit)
+<!-- aegean:media:start -->
+<p align="center"><img src="assets/social-preview.svg" alt="Tessera social preview" width="100%"></p>
+<p align="center"><a href="LICENSE"><img src="https://img.shields.io/badge/license-AL--1.1-2f9e44" alt="License"></a> <a href="https://github.com/AegeanWorks/AIKit"><img src="https://img.shields.io/badge/AIKit-integrated-6f42c1" alt="AIKit Integrated"></a></p>
+<!-- aegean:media:end -->
+
 
 A seamless pattern studio: compose geometric tiles in the browser and export crisp SVG.
 
@@ -157,6 +161,12 @@ The studio accepts its full state as a query string, so any configuration can be
 - `npm test` runs the unit and integration suite with no browser and no network beyond loopback.
 - `npm run verify:static` re-checks the embed contract the website sync enforces.
 - `python aikit.py check tessera` runs the test, lint-adjacent hygiene, guidelines and secret gates.
+
+<!-- aegean:brand-assets:start -->
+## 🎨 Brand Assets
+
+> **AI-Generated Brand Artwork.** The banner and logo are **AI-generated brand assets**. They are illustrative and may not literally depict every feature or the full project scope.
+<!-- aegean:brand-assets:end -->
 
 ## 📜 License
 
