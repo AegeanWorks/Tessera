@@ -8,8 +8,6 @@
 
 A seamless pattern studio: compose geometric tiles in the browser and export crisp SVG.
 
-![Tessera social preview](assets/social-preview.svg)
-
 Tessera is a zero-dependency static studio. Eight motifs and eight palettes generate endless seamless tiles entirely in the browser: tune repeats, line weight and warp, rotate or mirror the tile, reroll a seed, save a few looks, then export a clean, editable SVG, copy it to the clipboard, download a wallpaper-sized PNG, or share the exact state as a link. No uploads, no tracking and no network at runtime.
 
 ## ⚡ 30-Second Cold-Start Quick Reference
@@ -171,3 +169,13 @@ The studio accepts its full state as a query string, so any configuration can be
 ## 📜 License
 
 Free for personal use under the Aegean License 1.1 (AL-1.1); see [LICENSE](LICENSE). Any commercial use needs the Aegean Commercial License 1.0 (ACL-1.0); see [COMMERCIAL.md](COMMERCIAL.md).
+
+<!-- aegean:screenshots:start -->
+## Screenshots
+
+<a href="https://github.com/AegeanWorks/Tessera/commit/2d822bb"><img src="assets/screenshots/2026-11-03-wave.png" alt="Tessera Wave Aegean studio at 2026-11-03"></a>
+
+<a href="https://github.com/AegeanWorks/Tessera/commit/2d822bb"><img src="assets/screenshots/2026-11-03-pinwheel.png" alt="Tessera Nocturne pinwheel preset at 2026-11-03"></a>
+
+*commit `2d822bb` · 2026-11-03 · viewport 1440x900 · default Wave/Aegean plus one-click Nocturne pinwheel preset*
+<!-- aegean:screenshots:end -->

@@ -67,3 +67,10 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Context**: Every motif always faced the same way. Transforming the stage or the exported canvas would crop the repeat, and a 90° turn of the rectangular Comb tile would break the pattern's dimensions.
 - **Decision**: Add `rotate` (0/90/180/270) and `flip` (none/x/y) to the state record and apply them inside the SVG `<pattern>` as a nested group. A 90° or 270° turn swaps the tile width and height before the repeat scale. Flips mirror in the final tile bounds; presets preserve the user's transform; the gallery signature and entry state include both fields.
 - **Consequences**: Every transform preserves seamlessness by construction, and rectangular motifs stay seamless after a quarter turn. Old records and URLs without the fields default to 0/none. Randomize can produce a transform, while seed and preset changes keep the current one.
+
+### ADR-009: First screenshot keepers are default Wave and the Nocturne pinwheel preset
+- **Date**: 2026-11-03
+- **Status**: Accepted
+- **Context**: Tessera had structural-only brand approval but `assets/screenshots/` did not exist and `media.json screenshots: []`; the README also rendered the social SVG twice (media block plus a stray inline image).
+- **Decision**: Capture `npm start` at `http://127.0.0.1:4174`, viewport 1440x900, commit `2d822bb`: `2026-11-03-wave.png` (default Wave/Aegean studio) and `2026-11-03-pinwheel.png` (same build after the deterministic Nocturne pinwheel preset). Register both in `.aikit/media.json` and the README `aegean:screenshots` block; remove the duplicate inline preview line. Brand SVG reviews stay structural (the direct SVG URL did not render in the capture browser).
+- **Consequences**: README proves the default studio and one preset click with share-link state. Reproduce with: `npm start`, open the URL, screenshot, click Nocturne pinwheel, screenshot.

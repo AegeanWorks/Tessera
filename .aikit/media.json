@@ -42,5 +42,44 @@
       }
     }
   },
-  "screenshots": []
+  "screenshots": [
+    {
+      "path": "assets/screenshots/2026-11-03-wave.png",
+      "alt": "Tessera Wave Aegean studio at 2026-11-03",
+      "caption": "Default studio from npm start (http://127.0.0.1:4174): Wave motif in Aegean palette, motif and palette pickers, geometry sliders.",
+      "commit": "2d822bba17866f43fd81438beffd2df540a75a68",
+      "taken_at": "2026-11-03",
+      "viewport": "1440x900",
+      "width": 1440,
+      "height": 900,
+      "status": "approved",
+      "review": {
+        "status": "approved",
+        "reviewer": "agent:kilo",
+        "method": "vision",
+        "notes": "Real viewport capture of the default studio: live Wave pattern, all eight motif tiles, all eight palettes, repeat/weight sliders. Fresh-user state.",
+        "score": 92,
+        "reviewed_at": "2026-11-03"
+      }
+    },
+    {
+      "path": "assets/screenshots/2026-11-03-pinwheel.png",
+      "alt": "Tessera Nocturne pinwheel preset at 2026-11-03",
+      "caption": "Same build after the Nocturne pinwheel preset: Pinwheel motif in Nocturne palette with seed, presets, export and gallery panels.",
+      "commit": "2d822bba17866f43fd81438beffd2df540a75a68",
+      "taken_at": "2026-11-03",
+      "viewport": "1440x900",
+      "width": 1440,
+      "height": 900,
+      "status": "approved",
+      "review": {
+        "status": "approved",
+        "reviewer": "agent:kilo",
+        "method": "vision",
+        "notes": "Real capture one preset click from default: pinwheel field, seed 5, preset list, PNG export and gallery controls. Deterministic preset, no cherry-pick.",
+        "score": 91,
+        "reviewed_at": "2026-11-03"
+      }
+    }
+  ]
 }
