@@ -89,7 +89,8 @@ tessera/
 ├── play.sh                    <- macOS/Linux one-click launcher
 ├── assets/
 │   ├── logo.svg               <- square brand mark
-│   └── social-preview.svg     <- 1280×640 social card
+│   ├── social-preview.svg     <- 1280×640 social card
+│   └── screenshots/           <- keeper studio captures (see Screenshots)
 ├── scripts/
 │   ├── serve.mjs              <- static server, path containment, --open
 │   ├── ui-inventory.mjs       <- stable data-ui / data-panel / data-cue inventory
