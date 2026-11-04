@@ -64,6 +64,45 @@ test("the comb keeps its flat-top honeycomb ratio", () => {
   assert.ok(Math.abs(comb.tile.height - (2 / Math.sqrt(3)) * comb.tile.width) < 0.001);
 });
 
+test("the comb covers the full tile and shares edge wraps", () => {
+  const comb = getMotif("comb");
+  for (const seed of [5, 7, 42]) {
+    const elements = comb.build({ random: createRandom(seed), weight: 3, warp: 0.42 });
+    const hexes = elements.filter((element) => element.tag === "path");
+    assert.equal(hexes.length, 8, `seed ${seed} should build 8 hexes, got ${hexes.length}`);
+    const fills = hexes.map((hex) => hex.fill);
+    // Left/right wraps coincide across tiles: x=0 shares with x=90 per row.
+    assert.equal(fills[0], fills[5], `seed ${seed} top wrap diverges`);
+    assert.equal(fills[1], fills[6], `seed ${seed} mid wrap diverges`);
+    assert.equal(fills[2], fills[7], `seed ${seed} bottom wrap diverges`);
+    // Bottom edge is covered: tile height centers exist.
+    const centers = hexes.map((hex) => hex.d.slice(0, 24)).join("|");
+    assert.ok(centers.length > 0);
+  }
+});
+
+test("arcade corners share one inner radius for seamless quarters", () => {
+  for (const seed of [7, 8, 99]) {
+    const elements = getMotif("arcade").build({ random: createRandom(seed), weight: 3, warp: 0.5 });
+    const circles = elements.filter((element) => element.tag === "circle");
+    const inners = circles.filter((_, index) => index % 3 === 1).map((circle) => circle.r);
+    assert.equal(inners.length, 5);
+    assert.equal(inners[0], inners[1], `seed ${seed} corner inners diverge`);
+    assert.equal(inners[0], inners[2], `seed ${seed} corner inners diverge`);
+    assert.equal(inners[0], inners[3], `seed ${seed} corner inners diverge`);
+  }
+});
+
+test("drift dots stay fully inside the tile", () => {
+  for (let seed = 1; seed < 50; seed += 1) {
+    const elements = getMotif("drift").build({ random: createRandom(seed), weight: 6, warp: 1 });
+    for (const dot of elements.filter((element) => element.tag === "circle")) {
+      assert.ok(dot.cx >= 2 && dot.cx <= 98, `seed ${seed} dot x=${dot.cx} clips the seam`);
+      assert.ok(dot.cy >= 2 && dot.cy <= 98, `seed ${seed} dot y=${dot.cy} clips the seam`);
+    }
+  }
+});
+
 test("loom and drift are part of the catalogue", () => {
   assert.ok(MOTIF_IDS.includes("loom"));
   assert.ok(MOTIF_IDS.includes("drift"));

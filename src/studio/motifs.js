@@ -88,17 +88,30 @@ function buildComb({ random, weight, warp }) {
   const radius = 30;
   const height = (Math.sqrt(3) / 2) * radius;
   const width = 0.45 + weight * 0.45;
-  const centers = [];
-  for (let column = 0; column < 3; column += 1) {
-    const x = column * 45;
-    if (column % 2 === 0) {
-      centers.push({ x, y: 0 }, { x, y: height * 2 });
-    } else {
-      centers.push({ x, y: height });
-    }
-  }
+  // Full tile coverage needs 8 hexes: even columns (x=0,90) at y=0,2H,4H
+  // and the odd column (x=45) at y=H,3H. Edge wraps must share fills/dots
+  // or coincident halves diverge across tiles.
+  const fillThreshold = 0.16 + warp * 0.16;
+  const fillA = random() < fillThreshold ? "highlight" : "none";
+  const dotA = random() < 0.42;
+  const fillB = random() < fillThreshold ? "highlight" : "none";
+  const dotB = random() < 0.42;
+  const fillC = random() < fillThreshold ? "highlight" : "none";
+  const dotC = random() < 0.42;
+  const fillD = random() < fillThreshold ? "highlight" : "none";
+  const dotD = random() < 0.42;
+  const centers = [
+    { x: 0, y: 0, fill: fillA, hasDot: dotA },
+    { x: 0, y: height * 2, fill: fillB, hasDot: dotB },
+    { x: 0, y: height * 4, fill: fillA, hasDot: dotA },
+    { x: 45, y: height, fill: fillC, hasDot: dotC },
+    { x: 45, y: height * 3, fill: fillD, hasDot: dotD },
+    { x: 90, y: 0, fill: fillA, hasDot: dotA },
+    { x: 90, y: height * 2, fill: fillB, hasDot: dotB },
+    { x: 90, y: height * 4, fill: fillA, hasDot: dotA },
+  ];
   centers.forEach((center, index) => {
-    const fill = random() < 0.16 + warp * 0.16 ? "highlight" : "none";
+    const fill = center.fill;
     elements.push({
       tag: "path",
       d: hexPath(center.x, center.y, radius),
@@ -106,7 +119,7 @@ function buildComb({ random, weight, warp }) {
       "fill-opacity": fill === "none" ? undefined : 0.14,
       ...stroke(index % 2 === 0 ? "ink" : "accent", width, 0.9),
     });
-    if (random() < 0.42) {
+    if (center.hasDot) {
       elements.push(dot(center.x, center.y, 0.8 + weight * 0.2, "paper", 0.55));
     }
   });
@@ -184,6 +197,10 @@ function buildArcade({ random, weight, warp }) {
   const elements = [];
   const radius = 24 + warp * 12;
   const width = 0.45 + weight * 0.45;
+  // All four corners coincide across tiles (100 mod 100 === 0), so they must
+  // share one inner radius or coincident quarters diverge at the seam.
+  const cornerInner = 0.42 + random() * 0.12;
+  const centerInner = 0.42 + random() * 0.12;
   const centers = [
     [0, 0],
     [100, 0],
@@ -194,6 +211,7 @@ function buildArcade({ random, weight, warp }) {
   centers.forEach(([cx, cy], index) => {
     const role = index % 2 === 0 ? "ink" : "accent";
     const echo = role === "ink" ? "highlight" : "paper";
+    const isCenter = cx === 50 && cy === 50;
     elements.push({
       tag: "circle",
       cx,
@@ -205,7 +223,7 @@ function buildArcade({ random, weight, warp }) {
       tag: "circle",
       cx,
       cy,
-      r: radius * (0.42 + random() * 0.12),
+      r: radius * (isCenter ? centerInner : cornerInner),
       ...stroke(echo, width * 0.6, 0.48),
     });
     elements.push(dot(cx, cy, 1.1 + weight * 0.18, "paper", 0.75));
@@ -353,8 +371,10 @@ function buildDrift({ random, weight, warp }) {
     });
   }
   for (let index = 0; index < 4; index += 1) {
+    // Keep dots fully inside the tile (max r ~1.46) so no half-dot is
+    // clipped at the seam with no counterpart in the neighboring tile.
     elements.push(
-      dot(random() * 100, random() * 100, 0.5 + weight * 0.16, "highlight", 0.5),
+      dot(4 + random() * 92, 4 + random() * 92, 0.5 + weight * 0.16, "highlight", 0.5),
     );
   }
   return elements;

@@ -74,3 +74,10 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Context**: Tessera had structural-only brand approval but `assets/screenshots/` did not exist and `media.json screenshots: []`; the README also rendered the social SVG twice (media block plus a stray inline image).
 - **Decision**: Capture `npm start` at `http://127.0.0.1:4174`, viewport 1440x900, commit `2d822bb`: `2026-11-03-wave.png` (default Wave/Aegean studio) and `2026-11-03-pinwheel.png` (same build after the deterministic Nocturne pinwheel preset). Register both in `.aikit/media.json` and the README `aegean:screenshots` block; remove the duplicate inline preview line. Brand SVG reviews stay structural (the direct SVG URL did not render in the capture browser).
 - **Consequences**: README proves the default studio and one preset click with share-link state. Reproduce with: `npm start`, open the URL, screenshot, click Nocturne pinwheel, screenshot.
+
+### ADR-010: Seam wraps share decisions so coincident tile edges match
+- **Date**: 2026-11-04
+- **Status**: Accepted
+- **Context**: Comb drew 5 hexes with sequential random fills, missing bottom coverage (tile needs 8) and letting x=0/x=90 and y=0/y=H halves diverge; arcade gave each corner its own inner radius so coincident quarters mismatched; drift placed dots at 0-100 so edge dots clipped with no counterpart.
+- **Decision**: Comb builds 8 hexes with 4 distinct fill/dot decisions shared by wrap pairs (top/bottom/left/right); arcade shares one inner radius across all four corners with an independent center; drift keeps dots in 4-96 so the max 1.46px radius never crosses an edge. Added regression tests for 8-hex coverage, wrap sharing, corner sharing and dot margins.
+- **Consequences**: All tiles stay seamless by construction per ADR-002 with no API change; patterns shift slightly where the old output was gapped or mismatched, which is the intended fix.
