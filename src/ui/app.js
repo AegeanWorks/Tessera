@@ -1,6 +1,5 @@
 import { getMotif, motifList } from "../studio/motifs.js";
 import { paletteList, getPalette } from "../studio/palettes.js";
-import { createRandom } from "../studio/random.js";
 import { svgToPng } from "../studio/raster.js";
 import {
   DEFAULT_EXPORT_SIZE,
@@ -511,13 +510,13 @@ function bindActions() {
   const exportButton = document.getElementById("export");
 
   randomize?.addEventListener("click", () => {
-    state = randomizeState(state, createRandom(Date.now() % 1000003));
+    state = randomizeState(state, Math.random);
     update();
     announce("A new pattern, picked at random.");
   });
 
   reseed?.addEventListener("click", () => {
-    state = reseedState(state, createRandom(Date.now() % 1000003));
+    state = reseedState(state, Math.random);
     update();
     announce(`Seed ${state.seed}.`);
   });
@@ -548,7 +547,7 @@ function bindKeyboard() {
     const key = event.key.toLowerCase();
     if (key === "r") {
       event.preventDefault();
-      state = randomizeState(state, createRandom(Date.now() % 1000003));
+      state = randomizeState(state, Math.random);
       update();
       announce("A new pattern, picked at random.");
     } else if (key === "c") {
