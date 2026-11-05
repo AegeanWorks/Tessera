@@ -166,25 +166,36 @@ test("reseedState changes the seed and clamps it", () => {
   assert.ok(unchanged.seed >= LIMITS.seed.min && unchanged.seed <= LIMITS.seed.max);
 });
 
+test("exportName stays distinct across geometry that changes the render", () => {
+  const base = normalizeState({ motif: "mosaic", palette: "sage", repeat: 5, weight: 2, warp: 72, seed: 13 });
+  assert.notEqual(exportName(base), exportName({ ...base, weight: 6 }));
+  assert.notEqual(exportName(base), exportName({ ...base, warp: 5 }));
+  assert.notEqual(exportName(base), exportName({ ...base, repeat: 9 }));
+  assert.notEqual(
+    describeState(base),
+    describeState({ ...base, weight: 6 }),
+    "weight changes the render and must change the description",
+  );
+});
 test("describeState and exportName read from the normalized record", () => {
   const state = normalizeState({ palette: "kilim", motif: "ridge", repeat: 5, seed: 11 });
-  assert.equal(describeState(state), "Kilim ridge, 5 repeats across, seed 11");
+  assert.equal(describeState(state), "Kilim ridge, 5 repeats across, weight 3, warp 42%, seed 11");
   assert.equal(
     describeState(normalizeState({ ...state, rotate: 90, flip: "x" })),
-    "Kilim ridge, 5 repeats across, seed 11, rotated 90°, flipped horizontally",
+    "Kilim ridge, 5 repeats across, weight 3, warp 42%, seed 11, rotated 90°, flipped horizontally",
   );
   assert.equal(
     describeState(normalizeState({ ...state, flip: "y" })),
-    "Kilim ridge, 5 repeats across, seed 11, flipped vertically",
+    "Kilim ridge, 5 repeats across, weight 3, warp 42%, seed 11, flipped vertically",
   );
-  assert.equal(exportName(state), "tessera-ridge-kilim-11.svg");
+  assert.equal(exportName(state), "tessera-ridge-kilim-11-r5w3v42.svg");
   assert.equal(
     exportName(normalizeState({ ...state, rotate: 90, flip: "x" })),
-    "tessera-ridge-kilim-11-r90-fx.svg",
+    "tessera-ridge-kilim-11-r5w3v42-r90-fx.svg",
   );
   assert.equal(
     exportName(normalizeState({ ...state, flip: "y" })),
-    "tessera-ridge-kilim-11-fy.svg",
+    "tessera-ridge-kilim-11-r5w3v42-fy.svg",
   );
-  assert.equal(exportName({ motif: "nope", palette: "nope", seed: "bad" }), `tessera-${DEFAULTS.motif}-${DEFAULTS.palette}-${DEFAULTS.seed}.svg`);
+  assert.equal(exportName({ motif: "nope", palette: "nope", seed: "bad" }), `tessera-${DEFAULTS.motif}-${DEFAULTS.palette}-${DEFAULTS.seed}-r6w3v42.svg`);
 });

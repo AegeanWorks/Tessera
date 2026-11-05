@@ -30,7 +30,7 @@ export function entryName(state) {
   if (normalized.rotate) suffix.push(`${normalized.rotate}°`);
   if (normalized.flip === "x") suffix.push("X");
   else if (normalized.flip === "y") suffix.push("Y");
-  const base = `${titleCase(normalized.palette)} ${titleCase(normalized.motif)} · seed ${normalized.seed}`;
+  const base = `${titleCase(normalized.palette)} ${titleCase(normalized.motif)} · seed ${normalized.seed} · r${normalized.repeat} w${normalized.weight} v${normalized.warp}`;
   return suffix.length ? `${base} · ${suffix.join(" ")}` : base;
 }
 

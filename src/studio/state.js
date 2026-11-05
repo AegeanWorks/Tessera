@@ -184,12 +184,17 @@ export function describeState(state) {
   const motifName = normalized.motif.charAt(0).toUpperCase() + normalized.motif.slice(1);
   const paletteName = normalized.palette.charAt(0).toUpperCase() + normalized.palette.slice(1);
   const parts = [
-    `${paletteName} ${motifName.toLowerCase()}, ${normalized.repeat} repeats across, seed ${normalized.seed}`,
+    `${paletteName} ${motifName.toLowerCase()}, ${normalized.repeat} repeats across, weight ${normalized.weight}, warp ${normalized.warp}%, seed ${normalized.seed}`,
   ];
   if (normalized.rotate) parts.push(`rotated ${normalized.rotate}°`);
   if (normalized.flip === "x") parts.push("flipped horizontally");
   if (normalized.flip === "y") parts.push("flipped vertically");
   return parts.join(", ");
+}
+
+export function geometrySuffix(state) {
+  const normalized = normalizeState(state);
+  return `-r${normalized.repeat}w${normalized.weight}v${normalized.warp}`;
 }
 
 export function transformSuffix(state) {
@@ -202,5 +207,5 @@ export function transformSuffix(state) {
 
 export function exportName(state) {
   const normalized = normalizeState(state);
-  return `tessera-${normalized.motif}-${normalized.palette}-${normalized.seed}${transformSuffix(normalized)}.svg`;
+  return `tessera-${normalized.motif}-${normalized.palette}-${normalized.seed}${geometrySuffix(normalized)}${transformSuffix(normalized)}.svg`;
 }

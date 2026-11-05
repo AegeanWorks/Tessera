@@ -35,15 +35,15 @@ test("a visual signature ignores guides and motion but keeps transforms", () => 
 });
 
 test("entryName names the palette, the motif, the seed and any transform", () => {
-  assert.equal(entryName(LOOK), "Sage Mosaic · seed 13");
-  assert.equal(entryName({ ...LOOK, rotate: 90, flip: "x" }), "Sage Mosaic · seed 13 · 90° X");
-  assert.equal(entryName({ motif: "nope", palette: "nope", seed: 99999 }), "Aegean Wave · seed 9999");
+  assert.equal(entryName(LOOK), "Sage Mosaic · seed 13 · r5 w2 v72");
+  assert.equal(entryName({ ...LOOK, rotate: 90, flip: "x" }), "Sage Mosaic · seed 13 · r5 w2 v72 · 90° X");
+  assert.equal(entryName({ motif: "nope", palette: "nope", seed: 99999 }), "Aegean Wave · seed 9999 · r6 w3 v42");
 });
 
 test("normalizeEntry keeps only visual state and freezes the record", () => {
   const entry = normalizeEntry({ state: { ...LOOK, guides: true, motion: true }, savedAt: "2026-10-30T00:00:00.000Z" });
   assert.equal(entry.id, stateSignature(LOOK));
-  assert.equal(entry.name, "Sage Mosaic · seed 13");
+  assert.equal(entry.name, "Sage Mosaic · seed 13 · r5 w2 v72");
   assert.equal(entry.savedAt, "2026-10-30T00:00:00.000Z");
   assert.deepEqual(Object.keys(entry.state).sort(), [
     "flip",
@@ -72,13 +72,13 @@ test("addEntry puts the newest look first and collapses a duplicate", () => {
 
   const other = addEntry(first, { ...LOOK, motif: "wave", palette: "kilim" }, "2026-10-30T00:01:00.000Z");
   assert.equal(other.entries.length, 2);
-  assert.equal(other.entries[0].name, "Kilim Wave · seed 13");
+  assert.equal(other.entries[0].name, "Kilim Wave · seed 13 · r5 w2 v72");
 
   const again = addEntry(other, LOOK, "2026-10-30T00:02:00.000Z");
   assert.equal(again.entries.length, 2);
   assert.equal(again.entries[0].id, stateSignature(LOOK));
   assert.equal(again.entries[0].savedAt, "2026-10-30T00:02:00.000Z");
-  assert.equal(again.entries[1].name, "Kilim Wave · seed 13");
+  assert.equal(again.entries[1].name, "Kilim Wave · seed 13 · r5 w2 v72");
 });
 
 test("the gallery keeps at most twelve looks, newest first", () => {
@@ -113,7 +113,7 @@ test("removeEntry drops one look and leaves the rest in order", () => {
   const two = addEntry(one, { ...LOOK, motif: "wave" }, "2026-10-30T00:01:00.000Z");
   const removed = removeEntry(two, stateSignature(LOOK));
   assert.equal(removed.entries.length, 1);
-  assert.equal(removed.entries[0].name, "Sage Wave · seed 13");
+  assert.equal(removed.entries[0].name, "Sage Wave · seed 13 · r5 w2 v72");
   assert.deepEqual(removeEntry(removed, "missing").entries, removed.entries);
 });
 

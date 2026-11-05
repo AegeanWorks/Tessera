@@ -81,3 +81,10 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Context**: Comb drew 5 hexes with sequential random fills, missing bottom coverage (tile needs 8) and letting x=0/x=90 and y=0/y=H halves diverge; arcade gave each corner its own inner radius so coincident quarters mismatched; drift placed dots at 0-100 so edge dots clipped with no counterpart.
 - **Decision**: Comb builds 8 hexes with 4 distinct fill/dot decisions shared by wrap pairs (top/bottom/left/right); arcade shares one inner radius across all four corners with an independent center; drift keeps dots in 4-96 so the max 1.46px radius never crosses an edge. Added regression tests for 8-hex coverage, wrap sharing, corner sharing and dot margins.
 - **Consequences**: All tiles stay seamless by construction per ADR-002 with no API change; patterns shift slightly where the old output was gapped or mismatched, which is the intended fix.
+
+### ADR-011: Export filenames and labels carry the full visual geometry
+- **Date**: 2026-11-05
+- **Status**: Accepted
+- **Context**: `exportName`/`pngName` omitted repeat, weight and warp, so two different renders (e.g. weight 2 vs 6) produced the same filename and overwrote each other; `entryName` and `describeState` also omitted them, showing duplicate gallery names and identical descriptions for different looks.
+- **Decision**: Add `geometrySuffix` (`-r{repeat}w{weight}v{warp}`) to SVG/PNG filenames, include weight/warp in `describeState` and repeat/weight/warp in `entryName`. Updated the pinned expectations plus distinctness regression tests.
+- **Consequences**: Every distinct visual maps to a distinct filename, gallery name and description; old filenames change, which is intended because the old ones collided.

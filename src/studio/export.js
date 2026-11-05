@@ -1,4 +1,4 @@
-import { normalizeState, transformSuffix } from "./state.js";
+import { geometrySuffix, normalizeState, transformSuffix } from "./state.js";
 import { renderSvg } from "./svg.js";
 
 export const EXPORT_SIZES = Object.freeze([
@@ -21,7 +21,8 @@ export function pngName(state, sizeId = DEFAULT_EXPORT_SIZE) {
   const normalized = normalizeState(state);
   const size = exportSize(sizeId);
   const suffix = transformSuffix(normalized);
-  return `tessera-${normalized.motif}-${normalized.palette}-${normalized.seed}${suffix}-${size.width}x${size.height}.png`;
+  const geometry = geometrySuffix(normalized);
+  return `tessera-${normalized.motif}-${normalized.palette}-${normalized.seed}${geometry}${suffix}-${size.width}x${size.height}.png`;
 }
 
 export function renderExportSvg(state, sizeId = DEFAULT_EXPORT_SIZE, options = {}) {
