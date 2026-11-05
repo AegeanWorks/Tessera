@@ -7,7 +7,7 @@ import {
   escapeXml,
   renderSvg,
 } from "../src/studio/svg.js";
-import { getPalette } from "../src/studio/palettes.js";
+import { getPalette, PALETTE_IDS } from "../src/studio/palettes.js";
 import { MOTIF_IDS } from "../src/studio/motifs.js";
 import { normalizeState } from "../src/studio/state.js";
 
@@ -163,8 +163,8 @@ test("user text is escaped inside the title and description", () => {
 });
 
 test("palette roles never leak as raw paint values", () => {
-  for (const motif of ["wave", "ridge", "comb", "pinwheel", "arcade", "mosaic"]) {
-    for (const palette of ["aegean", "kilim", "riso", "nocturne", "sage", "ember"]) {
+  for (const motif of MOTIF_IDS) {
+    for (const palette of PALETTE_IDS) {
       const svg = renderSvg(normalizeState({ ...BASE, motif, palette }));
       for (const role of ["ink", "accent", "highlight", "paper", "bg"]) {
         assert.ok(!svg.includes(`fill="${role}"`), `${motif}/${palette} leaked fill ${role}`);
