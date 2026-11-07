@@ -162,3 +162,28 @@ the committed proof.
   static guard `deleting a saved look keeps keyboard focus in the gallery`;
   suite 114/114.
 - **Release**: v0.5.6.
+
+## Cycle 7 — Phone controls were smaller than a fingertip
+
+- **Area**: Mobile / coarse-pointer usability. On a 390x844 touch viewport the
+  secondary buttons were 36px tall, the PNG selector 38px, range inputs 28px and
+  the gallery delete target only 24x24, all below the 44px touch target used by
+  the primary controls.
+- **Evidence before**: `cycle7-before-mobile-gallery.png` and
+  `cycle7-before-mobile-full.png`; live metrics at 390x844 with
+  `pointer: coarse` measured New seed 79x36, Save look 156x36, Download PNG
+  320x36, PNG size 320x38, Repeat 320x28 and gallery delete 24x24.
+- **Fix**: one `@media (pointer: coarse)` block raises `.btn-small`, `select`,
+  range inputs and `.gallery-delete` to 44px, and widens the gallery-open
+  padding so the larger delete target never overlaps the look name. Desktop
+  pointer layouts keep their existing density.
+- **Evidence after**: `cycle7-after-mobile-gallery.png` and
+  `cycle7-after-mobile-full.png` at the same viewport/state: every measured
+  target is 44px tall, delete is 44x44, no horizontal overflow, and the gallery
+  row still shows the active outline and full look name.
+- **Played run**: `cycle7-touch.mjs` emulates a coarse pointer at 390x844,
+  saves a look with a real click, measures six targets, then taps delete. Before
+  `allTargetsAtLeast44: false`; after `true`; the delete tap still empties the
+  gallery and announces the removal.
+- **Tests**: failing-first `coarse pointers get 44px targets`; suite 115/115.
+- **Release**: v0.5.7.

@@ -1036,6 +1036,29 @@ select:hover {
   }
 }
 
+@media (pointer: coarse) {
+  .btn-small {
+    min-height: 44px;
+  }
+
+  select {
+    min-height: 44px;
+  }
+
+  input[type="range"] {
+    height: 44px;
+  }
+
+  .gallery-open {
+    padding-right: 54px;
+  }
+
+  .gallery-delete {
+    width: 44px;
+    height: 44px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

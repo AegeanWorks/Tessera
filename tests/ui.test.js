@@ -177,6 +177,16 @@ test("muted microcopy meets AA contrast on the darkest panel", () => {
   assert.ok(contrast(token("muted-dim"), token("bg-control")) >= 4.5);
 });
 
+test("coarse pointers get 44px targets", () => {
+  const styles = read("src/styles.css");
+  const coarse = styles.slice(styles.indexOf("@media (pointer: coarse)"));
+  assert.ok(coarse && coarse !== styles, "missing coarse-pointer block");
+  assert.match(coarse, /\.btn-small\s*\{[^}]*min-height:\s*44px/);
+  assert.match(coarse, /select\s*\{[^}]*min-height:\s*44px/);
+  assert.match(coarse, /input\[type="range"\]\s*\{[^}]*height:\s*44px/);
+  assert.match(coarse, /\.gallery-delete\s*\{[^}]*width:\s*44px[^}]*height:\s*44px/);
+});
+
 test("theme.css is the only stylesheet with raw color values", () => {
   const styles = read("src/styles.css");
   assert.ok(!/#[0-9a-f]{3,8}\b/i.test(styles), "styles.css should use theme tokens");
