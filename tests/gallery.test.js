@@ -7,6 +7,7 @@ import {
   addEntry,
   emptyGallery,
   entryName,
+  evictionCandidate,
   isSaved,
   neighborEntryId,
   normalizeEntry,
@@ -100,6 +101,20 @@ test("the gallery keeps at most twelve looks, newest first", () => {
   assert.equal(gallery.entries.length, GALLERY_LIMIT);
   assert.equal(gallery.entries[0].state.seed, GALLERY_LIMIT + 3);
   assert.ok(!gallery.entries.some((entry) => entry.state.seed === 1));
+});
+
+test("evictionCandidate names the oldest look only when a new save overflows", () => {
+  let gallery = emptyGallery();
+  for (let seed = 1; seed <= GALLERY_LIMIT; seed += 1) {
+    gallery = addEntry(gallery, { ...LOOK, seed }, `2026-10-30T00:00:${String(seed).padStart(2, "0")}.000Z`);
+  }
+  const oldest = gallery.entries[gallery.entries.length - 1];
+  assert.equal(evictionCandidate(gallery, { ...LOOK, seed: 99 }), oldest.id);
+  assert.equal(evictionCandidate(gallery, gallery.entries[0].state), null);
+
+  const small = addEntry(emptyGallery(), LOOK);
+  assert.equal(evictionCandidate(small, { ...LOOK, seed: 99 }), null);
+  assert.equal(evictionCandidate(emptyGallery(), LOOK), null);
 });
 
 test("normalizeGalleryRecord drops junk, duplicates and overflow", () => {

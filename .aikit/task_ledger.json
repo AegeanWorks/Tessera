@@ -5,22 +5,12 @@
     "last_phase": "implementation",
     "active_phase": 4,
     "status": "in_progress",
-    "updated_at": 1794085856.5654066,
+    "updated_at": 1794086763.6878612,
     "owner": "opencode:tessera-cycles",
     "started_by": "opencode:tessera-cycles",
     "continuations": []
   },
   "checkpoints": [
-    {
-      "task_id": "tessera-gallery-v1",
-      "phase": "completed",
-      "phase_num": 5,
-      "description": "Task 'tessera-gallery-v1' completed successfully.",
-      "status": "completed",
-      "timestamp": 1793345439.8567314,
-      "timestamp_str": "2026-10-30 10:30:39",
-      "agent": "opencode:tessera-gallery"
-    },
     {
       "task_id": "tessera-transforms-v1",
       "phase": "phase 2",
@@ -257,6 +247,17 @@
       "status": "in_progress",
       "timestamp": 1794085856.5654066,
       "timestamp_str": "2026-11-08 00:10:56",
+      "agent": "opencode:tessera-cycles"
+    },
+    {
+      "task_id": "tessera-quality-cycles-v1",
+      "phase": "implementation",
+      "phase_num": 4,
+      "description": "[14] Cycle 13 (extension) shipped: saving at the 12-look cap now names the evicted oldest look via evictionCandidate and a wrapped toast; failing-first gallery test and static guard; 123/123 tests, verify:static OK, aikit check 4/4. Seeded 12-look run: old toast only 'Saved Kilim Wave...' with seed 12 gone; new toast adds 'Removed the oldest look, Aegean Wave seed 12...' at 540px, still fits. checklists: passed",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794086763.6878612,
+      "timestamp_str": "2026-11-08 00:26:03",
       "agent": "opencode:tessera-cycles"
     }
   ]

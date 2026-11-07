@@ -307,3 +307,28 @@ the committed proof.
 - **Tests**: failing-first `transformLabel names only the active rotation and flip`;
   markup guard `the stage badge shows the active transform`; suite 121/121.
 - **Release**: v0.6.2.
+
+## Cycle 13 — The gallery silently evicted the oldest look
+
+- **Area**: Progression and saves. At the 12-look cap, saving a new pattern
+  drops the oldest entry, but the toast only said `Saved …`; the user was never
+  told which look disappeared.
+- **Evidence before**: old-build worktree `0a8dc02` served on port 4403,
+  `cycle13-before-eviction-toast-1440.png`: preload 12 looks, save Kilim Wave,
+  and the toast is `Saved Kilim Wave …` while Aegean Wave seed 12 has vanished
+  from the list.
+- **Fix**: `evictionCandidate(record, state)` returns the oldest id only when
+  the gallery is full and the incoming look is new. `saveLook` appends
+  `. Removed the oldest look, <name>.` to the toast. The toast gains
+  `max-width: min(92vw, 540px)` and centred wrapping so the longer message fits.
+- **Evidence after**: `cycle13-after-eviction-toast-1440.png` at the same 1440
+  state and 12-look seed: toast reads `Saved Kilim Wave … Removed the oldest
+  look, Aegean Wave · seed 12 …`, wraps to two lines, stays inside the viewport,
+  and the gallery still holds 12 looks with Kilim Wave first.
+- **Played run**: `cycle13-play.mjs` seeds a versioned 12-look gallery, reloads,
+  clicks Kilim and Save look with real CDP clicks. Before: warning false.
+  After: `warnsAboutEviction: true`, oldest id removed, toast visible and
+  `toastFits: true`.
+- **Tests**: failing-first `evictionCandidate names the oldest look only when a new save overflows`;
+  static guard `gallery save warns when the oldest look is evicted`; suite 123/123.
+- **Release**: v0.6.3.

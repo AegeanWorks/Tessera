@@ -96,6 +96,13 @@ export function isSaved(record, state) {
   return normalizeGalleryRecord(record).entries.some((entry) => entry.id === id);
 }
 
+export function evictionCandidate(record, state) {
+  const base = normalizeGalleryRecord(record);
+  if (base.entries.length < GALLERY_LIMIT) return null;
+  if (isSaved(base, state)) return null;
+  return base.entries[base.entries.length - 1].id;
+}
+
 export function activeEntryId(record, state) {
   const id = stateSignature(state);
   return normalizeGalleryRecord(record).entries.some((entry) => entry.id === id) ? id : null;

@@ -69,7 +69,7 @@ Each motif reads three arguments — a seeded random source, a line weight and a
 
 ## Saved Looks
 
-The Gallery block stores up to 12 patterns in a second versioned record, `tessera.gallery.v1`. Entries are newest first, and the visual signature — motif, palette, repeat, weight, warp and seed — is the id, so saving the same look again only moves it to the front. The entry that matches the current stage is outlined, so the active saved look is visible at a glance. Restoring a look preserves the current tile-guide and glow-drift toggles, and deleting one keeps keyboard focus on the neighbouring entry (or Save look when the gallery empties). **Copy link** writes the full state into the URL query, so a shared link restores the look without touching the recipient's gallery. A corrupt or unsupported record is refused instead of being repaired in place.
+The Gallery block stores up to 12 patterns in a second versioned record, `tessera.gallery.v1`. Entries are newest first, and the visual signature — motif, palette, repeat, weight, warp and seed — is the id, so saving the same look again only moves it to the front. Saving a new look at the cap names the oldest look that falls off in the toast. The entry that matches the current stage is outlined, so the active saved look is visible at a glance. Restoring a look preserves the current tile-guide and glow-drift toggles, and deleting one keeps keyboard focus on the neighbouring entry (or Save look when the gallery empties). **Copy link** writes the full state into the URL query, so a shared link restores the look without touching the recipient's gallery. A corrupt or unsupported record is refused instead of being repaired in place.
 
 ## What's Inside
 

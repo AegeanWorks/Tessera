@@ -137,6 +137,12 @@ test("the gallery marks the saved look currently on stage", () => {
   assert.match(styles, /\.gallery-item\.is-active \.gallery-open/);
 });
 
+test("gallery save warns when the oldest look is evicted", () => {
+  const app = read("src/ui/app.js");
+  assert.ok(app.includes("evictionCandidate"));
+  assert.ok(app.includes("Removed the oldest look"));
+});
+
 test("deleting a saved look keeps keyboard focus in the gallery", () => {
   const app = read("src/ui/app.js");
   assert.ok(app.includes("neighborEntryId"));

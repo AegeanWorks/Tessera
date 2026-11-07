@@ -25,7 +25,16 @@ import {
   thumbKey,
   transformLabel,
 } from "../studio/state.js";
-import { activeEntryId, addEntry, emptyGallery, isSaved, neighborEntryId, removeEntry, restoreEntry } from "../studio/gallery.js";
+import {
+  activeEntryId,
+  addEntry,
+  emptyGallery,
+  evictionCandidate,
+  isSaved,
+  neighborEntryId,
+  removeEntry,
+  restoreEntry,
+} from "../studio/gallery.js";
 import { clearState, loadGallery, loadState, saveGallery, saveState } from "../studio/storage.js";
 
 const stage = document.getElementById("stage");
@@ -303,11 +312,18 @@ function syncGallerySelection() {
 
 function saveLook() {
   const alreadySaved = isSaved(gallery, state);
+  const evictedId = alreadySaved ? null : evictionCandidate(gallery, state);
+  const evicted = evictedId ? gallery.entries.find((item) => item.id === evictedId) : null;
   gallery = addEntry(gallery, state);
   saveGallery(storage(), gallery);
   renderGallery();
   const entry = gallery.entries[0];
-  announce(alreadySaved ? `Moved ${entry.name} to the front.` : `Saved ${entry.name}.`);
+  const message = alreadySaved
+    ? `Moved ${entry.name} to the front.`
+    : evicted
+      ? `Saved ${entry.name}. Removed the oldest look, ${evicted.name}.`
+      : `Saved ${entry.name}.`;
+  announce(message);
 }
 
 function loadLook(id) {
