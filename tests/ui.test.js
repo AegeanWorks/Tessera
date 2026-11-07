@@ -285,6 +285,16 @@ test("PNG export keeps a last-export status", () => {
   assert.ok(app.includes("Last export:"));
 });
 
+test("picker grids support roving arrow navigation", () => {
+  const html = read("index.html");
+  const app = read("src/ui/app.js");
+  assert.ok(html.includes('id="motif-grid" role="group" aria-label="Motif" data-columns="3"'));
+  assert.ok(html.includes('id="palette-grid" role="group" aria-label="Palette" data-columns="2"'));
+  assert.ok(app.includes("bindGridNavigation"));
+  assert.ok(app.includes("gridTargetIndex"));
+  assert.ok(app.includes(".tabIndex"));
+});
+
 test("theme.css is the only stylesheet with raw color values", () => {
   const styles = read("src/styles.css");
   assert.ok(!/#[0-9a-f]{3,8}\b/i.test(styles), "styles.css should use theme tokens");

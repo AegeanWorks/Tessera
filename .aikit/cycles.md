@@ -539,3 +539,31 @@ the committed proof.
 - **Tests**: failing-first `PNG export keeps a last-export status`; suite
   132/132.
 - **Release**: v0.6.11.
+
+## Cycle 22 — Picker grids ignored arrow keys
+
+- **Area**: Keyboard navigation. Motif and palette pickers behaved like plain
+  tab lists: all eight buttons were tab stops, and arrow keys did nothing. A
+  visual grid should support directional movement without tabbing through every
+  thumbnail.
+- **Evidence before**: old-build worktree `ac5f39f` served on port 4413,
+  `cycle22-before-motif-right-1440.png` / `-390.png`: focusing Wave and pressing
+  ArrowRight leaves focus on Wave; all eight motif and palette buttons have
+  `tabIndex 0`.
+- **Fix**: add a pure `gridTargetIndex` helper and roving tabindex in both
+  pickers. Only the selected button is tabbable initially; ArrowLeft/Right move
+  within a row, ArrowUp/Down move by the grid's `data-columns` (3 motif, 2
+  palette), and Home/End jump to the ends. Arrow keys move focus only; Enter or
+  Space applies the focused choice.
+- **Evidence after**: `cycle22-after-motif-right-1440.png` and
+  `cycle22-after-motif-right-390.png` at the same default state show the focus
+  ring on Ridge while Wave remains selected. Down reaches Arcade, End reaches
+  Drift, Enter selects Drift, and the palette moves Kilim → Nocturne.
+- **Played run**: `cycle22-play.mjs` focuses each selected picker, uses real
+  arrow keys, then Enter at 1440 and repeats at 390 after clearing storage.
+  Before: all keys no-op. After: one tab stop per grid, Ridge/Arcade/Drift,
+  palette Kilim/Nocturne, Enter selects Drift, mobile ArrowRight reaches Ridge.
+- **Tests**: failing-first `navigation.test.js` for directional/Home/End/invalid
+  cases; static guard `picker grids support roving arrow navigation`; suite
+  136/136.
+- **Release**: v0.6.12.

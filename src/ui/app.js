@@ -1,4 +1,5 @@
 import { getMotif, motifList } from "../studio/motifs.js";
+import { gridTargetIndex } from "../studio/navigation.js";
 import { paletteList, getPalette } from "../studio/palettes.js";
 import { svgToPng } from "../studio/raster.js";
 import {
@@ -122,6 +123,7 @@ function buildMotifButtons() {
     button.className = "motif-button";
     button.dataset.motif = motif.id;
     button.setAttribute("aria-pressed", "false");
+    button.tabIndex = motif.id === state.motif ? 0 : -1;
     button.setAttribute("aria-label", `${motif.name} motif. ${motif.note}`);
 
     const icon = document.createElement("span");
@@ -176,6 +178,7 @@ function buildPaletteButtons() {
     button.className = "palette-button";
     button.dataset.palette = palette.id;
     button.setAttribute("aria-pressed", "false");
+    button.tabIndex = palette.id === state.palette ? 0 : -1;
     button.setAttribute("aria-label", `${palette.name} palette. ${palette.note}`);
 
     const swatches = document.createElement("span");
@@ -439,12 +442,16 @@ function syncInputs() {
 function syncSelection() {
   if (motifGrid) {
     for (const button of motifGrid.querySelectorAll(".motif-button")) {
-      button.setAttribute("aria-pressed", button.dataset.motif === state.motif ? "true" : "false");
+      const selected = button.dataset.motif === state.motif;
+      button.setAttribute("aria-pressed", selected ? "true" : "false");
+      button.tabIndex = selected ? 0 : -1;
     }
   }
   if (paletteGrid) {
     for (const button of paletteGrid.querySelectorAll(".palette-button")) {
-      button.setAttribute("aria-pressed", button.dataset.palette === state.palette ? "true" : "false");
+      const selected = button.dataset.palette === state.palette;
+      button.setAttribute("aria-pressed", selected ? "true" : "false");
+      button.tabIndex = selected ? 0 : -1;
     }
   }
   if (presetList) {
@@ -653,6 +660,23 @@ function bindSelect(input, key) {
   });
 }
 
+function bindGridNavigation(grid) {
+  if (!grid) return;
+  grid.addEventListener("keydown", (event) => {
+    const buttons = [...grid.querySelectorAll("button")];
+    const index = buttons.indexOf(event.target);
+    if (index < 0) return;
+    const columns = Number(grid.dataset.columns) || 1;
+    const target = gridTargetIndex(index, columns, buttons.length, event.key);
+    if (target === null) return;
+    event.preventDefault();
+    buttons.forEach((button, buttonIndex) => {
+      button.tabIndex = buttonIndex === target ? 0 : -1;
+    });
+    buttons[target].focus();
+  });
+}
+
 function bindActions() {
   const randomize = document.getElementById("randomize");
   const reseed = document.getElementById("new-seed");
@@ -689,6 +713,8 @@ function bindActions() {
   bindSelect(flipInput, "flip");
   bindSwitch(motionInput, "motion");
   bindSwitch(guidesInput, "guides");
+  bindGridNavigation(motifGrid);
+  bindGridNavigation(paletteGrid);
 }
 
 function isTextEntry(target) {
