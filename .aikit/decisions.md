@@ -88,3 +88,10 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Context**: `exportName`/`pngName` omitted repeat, weight and warp, so two different renders (e.g. weight 2 vs 6) produced the same filename and overwrote each other; `entryName` and `describeState` also omitted them, showing duplicate gallery names and identical descriptions for different looks.
 - **Decision**: Add `geometrySuffix` (`-r{repeat}w{weight}v{warp}`) to SVG/PNG filenames, include weight/warp in `describeState` and repeat/weight/warp in `entryName`. Updated the pinned expectations plus distinctness regression tests.
 - **Consequences**: Every distinct visual maps to a distinct filename, gallery name and description; old filenames change, which is intended because the old ones collided.
+
+### ADR-012: The preset rail marks a look by its base visual fields, not personal transforms
+- **Date**: 2026-11-07
+- **Status**: Accepted
+- **Context**: Presets now show visual previews and can be marked active, but `applyPreset` deliberately preserves the user's rotate, flip, guides and motion toggles. Comparing the full state would clear the marker immediately after loading a preset on a transformed stage, which would make the confirmation useless.
+- **Decision**: `activePresetId` compares the six base look fields (`motif`, `palette`, `repeat`, `weight`, `warp`, `seed`) and ignores transforms and toggles. Any edit to a base field clears the marker. Gallery signatures keep transforms because a saved look must restore its exact geometry.
+- **Consequences**: The outlined preset means "this curated base look is loaded"; the stage may still be mirrored or rotated. The preset previews and the active comparison stay consistent because both use the canonical preset state.
