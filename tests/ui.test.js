@@ -133,7 +133,8 @@ test("keyboard shortcuts are wired without hijacking form fields", () => {
     assert.ok(app.includes(key));
   }
   assert.ok(app.includes("isContentEditable"));
-  assert.ok(app.includes('["INPUT", "TEXTAREA", "SELECT", "BUTTON"].includes'));
+  assert.ok(app.includes('["INPUT", "TEXTAREA", "SELECT"].includes'));
+  assert.ok(!app.includes('"BUTTON"'), "a focused button must not swallow studio shortcuts");
 });
 
 test("theme.css is the only stylesheet with raw color values", () => {

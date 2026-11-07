@@ -35,3 +35,29 @@ the committed proof.
 - **Tests**: failing-first `thumbKey changes with every field a motif picker previews`;
   static guard `the motif picker previews every visual change`; suite 108/108.
 - **Release**: v0.5.1.
+
+## Cycle 2 — Studio shortcuts died after any button click
+
+- **Area**: Interaction / keyboard accessibility. `bindKeyboard` ignored key events
+  whose target was a `BUTTON`, and a real mouse click leaves focus on the clicked
+  button. After choosing a motif, a palette or a preset, `R`, `S`, `C`, `E`, `P`
+  and `L` silently stopped working until the user clicked empty page space.
+- **Evidence before**: old-build worktree `a45f63f` served on port 4391,
+  `cycle2-before-gallery-1440.png`: clicked Ridge (focus stayed on the button),
+  then pressed `S`; the gallery stayed empty, no toast, stage hash `29e96fd1`.
+  `R` was also ignored (`afterRandomizeKey` unchanged).
+- **Fix**: protect only text-editing controls (`INPUT`, `TEXTAREA`, `SELECT`) and
+  contenteditable from shortcuts; buttons no longer swallow them. Buttons still
+  receive Space/Enter normally, and the shortcut letters do not activate them.
+- **Evidence after**: `cycle2-after-gallery-1440.png` at the same default state
+  and same 1440x900 viewport: click Ridge, press `S`, and the gallery shows
+  `Aegean Ridge · seed 7 · r6 w3 v42` with the saved toast. `R` then randomizes
+  from the still-focused motif button (pinwheel, seed 4170). Focusing the PNG
+  size `<select>` and pressing `R` leaves the stage hash unchanged.
+- **Played run**: `cycle2-play.mjs` (fresh profile, real CDP mouse click on the
+  Ridge tile, real keyDown/keyUp for S then R). Before: no save, no randomize.
+  After: one saved look, then a random pattern; `<select>` guard still holds.
+- **Tests**: failing-first static guard now requires the protected list to be
+  exactly `INPUT`, `TEXTAREA`, `SELECT` and asserts `BUTTON` is absent; suite
+  108/108.
+- **Release**: v0.5.2.

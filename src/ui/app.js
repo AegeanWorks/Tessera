@@ -554,7 +554,7 @@ function bindKeyboard() {
     const target = event.target;
     if (target instanceof HTMLElement) {
       if (target.isContentEditable) return;
-      if (["INPUT", "TEXTAREA", "SELECT", "BUTTON"].includes(target.tagName)) return;
+      if (["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName)) return;
     }
     const key = event.key.toLowerCase();
     if (key === "r") {
