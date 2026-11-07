@@ -381,3 +381,29 @@ the committed proof.
 - **Tests**: failing-first static guard `clipboard fallback restores keyboard focus`;
   suite 125/125.
 - **Release**: v0.6.5.
+
+## Cycle 16 — The gallery had no clear-all action
+
+- **Area**: Progression and saves / collection management. Removing the whole
+  gallery meant clicking up to twelve separate × buttons; there was no way to
+  clear the collection deliberately, and no safe confirmation path.
+- **Evidence before**: old-build worktree `e18b503` served on port 4407,
+  `cycle16-before-gallery-1440.png`: three saved looks, no clear control
+  (`clearExists: false`) and no way to empty the collection in one action.
+- **Fix**: add a `Clear all` control in the gallery foot. The first click arms
+  it for four seconds (`Confirm clear all`, pink border, toast prompt); a second
+  click clears the record through `clearGallery`, restores focus to Save look,
+  and disables the control when empty. Blur or timeout disarms it. The control
+  is 44px tall under a coarse pointer.
+- **Evidence after**: `cycle16-after-gallery-1440.png` shows the new Clear all
+  control at the same three-look state; `cycle16-after-armed-1440.png` shows the
+  confirmation state; `cycle16-after-cleared-1440.png` shows the empty gallery,
+  disabled control and `Cleared 3 saved looks.` toast. `cycle16-after-gallery-390.png`
+  confirms the foot fits at 390px with no horizontal overflow.
+- **Played run**: `cycle16-play.mjs` saves three looks, clicks Clear all once
+  (count stays 3, label becomes Confirm clear all), blurs to prove it disarms,
+  then clicks twice. Result: count 0, storage key removed, focus on Save look,
+  `clearedToast: "Cleared 3 saved looks."`.
+- **Tests**: failing-first `the gallery offers a confirmed clear-all action`;
+  markup inventory now includes `#clear-gallery`; suite 126/126.
+- **Release**: v0.6.6.

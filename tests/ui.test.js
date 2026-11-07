@@ -60,6 +60,7 @@ test("every control in the markup is addressable and labelled", () => {
     "export-png",
     "save-look",
     "copy-link",
+    "clear-gallery",
     "gallery-list",
     "toast",
   ]) {
@@ -159,6 +160,16 @@ test("deleting a saved look keeps keyboard focus in the gallery", () => {
   const app = read("src/ui/app.js");
   assert.ok(app.includes("neighborEntryId"));
   assert.match(app, /\(focusTarget \|\| saveLookButton\)\?\.focus\(\)/);
+});
+
+test("the gallery offers a confirmed clear-all action", () => {
+  const html = read("index.html");
+  const app = read("src/ui/app.js");
+  assert.ok(html.includes('id="clear-gallery"'));
+  assert.ok(html.includes('data-ui="clear-gallery"'));
+  assert.ok(app.includes("clearGallery(storage())"));
+  assert.ok(app.includes("Confirm clear all"));
+  assert.ok(app.includes("clearAllLooks"));
 });
 
 test("keyboard shortcuts are wired without hijacking form fields", () => {

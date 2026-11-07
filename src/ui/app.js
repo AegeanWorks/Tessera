@@ -35,7 +35,7 @@ import {
   removeEntry,
   restoreEntry,
 } from "../studio/gallery.js";
-import { clearState, loadGallery, loadState, saveGallery, saveState } from "../studio/storage.js";
+import { clearGallery, clearState, loadGallery, loadState, saveGallery, saveState } from "../studio/storage.js";
 
 const stage = document.getElementById("stage");
 const motifGrid = document.getElementById("motif-grid");
@@ -63,6 +63,7 @@ const exportPngButton = document.getElementById("export-png");
 const galleryList = document.getElementById("gallery-list");
 const saveLookButton = document.getElementById("save-look");
 const copyLinkButton = document.getElementById("copy-link");
+const clearGalleryButton = document.getElementById("clear-gallery");
 const toast = document.getElementById("toast");
 
 let state = normalizeState(DEFAULTS);
@@ -70,6 +71,8 @@ let lastThumbKey = "";
 let thumbFrame = 0;
 let pngSize = DEFAULT_EXPORT_SIZE;
 let gallery = emptyGallery();
+let clearArmed = false;
+let clearTimer = 0;
 let toastTimer = 0;
 
 function storage() {
@@ -250,6 +253,7 @@ function buildPngSizes() {
 
 function renderGallery() {
   if (!galleryList) return;
+  syncClearButton();
   galleryList.replaceChildren();
   if (!gallery.entries.length) {
     const empty = document.createElement("p");
@@ -313,6 +317,44 @@ function syncGallerySelection() {
     if (selected) open.setAttribute("aria-current", "true");
     else open.removeAttribute("aria-current");
   }
+}
+
+function disarmClear() {
+  clearArmed = false;
+  window.clearTimeout(clearTimer);
+  clearTimer = 0;
+  if (!clearGalleryButton) return;
+  clearGalleryButton.classList.remove("is-armed");
+  clearGalleryButton.textContent = "Clear all";
+}
+
+function syncClearButton() {
+  if (!clearGalleryButton) return;
+  const empty = gallery.entries.length === 0;
+  clearGalleryButton.disabled = empty;
+  if (empty) disarmClear();
+}
+
+function armClear() {
+  if (!gallery.entries.length || !clearGalleryButton) return;
+  clearArmed = true;
+  clearGalleryButton.classList.add("is-armed");
+  clearGalleryButton.textContent = "Confirm clear all";
+  announce(`Press Clear again to remove all ${gallery.entries.length} saved looks.`);
+  window.clearTimeout(clearTimer);
+  clearTimer = window.setTimeout(() => disarmClear(), 4000);
+}
+
+function clearAllLooks() {
+  const count = gallery.entries.length;
+  if (!count) return;
+  disarmClear();
+  gallery = emptyGallery();
+  const persisted = clearGallery(storage());
+  renderGallery();
+  saveLookButton?.focus();
+  const looks = count === 1 ? "look" : "looks";
+  announce(persistedNotice(`Cleared ${count} saved ${looks}.`, persisted));
 }
 
 function saveLook() {
@@ -615,6 +657,11 @@ function bindActions() {
   exportPngButton?.addEventListener("click", exportPng);
   saveLookButton?.addEventListener("click", saveLook);
   copyLinkButton?.addEventListener("click", copyLink);
+  clearGalleryButton?.addEventListener("click", () => {
+    if (clearArmed) clearAllLooks();
+    else armClear();
+  });
+  clearGalleryButton?.addEventListener("blur", disarmClear);
 
   bindRange(repeatInput, "repeat");
   bindRange(weightInput, "weight");
