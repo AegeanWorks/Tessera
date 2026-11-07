@@ -17,6 +17,7 @@ import {
   presetState,
   randomizeState,
   reseedState,
+  shareSummary,
   thumbKey,
   transformLabel,
 } from "../src/studio/state.js";
@@ -224,6 +225,14 @@ test("transformLabel names only the active rotation and flip", () => {
   assert.equal(transformLabel({ ...DEFAULTS, flip: "y" }), "Flip Y");
   assert.equal(transformLabel({ ...DEFAULTS, rotate: 270, flip: "x" }), "270° · Flip X");
   assert.equal(transformLabel({ ...DEFAULTS, rotate: 45, flip: "diagonal" }), "");
+});
+
+test("shareSummary names the look a copied link restores", () => {
+  assert.equal(shareSummary(DEFAULTS), "Aegean Wave · seed 7 · 6 repeats");
+  assert.equal(
+    shareSummary({ ...DEFAULTS, palette: "kilim", motif: "comb", seed: 42, repeat: 9, rotate: 90, flip: "y" }),
+    "Kilim Comb · seed 42 · 9 repeats · 90° · Flip Y",
+  );
 });
 
 test("describeState and exportName read from the normalized record", () => {

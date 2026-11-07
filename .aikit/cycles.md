@@ -463,3 +463,30 @@ the committed proof.
 - **Tests**: failing-first `reset names the pattern and reports storage failures`;
   suite 128/128.
 - **Release**: v0.6.8.
+
+## Cycle 19 — Copy link did not say what the link restored
+
+- **Area**: Share-link round-trip feedback. Copy link confirmed only
+  `Share link copied to the clipboard.`; after changing motif, palette, repeats,
+  weight, seed and transform, the toast gave no indication that the link
+  contained the look on stage.
+- **Evidence before**: old-build worktree `5b72fc9` served on port 4410,
+  `cycle19-before-share-1440.png`: comb/kilim, 8 repeats, weight 6, 90° + Flip X,
+  guides + glow; the copied URL fully restores the state, but the toast is
+  generic. Same at 390.
+- **Fix**: `shareSummary(state)` names the palette, motif, seed, repeats and any
+  transform; `copyLink` uses it in the toast. The URL codec itself is untouched.
+- **Evidence after**: `cycle19-after-share-1440.png` and
+  `cycle19-after-share-390.png` at the identical state show
+  `Share link copied: Kilim Comb · seed 7 · 8 repeats · 90° · Flip X.` and fit
+  without overflow. `cycle19-after-reopened-1440.png` shows the link opened
+  after a conflicting localStorage record was planted; the stage hash and every
+  state field match the source (`73dd09fd`).
+- **Played run**: `cycle19-play.mjs` stubs clipboard `writeText`, changes six
+  fields plus both effects, copies at 1440 and 390, plants a conflicting saved
+  state, navigates to the copied URL, and compares motif/palette/repeat/weight/
+  seed/rotate/flip/guides/motion plus the rendered stage hash.
+  `roundTripState: true`, `roundTripStage: true`.
+- **Tests**: failing-first `shareSummary names the look a copied link restores`;
+  static guard `copy link names the state it shares`; suite 130/130.
+- **Release**: v0.6.9.

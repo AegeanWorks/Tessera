@@ -22,6 +22,7 @@ import {
   presetState,
   randomizeState,
   reseedState,
+  shareSummary,
   thumbKey,
   transformLabel,
 } from "../studio/state.js";
@@ -546,7 +547,7 @@ function shareLink() {
 }
 
 async function copyLink() {
-  await copyText(shareLink(), "Share link copied to the clipboard.");
+  await copyText(shareLink(), `Share link copied: ${shareSummary(state)}.`);
 }
 
 function exportSvg() {

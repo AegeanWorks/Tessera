@@ -230,6 +230,23 @@ export function transformLabel(state) {
   return parts.join(" · ");
 }
 
+function titleCase(value) {
+  const text = String(value);
+  return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
+export function shareSummary(state) {
+  const normalized = normalizeState(state);
+  const parts = [
+    `${titleCase(normalized.palette)} ${titleCase(normalized.motif)}`,
+    `seed ${normalized.seed}`,
+    `${normalized.repeat} repeats`,
+  ];
+  const transform = transformLabel(normalized);
+  if (transform) parts.push(transform);
+  return parts.join(" · ");
+}
+
 export function thumbKey(state) {
   const normalized = normalizeState(state);
   return [

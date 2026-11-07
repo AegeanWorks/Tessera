@@ -157,6 +157,12 @@ test("clipboard fallback restores keyboard focus", () => {
   assert.ok(app.includes("preventScroll: true"));
 });
 
+test("copy link names the state it shares", () => {
+  const app = read("src/ui/app.js");
+  assert.ok(app.includes("shareSummary"));
+  assert.ok(app.includes("Share link copied:"));
+});
+
 test("deleting a saved look keeps keyboard focus in the gallery", () => {
   const app = read("src/ui/app.js");
   assert.ok(app.includes("neighborEntryId"));
