@@ -142,6 +142,11 @@ test("every preset resolves to a valid state", () => {
   }
 });
 
+test("every motif has a curated preset", () => {
+  const covered = new Set(PRESETS.map((preset) => preset.state.motif));
+  assert.deepEqual(MOTIF_IDS.filter((id) => !covered.has(id)), []);
+});
+
 test("applyPreset keeps personal toggles and transforms", () => {
   const current = normalizeState({ guides: true, motion: true, motif: "wave", rotate: 90, flip: "x" });
   const state = applyPreset("riso-comb", current);

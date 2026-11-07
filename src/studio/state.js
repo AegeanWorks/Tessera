@@ -56,6 +56,24 @@ export const PRESETS = Object.freeze([
     note: "Mosaic / Sage",
     state: Object.freeze({ motif: "mosaic", palette: "sage", repeat: 5, weight: 2, warp: 72, seed: 13 }),
   }),
+  Object.freeze({
+    id: "ember-arcade",
+    name: "Ember arcade",
+    note: "Arcade / Ember",
+    state: Object.freeze({ motif: "arcade", palette: "ember", repeat: 5, weight: 3, warp: 54, seed: 17 }),
+  }),
+  Object.freeze({
+    id: "terra-loom",
+    name: "Terra loom",
+    note: "Loom / Terra",
+    state: Object.freeze({ motif: "loom", palette: "terra", repeat: 5, weight: 3, warp: 58, seed: 19 }),
+  }),
+  Object.freeze({
+    id: "iris-drift",
+    name: "Iris drift",
+    note: "Drift / Iris",
+    state: Object.freeze({ motif: "drift", palette: "iris", repeat: 6, weight: 2, warp: 68, seed: 23 }),
+  }),
 ]);
 
 const STATE_KEYS = Object.freeze([

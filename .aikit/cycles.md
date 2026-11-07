@@ -212,3 +212,26 @@ the committed proof.
 - **Tests**: failing-first static guard now requires `isTextEntry` and its
   input-type branch; suite 115/115.
 - **Release**: v0.5.8.
+
+## Cycle 9 — Three motifs had no preset
+
+- **Area**: Catalogue / discovery. The preset rail covered Wave, Ridge, Comb,
+  Pinwheel and Mosaic only; Arcade, Loom and Drift — including both motifs added
+  in v0.5.0 — could not be reached in one click.
+- **Evidence before**: old-build worktree `d877263` served on port 4397,
+  `cycle9-before-presets-1440.png`: five preset rows, no `ember-arcade`,
+  `terra-loom` or `iris-drift` nodes; clicking those ids was a no-op and the
+  stage stayed Wave/Aegean.
+- **Fix**: add three frozen presets with distinct seeds and geometry:
+  Ember arcade (arcade/ember, seed 17), Terra loom (loom/terra, seed 19) and
+  Iris drift (drift/iris, seed 23). Presets remain pure state records, so the
+  existing URL, gallery, transform and export paths pick them up unchanged.
+- **Evidence after**: `cycle9-after-presets-1440.png` at the same viewport and
+  default state shows eight preset rows covering all eight motifs;
+  `cycle9-after-drift-stage-1440.png` shows the new Iris drift look after a real
+  click. Each new preset loads its exact motif, palette, seed and repeat.
+- **Played run**: `cycle9-play.mjs` clicks all three new presets. Before:
+  `presetCount: 5`, all clicks false. After: `presetCount: 8`, Arcade/Ember
+  seed 17, Loom/Terra seed 19, Drift/Iris seed 23, each with its loaded toast.
+- **Tests**: failing-first `every motif has a curated preset`; suite 116/116.
+- **Release**: v0.5.9.

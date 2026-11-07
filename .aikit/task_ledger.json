@@ -5,29 +5,12 @@
     "last_phase": "implementation",
     "active_phase": 4,
     "status": "in_progress",
-    "updated_at": 1794082610.4346035,
+    "updated_at": 1794083073.1805437,
     "owner": "opencode:tessera-cycles",
     "started_by": "opencode:tessera-cycles",
     "continuations": []
   },
   "checkpoints": [
-    {
-      "task_id": "tessera-png-export-v1",
-      "phase": "phase 4",
-      "phase_num": 4,
-      "description": "[3/3] PNG export shipped: frozen wallpaper/Full HD/4K/phone/square size table, DOM-free raster orchestrator with injected canvas/image adapters, sidebar export block with P shortcut, README and ADR-006, v0.2.0. 85 Node tests in budget, 4/4 project gates, static contract; Edge headless produced 1080x1080 and 3840x2160 PNGs plus the createImageBitmap fallback with zero console errors; no overflow at 320/390/768/1024/1440/1920 and the 768px two-column grid pairs cleanly. checklists: passed",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1793344650.839873,
-      "timestamp_str": "2026-10-30 10:17:30",
-      "agent": "opencode:tessera-png",
-      "handoff": {
-        "state": "all 11 project files are uncommitted on master",
-        "next": "commit feat(studio): add PNG wallpaper export",
-        "open": "AegeanWorks Live will pick up 0.2.0 on its next sync",
-        "evidence": "node --test tests 85/85, aikit check tessera 4/4, verify:static OK, headless PNG matrix and responsive sweep"
-      }
-    },
     {
       "task_id": "tessera-png-export-v1",
       "phase": "completed",
@@ -274,6 +257,17 @@
       "status": "in_progress",
       "timestamp": 1794082610.4346035,
       "timestamp_str": "2026-11-07 23:16:50",
+      "agent": "opencode:tessera-cycles"
+    },
+    {
+      "task_id": "tessera-quality-cycles-v1",
+      "phase": "implementation",
+      "phase_num": 4,
+      "description": "[10] Cycle 9 (extension) shipped: three frozen presets complete the motif catalogue (Ember arcade seed 17, Terra loom seed 19, Iris drift seed 23); failing-first 'every motif has a curated preset' guard; 116/116 tests, verify:static OK, aikit check 4/4. Old build showed 5 presets and no-op clicks; new build shows 8 and each new preset loads its exact motif/palette/seed/repeat with a toast. checklists: passed",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794083073.1805437,
+      "timestamp_str": "2026-11-07 23:24:33",
       "agent": "opencode:tessera-cycles"
     }
   ]
