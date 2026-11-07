@@ -315,6 +315,52 @@ input:focus-visible {
   bottom: 16px;
 }
 
+.stage-effects {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  max-width: calc(100% - 200px);
+}
+
+.stage-effects[hidden],
+.stage-effect[hidden] {
+  display: none;
+}
+
+.stage-effect {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 9px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  color: var(--text-soft);
+  background: var(--panel-soft);
+  backdrop-filter: blur(12px);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.stage-effect::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--ink);
+  box-shadow: 0 0 8px var(--glow-cyan);
+}
+
+.stage-effect[data-effect="motion"]::before {
+  background: var(--violet);
+  box-shadow: 0 0 8px var(--glow-violet);
+}
+
 .stage-divider {
   color: var(--muted-dim);
 }
@@ -1082,6 +1128,10 @@ select:hover {
   .stage-frame {
     height: clamp(260px, 52vh, 420px);
     border-radius: var(--radius-md);
+  }
+
+  .stage-effects {
+    bottom: 58px;
   }
 
   .stage-caption {

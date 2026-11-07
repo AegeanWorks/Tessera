@@ -407,3 +407,31 @@ the committed proof.
 - **Tests**: failing-first `the gallery offers a confirmed clear-all action`;
   markup inventory now includes `#clear-gallery`; suite 126/126.
 - **Release**: v0.6.6.
+
+## Cycle 17 — Active stage effects had no on-stage cue
+
+- **Area**: Stage effects / feedback and reduced-motion accessibility. Tile
+  guides and Glow drift changed the stage, but nothing on the stage named the
+  active effects. With `prefers-reduced-motion: reduce`, Glow drift is
+  deliberately static (`animation: none`), so a checked toggle had no visible
+  result at all on the stage.
+- **Evidence before**: old-build worktree `6fb7ecb` served on port 4408,
+  `cycle17-before-effects-1440.png`: both toggles on, 9 guide lines drawn and
+  `animationName: tessera-drift`, but no effect cue exists
+  (`effectsExists: false`); same at 390 and under reduced motion.
+- **Fix**: add a hidden `#stage-effects` chip row at the stage's lower left.
+  `syncInputs` exposes `data-guides`/`data-motion` on the stage and shows
+  `Guides` and/or `Glow` chips only while those effects are active. The chips
+  sit above the badge on narrow screens and are labelled with coloured dots.
+- **Evidence after**: `cycle17-after-effects-1440.png` and
+  `cycle17-after-effects-390.png` at the same on-state: Guides + Glow chips
+  appear, fit inside the stage frame, and vanish when both toggles are turned
+  off. Under reduced motion the animation is `none` but the Glow chip remains,
+  so the toggle still has an on-stage explanation.
+- **Played run**: `cycle17-play.mjs` clicks both switch labels, checks guide
+  lines, animation name, stage datasets, chip labels and fit at 1440/390, then
+  emulates reduced motion and toggles both off. Before: no chips. After:
+  `effectsVisible: true`, `reducedMotionKeepsCue: true`, `clearsWhenOff: true`.
+- **Tests**: failing-first `the stage surfaces active tile guides and glow drift`;
+  markup inventory includes `#stage-effects`; suite 127/127.
+- **Release**: v0.6.7.

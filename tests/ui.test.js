@@ -42,6 +42,7 @@ test("every control in the markup is addressable and labelled", () => {
     "motif-grid",
     "palette-grid",
     "stage-transform",
+    "stage-effects",
     "repeat",
     "weight",
     "warp",
@@ -242,6 +243,16 @@ test("the stage badge shows the active transform", () => {
   assert.ok(html.includes('id="stage-transform"'));
   assert.ok(app.includes("transformLabel"));
   assert.ok(app.includes("stageTransform"));
+});
+
+test("the stage surfaces active tile guides and glow drift", () => {
+  const html = read("index.html");
+  const app = read("src/ui/app.js");
+  assert.ok(html.includes('id="stage-effects"'));
+  assert.ok(html.includes('data-effect="guides"'));
+  assert.ok(html.includes('data-effect="motion"'));
+  assert.ok(app.includes("stageEffects"));
+  assert.ok(app.includes('stage.dataset.guides'));
 });
 
 test("theme.css is the only stylesheet with raw color values", () => {

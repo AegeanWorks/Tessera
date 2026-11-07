@@ -58,6 +58,7 @@ const stageRepeat = document.getElementById("stage-repeat");
 const stageSeed = document.getElementById("stage-seed");
 const stageTransform = document.getElementById("stage-transform");
 const stageTransformDivider = document.getElementById("stage-transform-divider");
+const stageEffects = document.getElementById("stage-effects");
 const pngSizeInput = document.getElementById("png-size");
 const exportPngButton = document.getElementById("export-png");
 const galleryList = document.getElementById("gallery-list");
@@ -420,7 +421,17 @@ function syncInputs() {
     stageTransform.hidden = transform === "";
   }
   if (stageTransformDivider) stageTransformDivider.hidden = transform === "";
-  if (stage) stage.dataset.motion = state.motion ? "on" : "off";
+  if (stageEffects) {
+    for (const chip of stageEffects.querySelectorAll("[data-effect]")) {
+      const active = chip.dataset.effect === "guides" ? state.guides : state.motion;
+      chip.hidden = !active;
+    }
+    stageEffects.hidden = !state.guides && !state.motion;
+  }
+  if (stage) {
+    stage.dataset.motion = state.motion ? "on" : "off";
+    stage.dataset.guides = state.guides ? "on" : "off";
+  }
 }
 
 function syncSelection() {
