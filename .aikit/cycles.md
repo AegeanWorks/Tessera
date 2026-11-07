@@ -332,3 +332,28 @@ the committed proof.
 - **Tests**: failing-first `evictionCandidate names the oldest look only when a new save overflows`;
   static guard `gallery save warns when the oldest look is evicted`; suite 123/123.
 - **Release**: v0.6.3.
+
+## Cycle 14 — Storage failures were reported as successful saves
+
+- **Area**: Progression and saves / robustness. When `localStorage.setItem`
+  throws (quota, private mode, hostile store), `saveGallery` returns false but
+  `saveLook`/`deleteLook` ignored it and still announced a normal save/removal;
+  the look vanished on reload while the toast claimed success.
+- **Evidence before**: old-build worktree `d94639c` served on port 4405,
+  `cycle14-before-storage-warning-1440.png`: after overriding
+  `localStorage.setItem` to throw, the toast still reads
+  `Saved Kilim Wave …`; delete likewise reads `Removed …`.
+- **Fix**: both gallery actions keep `const persisted = saveGallery(...)` and
+  route the message through `persistedNotice`. On failure the toast appends
+  `Browser storage is unavailable, so this lasts for this session only.` The
+  in-memory gallery still updates, so the session remains usable.
+- **Evidence after**: `cycle14-after-storage-warning-1440.png` at the same state
+  and viewport: the toast carries the warning, wraps within 540px, and the
+  look remains listed for the session. Delete shows the same warning.
+- **Played run**: `cycle14-play.mjs` saves one look normally, overrides
+  `localStorage.setItem` with a throwing function, then clicks Kilim + Save and
+  Delete. Before: `failedSaveWarns: false`, `failedDeleteWarns: false`. After:
+  both true, `toastFits: true`, and the in-memory list still updates.
+- **Tests**: failing-first static guard `gallery persistence failures are reported`;
+  suite 124/124.
+- **Release**: v0.6.4.

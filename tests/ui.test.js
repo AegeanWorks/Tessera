@@ -143,6 +143,12 @@ test("gallery save warns when the oldest look is evicted", () => {
   assert.ok(app.includes("Removed the oldest look"));
 });
 
+test("gallery persistence failures are reported", () => {
+  const app = read("src/ui/app.js");
+  assert.ok(app.includes("const persisted = saveGallery"));
+  assert.ok(app.includes("for this session only"));
+});
+
 test("deleting a saved look keeps keyboard focus in the gallery", () => {
   const app = read("src/ui/app.js");
   assert.ok(app.includes("neighborEntryId"));

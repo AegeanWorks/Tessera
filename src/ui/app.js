@@ -94,6 +94,11 @@ function announce(message) {
   }, 2400);
 }
 
+function persistedNotice(message, persisted) {
+  if (persisted) return message;
+  return `${message.replace(/\.$/, "")}. Browser storage is unavailable, so this lasts for this session only.`;
+}
+
 function motifOptions() {
   return motifList();
 }
@@ -315,7 +320,7 @@ function saveLook() {
   const evictedId = alreadySaved ? null : evictionCandidate(gallery, state);
   const evicted = evictedId ? gallery.entries.find((item) => item.id === evictedId) : null;
   gallery = addEntry(gallery, state);
-  saveGallery(storage(), gallery);
+  const persisted = saveGallery(storage(), gallery);
   renderGallery();
   const entry = gallery.entries[0];
   const message = alreadySaved
@@ -323,7 +328,7 @@ function saveLook() {
     : evicted
       ? `Saved ${entry.name}. Removed the oldest look, ${evicted.name}.`
       : `Saved ${entry.name}.`;
-  announce(message);
+  announce(persistedNotice(message, persisted));
 }
 
 function loadLook(id) {
@@ -339,7 +344,7 @@ function deleteLook(id) {
   if (!entry) return;
   const focusId = neighborEntryId(gallery, id);
   gallery = removeEntry(gallery, id);
-  saveGallery(storage(), gallery);
+  const persisted = saveGallery(storage(), gallery);
   renderGallery();
   let focusTarget = null;
   if (focusId && galleryList) {
@@ -348,7 +353,7 @@ function deleteLook(id) {
     );
   }
   (focusTarget || saveLookButton)?.focus();
-  announce(`Removed ${entry.name}.`);
+  announce(persistedNotice(`Removed ${entry.name}.`, persisted));
 }
 
 function syncInputs() {
