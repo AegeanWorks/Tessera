@@ -137,6 +137,11 @@ test("keyboard shortcuts are wired without hijacking form fields", () => {
   assert.ok(!app.includes('"BUTTON"'), "a focused button must not swallow studio shortcuts");
 });
 
+test("control cards size to their content in the two-column layout", () => {
+  const styles = read("src/styles.css");
+  assert.match(styles, /\.controls\s*\{[^}]*align-items:\s*start/, "stretched cards leave blank space");
+});
+
 test("theme.css is the only stylesheet with raw color values", () => {
   const styles = read("src/styles.css");
   assert.ok(!/#[0-9a-f]{3,8}\b/i.test(styles), "styles.css should use theme tokens");

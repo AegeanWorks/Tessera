@@ -61,3 +61,27 @@ the committed proof.
   exactly `INPUT`, `TEXTAREA`, `SELECT` and asserts `BUTTON` is absent; suite
   108/108.
 - **Release**: v0.5.2.
+
+## Cycle 3 — Tablet cards stretched into empty boxes
+
+- **Area**: Responsive layout / readability at the 641-900px two-column control
+  grid. Grid rows stretched every card to the tallest neighbour, so Palette
+  carried 118px of dead space, Seed 160px and Export 146px at 768x900; the cards
+  looked unfinished and their borders framed empty panels.
+- **Evidence before**: `cycle3-before-768-full.png` plus the `cycle3-layout.mjs`
+  sweep. At 768x900 the measured slack was Palette 118.1px, Seed 159.5px,
+  Export 146.3px, every other width <=1px. No horizontal overflow.
+- **Fix**: `.controls { align-items: start; }` lets each card stay content-sized
+  in the two-column grid. The single-column desktop and phone layouts are
+  unaffected because there is only one item per row.
+- **Evidence after**: `cycle3-after-768-full.png` at the same 768x900 viewport
+  and default state: all seven cards now report <=1px slack, no horizontal
+  overflow at 320/390/768/1024/1440/1920, and 1440/390 default captures remain
+  byte-identical to baseline.
+- **Played run**: `cycle3-layout.mjs` sweeps six widths, scrolls each layout,
+  then at 768x900 clicks Save look with a real CDP mouse event. Before and after
+  the save still creates `Aegean Wave · seed 7 · r6 w3 v42`; the layout metrics
+  are the change under test.
+- **Tests**: failing-first static guard `control cards size to their content in the two-column layout`;
+  suite 109/109.
+- **Release**: v0.5.3.
