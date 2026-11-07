@@ -5,29 +5,12 @@
     "last_phase": "implementation",
     "active_phase": 4,
     "status": "in_progress",
-    "updated_at": 1794084384.0006237,
+    "updated_at": 1794085856.5654066,
     "owner": "opencode:tessera-cycles",
     "started_by": "opencode:tessera-cycles",
     "continuations": []
   },
   "checkpoints": [
-    {
-      "task_id": "tessera-gallery-v1",
-      "phase": "phase 4",
-      "phase_num": 4,
-      "description": "[3/3] Local gallery shipped: pure signature/dedupe/12-cap model, versioned tessera.gallery.v1 record, sidebar Save look (S), Copy link (L), thumbnail restore and delete, README and ADR-007, v0.3.0. 96 Node tests in budget, 4/4 project gates, static contract; headless Edge verified save, reload, restore, delete, duplicate-save collapse and clipboard share link with zero console errors; no overflow at 320/390/768/1024/1440/1920 and the 768px grid spans the seventh block. checklists: passed",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1793345434.1211538,
-      "timestamp_str": "2026-10-30 10:30:34",
-      "agent": "opencode:tessera-gallery",
-      "handoff": {
-        "state": "12 project files uncommitted on master",
-        "next": "commit feat(studio): add local gallery and share links",
-        "open": "AegeanWorks Live picks up 0.3.0 on its next sync",
-        "evidence": "node --test tests 96/96, aikit check tessera 4/4, verify:static OK, headless gallery flow and responsive sweep"
-      }
-    },
     {
       "task_id": "tessera-gallery-v1",
       "phase": "completed",
@@ -263,6 +246,17 @@
       "status": "in_progress",
       "timestamp": 1794084384.0006237,
       "timestamp_str": "2026-11-07 23:46:24",
+      "agent": "opencode:tessera-cycles"
+    },
+    {
+      "task_id": "tessera-quality-cycles-v1",
+      "phase": "implementation",
+      "phase_num": 4,
+      "description": "[13] Cycle 12 (extension) shipped: stage badge now names the active transform via transformLabel, hidden for 0/none; failing-first state test and markup guard; 121/121 tests, verify:static OK, aikit check 4/4. Keyboard run changed Rotate 0->90 and Flip none->x: old build badge stayed '6 x 7'; new build shows '6 x 7 - 90deg - Flip X' at 1440 and 390, clears on return to 0/none, no overflow. checklists: passed",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794085856.5654066,
+      "timestamp_str": "2026-11-08 00:10:56",
       "agent": "opencode:tessera-cycles"
     }
   ]

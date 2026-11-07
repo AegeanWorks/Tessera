@@ -23,6 +23,7 @@ import {
   randomizeState,
   reseedState,
   thumbKey,
+  transformLabel,
 } from "../studio/state.js";
 import { activeEntryId, addEntry, emptyGallery, isSaved, neighborEntryId, removeEntry, restoreEntry } from "../studio/gallery.js";
 import { clearState, loadGallery, loadState, saveGallery, saveState } from "../studio/storage.js";
@@ -46,6 +47,8 @@ const stageMotif = document.getElementById("stage-motif");
 const stagePalette = document.getElementById("stage-palette");
 const stageRepeat = document.getElementById("stage-repeat");
 const stageSeed = document.getElementById("stage-seed");
+const stageTransform = document.getElementById("stage-transform");
+const stageTransformDivider = document.getElementById("stage-transform-divider");
 const pngSizeInput = document.getElementById("png-size");
 const exportPngButton = document.getElementById("export-png");
 const galleryList = document.getElementById("gallery-list");
@@ -348,6 +351,12 @@ function syncInputs() {
   if (stagePalette) stagePalette.textContent = getPalette(state.palette).name;
   if (stageRepeat) stageRepeat.textContent = String(state.repeat);
   if (stageSeed) stageSeed.textContent = String(state.seed);
+  const transform = transformLabel(state);
+  if (stageTransform) {
+    stageTransform.textContent = transform;
+    stageTransform.hidden = transform === "";
+  }
+  if (stageTransformDivider) stageTransformDivider.hidden = transform === "";
   if (stage) stage.dataset.motion = state.motion ? "on" : "off";
 }
 

@@ -221,6 +221,15 @@ export function describeState(state) {
   return parts.join(", ");
 }
 
+export function transformLabel(state) {
+  const normalized = normalizeState(state);
+  const parts = [];
+  if (normalized.rotate) parts.push(`${normalized.rotate}°`);
+  if (normalized.flip === "x") parts.push("Flip X");
+  else if (normalized.flip === "y") parts.push("Flip Y");
+  return parts.join(" · ");
+}
+
 export function thumbKey(state) {
   const normalized = normalizeState(state);
   return [

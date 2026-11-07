@@ -41,6 +41,7 @@ test("every control in the markup is addressable and labelled", () => {
     "export",
     "motif-grid",
     "palette-grid",
+    "stage-transform",
     "repeat",
     "weight",
     "warp",
@@ -204,6 +205,14 @@ test("the preset rail marks the active preset", () => {
   assert.ok(app.includes("activePresetId"));
   assert.ok(app.includes('aria-current'));
   assert.match(styles, /\.preset-button\.is-active\s*\{/);
+});
+
+test("the stage badge shows the active transform", () => {
+  const html = read("index.html");
+  const app = read("src/ui/app.js");
+  assert.ok(html.includes('id="stage-transform"'));
+  assert.ok(app.includes("transformLabel"));
+  assert.ok(app.includes("stageTransform"));
 });
 
 test("theme.css is the only stylesheet with raw color values", () => {

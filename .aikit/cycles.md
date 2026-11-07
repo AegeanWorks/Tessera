@@ -281,3 +281,29 @@ the committed proof.
 - **Tests**: failing-first `activePresetId names the preset matching the visual state`;
   static guard `the preset rail marks the active preset`; suite 119/119.
 - **Release**: v0.6.1.
+
+## Cycle 12 — The stage badge hid the active transform
+
+- **Area**: Stage feedback / readability. Rotate and Flip visibly change the
+  pattern and travel into SVG/PNG filenames, links, presets and the gallery,
+  but the stage badge still read only `6 × 7`; after a quarter turn + mirror
+  there was no on-stage confirmation of the active transform.
+- **Evidence before**: old-build worktree `ec16e5c` served on port 4401,
+  `cycle12-before-transform-1440.png`: keyboard-changing Rotate to 90 and Flip
+  to Horizontal rotates/mirrors the SVG (`rotate(90)`, `scale(-1 1)`) while the
+  badge remains `6 × 7` and no `#stage-transform` exists. Same result at 390px.
+- **Fix**: `transformLabel(state)` returns `90°`, `Flip X`, `Flip Y` or a
+  `·`-joined pair; the stage badge gains a hidden transform slot and divider,
+  and `syncInputs` fills or hides them. Default 0/none stays hidden so the
+  baseline stage is unchanged.
+- **Evidence after**: `cycle12-after-transform-1440.png` and
+  `cycle12-after-transform-390.png` at the identical load + transform state:
+  the badge reads `6 × 7 · 90° · FLIP X`, fits within the stage frame at both
+  viewports, and disappears again when Rotate returns to 0 and Flip to None.
+- **Played run**: `cycle12-play.mjs` focuses the real Rotate/Flip selects and
+  sends ArrowDown twice, reads values, badge text, hidden state and SVG
+  transforms, then ArrowUp twice to clear. Before: `badgeShowsTransform: false`;
+  after: true at 1440 and 390, with `clearsOnReset: true`.
+- **Tests**: failing-first `transformLabel names only the active rotation and flip`;
+  markup guard `the stage badge shows the active transform`; suite 121/121.
+- **Release**: v0.6.2.

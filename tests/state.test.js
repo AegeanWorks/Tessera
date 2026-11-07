@@ -18,6 +18,7 @@ import {
   randomizeState,
   reseedState,
   thumbKey,
+  transformLabel,
 } from "../src/studio/state.js";
 import { createRandom } from "../src/studio/random.js";
 import { MOTIF_IDS } from "../src/studio/motifs.js";
@@ -216,6 +217,15 @@ test("exportName stays distinct across geometry that changes the render", () => 
     "weight changes the render and must change the description",
   );
 });
+test("transformLabel names only the active rotation and flip", () => {
+  assert.equal(transformLabel(DEFAULTS), "");
+  assert.equal(transformLabel({ ...DEFAULTS, rotate: 90 }), "90°");
+  assert.equal(transformLabel({ ...DEFAULTS, flip: "x" }), "Flip X");
+  assert.equal(transformLabel({ ...DEFAULTS, flip: "y" }), "Flip Y");
+  assert.equal(transformLabel({ ...DEFAULTS, rotate: 270, flip: "x" }), "270° · Flip X");
+  assert.equal(transformLabel({ ...DEFAULTS, rotate: 45, flip: "diagonal" }), "");
+});
+
 test("describeState and exportName read from the normalized record", () => {
   const state = normalizeState({ palette: "kilim", motif: "ridge", repeat: 5, seed: 11 });
   assert.equal(describeState(state), "Kilim ridge, 5 repeats across, weight 3, warp 42%, seed 11");
