@@ -5,29 +5,12 @@
     "last_phase": "implementation",
     "active_phase": 4,
     "status": "in_progress",
-    "updated_at": 1794082205.7468238,
+    "updated_at": 1794082610.4346035,
     "owner": "opencode:tessera-cycles",
     "started_by": "opencode:tessera-cycles",
     "continuations": []
   },
   "checkpoints": [
-    {
-      "task_id": "tessera-png-export-v1",
-      "phase": "phase 2",
-      "phase_num": 2,
-      "description": "[1/3] Pure export-size table and PNG filename module; DOM-free raster orchestrator with injected canvas/image adapters; failing-first tests",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1793344174.5516639,
-      "timestamp_str": "2026-10-30 10:09:34",
-      "agent": "opencode:tessera-png",
-      "impact_assessment": {
-        "why": "Tessera can export only 1600x1067 SVG; a pattern studio needs wallpaper and phone PNGs without a screenshot tool, and users cannot use the exported art as a wallpaper today.",
-        "benefits": "One click produces a crisp PNG at a stated size from the same seamless tile; sizes and filenames are data, so the raster path is testable in Node and stays independent of DOM code.",
-        "risks": "contract: new studio/export.js and studio/raster.js modules plus a new sidebar control; dependency: none (Canvas/Blob browser APIs, no new packages); concurrency: none, read-only state; state: no change to the versioned localStorage record or URL schema.",
-        "mitigation": "Keep raster.js free of DOM globals by injecting createCanvas/loadImage from app.js; validate dimensions against a 16.7 MP ceiling; failing-first tests for sizes, naming, draw calls and failure paths; static contract stays green."
-      }
-    },
     {
       "task_id": "tessera-png-export-v1",
       "phase": "phase 4",
@@ -280,6 +263,17 @@
       "status": "in_progress",
       "timestamp": 1794082205.7468238,
       "timestamp_str": "2026-11-07 23:10:05",
+      "agent": "opencode:tessera-cycles"
+    },
+    {
+      "task_id": "tessera-quality-cycles-v1",
+      "phase": "implementation",
+      "phase_num": 4,
+      "description": "[9] Cycle 8 (extension) shipped: isTextEntry protects only text-editing inputs, textareas, selects and contenteditable, so shortcuts work from range sliders and checkboxes; failing-first static guard updated; 115/115 tests, verify:static OK, aikit check 4/4. Real key events: S from the focused Tile guides switch saved the look and R from the focused Repeat slider randomized to Pinwheel seed 4170; PNG-size select still blocks R. checklists: passed",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794082610.4346035,
+      "timestamp_str": "2026-11-07 23:16:50",
       "agent": "opencode:tessera-cycles"
     }
   ]

@@ -187,3 +187,28 @@ the committed proof.
   gallery and announces the removal.
 - **Tests**: failing-first `coarse pointers get 44px targets`; suite 115/115.
 - **Release**: v0.5.7.
+
+## Cycle 8 — Sliders and switches still swallowed shortcuts
+
+- **Area**: Keyboard interaction, second pass. The cycle-2 guard protected every
+  `INPUT`, but the studio has no text inputs: its controls are ranges and
+  checkboxes. After dragging Repeat or toggling Tile guides, `R`, `S`, `E`, `P`,
+  `C` and `L` were ignored even though those controls do not consume letters.
+- **Evidence before**: old-build worktree `bb7e0f0` served on port 4396,
+  `cycle8-before-gallery-1440.png`: focus Tile guides, press `S`; gallery stays
+  empty and no toast. Focus Repeat, press `R`; motif, seed and stage hash stay
+  `wave / 7 / c20dc69c`.
+- **Fix**: `isTextEntry` now protects only text-editing inputs, textareas,
+  selects and contenteditable; range, checkbox, radio and button inputs no
+  longer block shortcuts. The PNG-size select keeps its own type-ahead keys.
+- **Evidence after**: `cycle8-after-gallery-1440.png` at the same viewport and
+  state: with Tile guides still focused, `S` saves `Aegean Wave · seed 7 ·
+  r6 w3 v42` and shows the saved toast. With Repeat focused, `R` randomizes to
+  Pinwheel / seed 4170. Focusing the PNG-size select and pressing `R` leaves
+  the stage hash unchanged.
+- **Played run**: `cycle8-play.mjs` uses real CDP key events on the focused
+  checkbox and range. Before: save false, randomize false. After: both true;
+  select guard still true.
+- **Tests**: failing-first static guard now requires `isTextEntry` and its
+  input-type branch; suite 115/115.
+- **Release**: v0.5.8.

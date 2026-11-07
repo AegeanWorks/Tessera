@@ -570,14 +570,20 @@ function bindActions() {
   bindSwitch(guidesInput, "guides");
 }
 
+function isTextEntry(target) {
+  if (!(target instanceof HTMLElement)) return false;
+  if (target.isContentEditable) return true;
+  if (target.tagName === "TEXTAREA" || target.tagName === "SELECT") return true;
+  if (target.tagName === "INPUT") {
+    return !["range", "checkbox", "radio", "button", "submit", "reset"].includes(target.type);
+  }
+  return false;
+}
+
 function bindKeyboard() {
   document.addEventListener("keydown", (event) => {
     if (event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey) return;
-    const target = event.target;
-    if (target instanceof HTMLElement) {
-      if (target.isContentEditable) return;
-      if (["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName)) return;
-    }
+    if (isTextEntry(event.target)) return;
     const key = event.key.toLowerCase();
     if (key === "r") {
       event.preventDefault();
