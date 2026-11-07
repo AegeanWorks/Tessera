@@ -113,3 +113,26 @@ the committed proof.
   static guard `the gallery marks the saved look currently on stage`; suite
   111/111.
 - **Release**: v0.5.4.
+
+## Cycle 5 — Microcopy sat below AA contrast
+
+- **Area**: UI readability / accessibility. `--muted-dim` (#5f7189) is used for
+  9-11px control indexes, preset notes, export notes and gallery notes; against
+  the darkest panel (#0d1422) it measured only **3.69:1**, below the 4.5:1 AA
+  threshold for small text.
+- **Evidence before**: `cycle5-before-notes-1440.png` (gallery/export/preset
+  notes at 1440x900) and the computed-style probe: `.control-note`,
+  `.preset-note`, `.control-index` and `.gallery-empty` all report 3.69:1.
+- **Fix**: brighten the single token to `#7b8da6`, keeping the muted hierarchy
+  without introducing a raw color outside `theme.css`.
+- **Evidence after**: `cycle5-after-notes-1440.png` at the same viewport and
+  state; the same four selectors and the token now measure **5.44:1**. The
+  full-page 1440 capture shows the brighter notes in context; layout metrics
+  and scroll heights are unchanged.
+- **Played run**: `cycle5-contrast.mjs` loads the studio, reads computed colors
+  from the live DOM, and computes WCAG contrast against `--bg-control`; before
+  `allMicrocopyAtLeastAA: false`, after `true`. No interaction state is needed,
+  so the before/after pair uses the same default state.
+- **Tests**: failing-first `muted microcopy meets AA contrast on the darkest panel`;
+  suite 112/112.
+- **Release**: v0.5.5.

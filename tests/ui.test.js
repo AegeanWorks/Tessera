@@ -151,6 +151,26 @@ test("control cards size to their content in the two-column layout", () => {
   assert.match(styles, /\.controls\s*\{[^}]*align-items:\s*start/, "stretched cards leave blank space");
 });
 
+test("muted microcopy meets AA contrast on the darkest panel", () => {
+  const theme = read("src/theme.css");
+  const token = (name) => {
+    const match = theme.match(new RegExp(`--${name}:\\s*#([0-9a-f]{6})`, "i"));
+    assert.ok(match, `missing --${name}`);
+    return [0, 2, 4].map((start) => parseInt(match[1].slice(start, start + 2), 16));
+  };
+  const linear = (value) => {
+    const channel = value / 255;
+    return channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4;
+  };
+  const luminance = (rgb) => 0.2126 * linear(rgb[0]) + 0.7152 * linear(rgb[1]) + 0.0722 * linear(rgb[2]);
+  const contrast = (a, b) => {
+    const one = luminance(a);
+    const two = luminance(b);
+    return (Math.max(one, two) + 0.05) / (Math.min(one, two) + 0.05);
+  };
+  assert.ok(contrast(token("muted-dim"), token("bg-control")) >= 4.5);
+});
+
 test("theme.css is the only stylesheet with raw color values", () => {
   const styles = read("src/styles.css");
   assert.ok(!/#[0-9a-f]{3,8}\b/i.test(styles), "styles.css should use theme tokens");
