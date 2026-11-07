@@ -676,12 +676,12 @@ input[type="range"]::-moz-range-thumb {
 }
 
 .preset-button {
-  display: flex;
+  display: grid;
+  grid-template-columns: 52px minmax(0, 1fr) auto;
   align-items: center;
-  justify-content: space-between;
   gap: 12px;
   width: 100%;
-  padding: 10px 12px;
+  padding: 8px 10px 8px 8px;
   border: 1px solid var(--line);
   border-radius: 10px;
   color: var(--text-soft);
@@ -698,16 +698,34 @@ input[type="range"]::-moz-range-thumb {
   background: var(--bg-control);
 }
 
+.preset-thumb {
+  display: block;
+  overflow: hidden;
+  border-radius: 6px;
+  background: var(--bg-deep);
+}
+
+.preset-thumb svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
 .preset-name {
+  overflow: hidden;
   font-size: 12.5px;
   font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .preset-note {
+  justify-self: end;
   color: var(--muted-dim);
   font-family: var(--font-mono);
   font-size: 9px;
   letter-spacing: 0.06em;
+  text-align: right;
   text-transform: uppercase;
 }
 

@@ -5,22 +5,12 @@
     "last_phase": "implementation",
     "active_phase": 4,
     "status": "in_progress",
-    "updated_at": 1794083073.1805437,
+    "updated_at": 1794083797.536883,
     "owner": "opencode:tessera-cycles",
     "started_by": "opencode:tessera-cycles",
     "continuations": []
   },
   "checkpoints": [
-    {
-      "task_id": "tessera-png-export-v1",
-      "phase": "completed",
-      "phase_num": 5,
-      "description": "Task 'tessera-png-export-v1' completed successfully.",
-      "status": "completed",
-      "timestamp": 1793344656.5745888,
-      "timestamp_str": "2026-10-30 10:17:36",
-      "agent": "opencode:tessera-png"
-    },
     {
       "task_id": "tessera-gallery-v1",
       "phase": "phase 2",
@@ -268,6 +258,17 @@
       "status": "in_progress",
       "timestamp": 1794083073.1805437,
       "timestamp_str": "2026-11-07 23:24:33",
+      "agent": "opencode:tessera-cycles"
+    },
+    {
+      "task_id": "tessera-quality-cycles-v1",
+      "phase": "implementation",
+      "phase_num": 4,
+      "description": "[11] Cycle 10 (extension) shipped: every preset now renders a decorative 52px preview from presetState, making the eight-look rail scannable; failing-first static guard; 117/117 tests, verify:static OK, aikit check 4/4. Before had zero previews; after has 8/8 distinct thumbnails, names keep >=116px, clicking Iris drift still loads Drift/Iris seed 23. checklists: passed",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794083797.536883,
+      "timestamp_str": "2026-11-07 23:36:37",
       "agent": "opencode:tessera-cycles"
     }
   ]

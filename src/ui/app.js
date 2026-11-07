@@ -186,6 +186,17 @@ function buildPresetButtons() {
     button.dataset.preset = preset.id;
     button.setAttribute("aria-label", `${preset.name}: ${preset.note}`);
 
+    const thumb = document.createElement("span");
+    thumb.className = "preset-thumb";
+    thumb.setAttribute("aria-hidden", "true");
+    thumb.innerHTML = renderSvg(presetState(preset.id), {
+      width: 64,
+      height: 42,
+      repeat: 2,
+      decorative: true,
+      idPrefix: `preset-${preset.id}`,
+    });
+
     const name = document.createElement("span");
     name.className = "preset-name";
     name.textContent = preset.name;
@@ -194,7 +205,7 @@ function buildPresetButtons() {
     note.className = "preset-note";
     note.textContent = preset.note;
 
-    button.append(name, note);
+    button.append(thumb, name, note);
     button.addEventListener("click", () => {
       state = applyPreset(preset.id, state);
       update();

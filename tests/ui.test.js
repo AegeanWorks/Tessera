@@ -190,6 +190,14 @@ test("coarse pointers get 44px targets", () => {
   assert.match(coarse, /\.gallery-delete\s*\{[^}]*width:\s*44px[^}]*height:\s*44px/);
 });
 
+test("preset buttons show a visual preview", () => {
+  const app = read("src/ui/app.js");
+  const styles = read("src/styles.css");
+  assert.ok(app.includes("preset-thumb"));
+  assert.ok(app.includes("presetState(preset.id)"));
+  assert.match(styles, /\.preset-thumb\s*\{/);
+});
+
 test("theme.css is the only stylesheet with raw color values", () => {
   const styles = read("src/styles.css");
   assert.ok(!/#[0-9a-f]{3,8}\b/i.test(styles), "styles.css should use theme tokens");

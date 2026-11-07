@@ -235,3 +235,26 @@ the committed proof.
   seed 17, Loom/Terra seed 19, Drift/Iris seed 23, each with its loaded toast.
 - **Tests**: failing-first `every motif has a curated preset`; suite 116/116.
 - **Release**: v0.5.9.
+
+## Cycle 10 — Presets were text-only
+
+- **Area**: Catalogue recognition. Eight presets were plain name/note rows, so
+  choosing a look required reading every pairing; the motif and palette pickers
+  already show visual previews.
+- **Evidence before**: old-build worktree `cf200a3` served on port 4398,
+  `cycle10-before-presets-1440.png`: eight text rows, `thumbnailCount: 0`,
+  every measured hash `811c9dc5` (empty string).
+- **Fix**: each preset button now includes a 52px decorative SVG rendered from
+  `presetState(preset.id)` at repeat 2, so the preview shows the exact motif,
+  palette, seed and geometry that the click loads. The row becomes a
+  three-column grid (preview, name, pairing note); names truncate safely.
+- **Evidence after**: `cycle10-after-presets-1440.png` at the same viewport and
+  default state: eight thumbnails, all eight hashes distinct, preset names keep
+  at least 116px of width. Clicking Iris drift still loads Drift/Iris seed 23
+  and shows the loaded toast.
+- **Played run**: `cycle10-play.mjs` counts and hashes the previews, then clicks
+  Iris drift. Before: zero previews. After: 8/8 previews, all distinct; the
+  preset click is unchanged. The 768px full-page capture confirms the wider
+  preset rail remains within the viewport.
+- **Tests**: failing-first `preset buttons show a visual preview`; suite 117/117.
+- **Release**: v0.6.0.
