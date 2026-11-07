@@ -269,6 +269,13 @@ test("reset names the pattern and reports storage failures", () => {
   assert.ok(app.includes("Reset the pattern to its defaults."));
 });
 
+test("the skip link lands keyboard focus in the studio", () => {
+  const html = read("index.html");
+  const styles = read("src/styles.css");
+  assert.match(html, /<main class="studio" id="studio" tabindex="-1">/);
+  assert.match(styles, /\.studio:focus-visible\s*\{/);
+});
+
 test("theme.css is the only stylesheet with raw color values", () => {
   const styles = read("src/styles.css");
   assert.ok(!/#[0-9a-f]{3,8}\b/i.test(styles), "styles.css should use theme tokens");

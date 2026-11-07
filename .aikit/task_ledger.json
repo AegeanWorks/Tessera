@@ -5,7 +5,7 @@
     "last_phase": "implementation",
     "active_phase": 4,
     "status": "in_progress",
-    "updated_at": 1794092341.9627154,
+    "updated_at": 1794093652.983635,
     "owner": "opencode:tessera-cycles",
     "started_by": "opencode:tessera-cycles",
     "continuations": []
@@ -99,17 +99,6 @@
         "mitigation": "Add failing pure/static tests first, keep each diff limited to one area, and verify with the same seeded 1440x900 CDP run before and after; the full npm, static-contract and AIKit gates run before every commit."
       },
       "plan_digest": "b52931f5bf547c94ec3e16856135270a70e51c91ea93d8a89d84384b3c7117fc"
-    },
-    {
-      "task_id": "tessera-quality-cycles-v1",
-      "phase": "implementation",
-      "phase_num": 4,
-      "description": "[7] Cycle 6 (extension) shipped: deleting a gallery look moves focus to the neighbouring entry, or Save look when empty, via neighborEntryId; failing-first pure test and static guard; 114/114 tests, verify:static OK, aikit check 4/4. Real Enter deletion of the first of three rows on the old build left BODY focused; the new build focuses Load Kilim Wave with a visible ring. checklists: passed",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1794081653.9139824,
-      "timestamp_str": "2026-11-07 23:00:53",
-      "agent": "opencode:tessera-cycles"
     },
     {
       "task_id": "tessera-quality-cycles-v1",
@@ -252,6 +241,17 @@
       "status": "in_progress",
       "timestamp": 1794092341.9627154,
       "timestamp_str": "2026-11-08 01:59:01",
+      "agent": "opencode:tessera-cycles"
+    },
+    {
+      "task_id": "tessera-quality-cycles-v1",
+      "phase": "implementation",
+      "phase_num": 4,
+      "description": "[21] Cycle 20 (extension) shipped: skip link now focuses tabindex=-1 main with a visible main outline and cyan inset stage ring; failing-first static guard; 131/131 tests, verify:static OK, aikit check 4/4. Keyboard run at 1440 and 390: before focus fell to BODY with no outline; after activeElement MAIN#studio, focusVisible true, stage ring true, next Tab reaches Wave. checklists: passed",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794093652.983635,
+      "timestamp_str": "2026-11-08 02:20:52",
       "agent": "opencode:tessera-cycles"
     }
   ]

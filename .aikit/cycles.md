@@ -490,3 +490,26 @@ the committed proof.
 - **Tests**: failing-first `shareSummary names the look a copied link restores`;
   static guard `copy link names the state it shares`; suite 130/130.
 - **Release**: v0.6.9.
+
+## Cycle 20 — The skip link scrolled but did not focus the studio
+
+- **Area**: Keyboard tab order / skip-link accessibility. Activating
+  `Skip to the studio` scrolled to `#studio` but left focus on `<body>`; there
+  was no focus indicator and the skip link's promise was only half kept.
+- **Evidence before**: old-build worktree `5f6f236` served on port 4411,
+  `cycle20-before-skip-landing-1440.png` / `-390.png`: after Tab + Enter the
+  active element is `BODY`, `mainOutlineStyle: none`, and no stage ring.
+- **Fix**: give `<main id="studio">` `tabindex="-1"` so anchor navigation can
+  focus it, and add a focus-visible treatment: a 2px main outline plus a cyan
+  inset ring and glow around the stage frame. The next Tab moves on to the first
+  motif button.
+- **Evidence after**: `cycle20-after-skip-landing-1440.png` / `-390.png` at the
+  same default state show `activeElement` as `MAIN#studio`, a visible cyan ring
+  around the stage, and the subsequent Tab focuses Wave.
+- **Played run**: `cycle20-play.mjs` presses Tab, Enter and Tab at 1440 and after
+  a 390 reload. Before: `desktopLandsOnMain: false`, no outline. After:
+  `desktopLandsOnMain: true`, `desktopStageRing: true`,
+  `desktopNextIsMotif: true`; the same holds at 390.
+- **Tests**: failing-first `the skip link lands keyboard focus in the studio`;
+  suite 131/131.
+- **Release**: v0.6.10.
