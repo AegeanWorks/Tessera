@@ -255,6 +255,14 @@ test("the stage surfaces active tile guides and glow drift", () => {
   assert.ok(app.includes('stage.dataset.guides'));
 });
 
+test("reset names the pattern and reports storage failures", () => {
+  const html = read("index.html");
+  const app = read("src/ui/app.js");
+  assert.ok(html.includes(">Reset pattern</button>"));
+  assert.ok(app.includes("const persisted = clearState(storage())"));
+  assert.ok(app.includes("Reset the pattern to its defaults."));
+});
+
 test("theme.css is the only stylesheet with raw color values", () => {
   const styles = read("src/styles.css");
   assert.ok(!/#[0-9a-f]{3,8}\b/i.test(styles), "styles.css should use theme tokens");

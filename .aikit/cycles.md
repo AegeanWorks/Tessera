@@ -435,3 +435,31 @@ the committed proof.
 - **Tests**: failing-first `the stage surfaces active tile guides and glow drift`;
   markup inventory includes `#stage-effects`; suite 127/127.
 - **Release**: v0.6.7.
+
+## Cycle 18 — Reset overclaimed what it reset
+
+- **Area**: Reset action clarity and persistence feedback. The button said
+  `Reset studio`, but it resets only the live pattern state; the 12-look gallery
+  and PNG size stay untouched. It also ignored a failed `clearState`, so the
+  toast claimed a reset while a reload could restore the old state.
+- **Evidence before**: old-build worktree `3a14f38` served on port 4409,
+  `cycle18-before-reset-1440.png` / `-390.png`: with Comb/Kilim/weight 6/guides
+  on and one saved look, the button reads `Reset studio`. After resetting the
+  gallery stays at one look and the toast says `Reset to the studio defaults.`
+  even when `removeItem`/`setItem` throw.
+- **Fix**: rename the control to `Reset pattern`; capture
+  `const persisted = clearState(storage())` and route the message through
+  `persistedNotice` so a storage failure appends the session-only warning.
+  State reset behavior and gallery preservation are unchanged.
+- **Evidence after**: `cycle18-after-reset-1440.png` / `-390.png` at the same
+  Comb/Kilim/weight-6/guides-on state show `Reset pattern`;
+  `cycle18-after-reset-warning-1440.png` shows the reset toast with
+  `Browser storage is unavailable…` while the saved look remains.
+- **Played run**: `cycle18-play.mjs` changes motif/palette/weight/guides, saves a
+  look, clicks Reset pattern, then breaks `removeItem`/`setItem` and resets
+  again. Before: label `Reset studio`, no warning. After: label
+  `Reset pattern`, defaults restored, gallery still 1, warning visible and
+  fitting at 1440/390.
+- **Tests**: failing-first `reset names the pattern and reports storage failures`;
+  suite 128/128.
+- **Release**: v0.6.8.

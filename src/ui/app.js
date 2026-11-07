@@ -744,10 +744,10 @@ function mount() {
   update({ persist: false, url: false });
   const reset = document.getElementById("reset");
   reset?.addEventListener("click", () => {
-    clearState(storage());
+    const persisted = clearState(storage());
     state = normalizeState(DEFAULTS);
     update();
-    announce("Reset to the studio defaults.");
+    announce(persistedNotice("Reset the pattern to its defaults.", persisted));
   });
 }
 
