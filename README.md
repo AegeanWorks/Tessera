@@ -102,6 +102,7 @@ tessera/
 │   │   ├── export.js          <- PNG size table and export names
 │   │   ├── gallery.js         <- saved looks, signature ids and the 12 cap
 │   │   ├── motifs.js          <- eight pure motif builders
+│   │   ├── navigation.js        <- grid arrow-key target math
 │   │   ├── palettes.js        <- eight palettes as color roles
 │   │   ├── random.js          <- seeded mulberry32 generator
 │   │   ├── raster.js          <- DOM-free SVG-to-PNG orchestration
@@ -117,6 +118,7 @@ tessera/
     ├── export.test.js         <- sizes, fallback and PNG names
     ├── gallery.test.js        <- signatures, dedupe, cap and restore
     ├── motifs.test.js         <- determinism, roles, tile ratios
+    ├── navigation.test.js   <- grid direction, Home and End
     ├── palettes.test.js       <- complete role sets and fallbacks
     ├── random.test.js         <- replay, divergence, bounds
     ├── raster.test.js         <- draw calls, size budget, failure paths

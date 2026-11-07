@@ -566,4 +566,7 @@ the committed proof.
 - **Tests**: failing-first `navigation.test.js` for directional/Home/End/invalid
   cases; static guard `picker grids support roving arrow navigation`; suite
   136/136.
+- **Gate follow-up**: the post-commit guideline gate flagged the new
+  `navigation.js` and `navigation.test.js` as missing from the README tree;
+  both were added and the full 4/4 gate set re-ran green.
 - **Release**: v0.6.12.
