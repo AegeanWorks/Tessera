@@ -59,6 +59,7 @@ test("every control in the markup is addressable and labelled", () => {
     "reset",
     "png-size",
     "export-png",
+    "export-status",
     "save-look",
     "copy-link",
     "clear-gallery",
@@ -274,6 +275,14 @@ test("the skip link lands keyboard focus in the studio", () => {
   const styles = read("src/styles.css");
   assert.match(html, /<main class="studio" id="studio" tabindex="-1">/);
   assert.match(styles, /\.studio:focus-visible\s*\{/);
+});
+
+test("PNG export keeps a last-export status", () => {
+  const html = read("index.html");
+  const app = read("src/ui/app.js");
+  assert.ok(html.includes('id="export-status"'));
+  assert.ok(app.includes("exportStatus"));
+  assert.ok(app.includes("Last export:"));
 });
 
 test("theme.css is the only stylesheet with raw color values", () => {

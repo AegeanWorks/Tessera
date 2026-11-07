@@ -62,6 +62,7 @@ const stageTransformDivider = document.getElementById("stage-transform-divider")
 const stageEffects = document.getElementById("stage-effects");
 const pngSizeInput = document.getElementById("png-size");
 const exportPngButton = document.getElementById("export-png");
+const exportStatus = document.getElementById("export-status");
 const galleryList = document.getElementById("gallery-list");
 const saveLookButton = document.getElementById("save-look");
 const copyLinkButton = document.getElementById("copy-link");
@@ -598,6 +599,10 @@ async function exportPng() {
     exportPngButton.disabled = true;
     exportPngButton.setAttribute("aria-busy", "true");
   }
+  if (exportStatus) {
+    exportStatus.hidden = false;
+    exportStatus.textContent = `Rendering ${size.label} PNG…`;
+  }
   announce(`Rendering ${size.label} PNG…`);
   try {
     const svg = renderExportSvg(state, size.id, { guides: state.guides });
@@ -610,8 +615,10 @@ async function exportPng() {
     link.click();
     link.remove();
     window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+    if (exportStatus) exportStatus.textContent = `Last export: ${link.download}`;
     announce(`Exported ${link.download}.`);
   } catch (error) {
+    if (exportStatus) exportStatus.textContent = "Last export failed. PNG export is unavailable in this browser.";
     announce("PNG export is unavailable in this browser.");
     if (window.console) window.console.error(error);
   } finally {

@@ -513,3 +513,29 @@ the committed proof.
 - **Tests**: failing-first `the skip link lands keyboard focus in the studio`;
   suite 131/131.
 - **Release**: v0.6.10.
+
+## Cycle 21 — PNG export feedback vanished with the toast
+
+- **Area**: PNG export feedback. A successful export announced the filename in a
+  transient toast, then left no record of what was saved; a failed export also
+  cleared out of sight once the toast timed out.
+- **Evidence before**: old-build worktree `d3a7079` served on port 4412,
+  `cycle21-before-export-1440.png` / `-390.png`: a 1080×1080 PNG downloads, the
+  toast names it, but the export block has no `#export-status` and nothing
+  persists after the toast.
+- **Fix**: add a hidden export status line. Export shows `Rendering … PNG…`,
+  success keeps `Last export: <filename>`, and failure keeps
+  `Last export failed. PNG export is unavailable in this browser.` The line is
+  monospace, wraps with `overflow-wrap: anywhere`, and stays hidden before the
+  first export.
+- **Evidence after**: `cycle21-after-export-1440.png` and `-390.png` show the
+  persistent `Last export: tessera-wave-aegean-7-r6w3v42-1080x1080.png` after
+  the toast has gone; `cycle21-after-export-failed-1440.png` shows the
+  persistent failure line while the gallery remains intact.
+- **Played run**: `cycle21-play.mjs` selects Square with the keyboard, downloads
+  a real 1080×1080 PNG (112442 bytes), waits past the toast, rechecks at 390,
+  then stubs `canvas.toBlob` to force a failure. Before: no status element.
+  After: success and failure status both persist, fit at 1440/390.
+- **Tests**: failing-first `PNG export keeps a last-export status`; suite
+  132/132.
+- **Release**: v0.6.11.

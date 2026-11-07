@@ -843,6 +843,13 @@ select:hover {
   line-height: 1.5;
 }
 
+.export-status {
+  color: var(--text-soft);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  overflow-wrap: anywhere;
+}
+
 .gallery-actions {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
