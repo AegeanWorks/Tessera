@@ -23,7 +23,7 @@ import {
   reseedState,
   thumbKey,
 } from "../studio/state.js";
-import { addEntry, emptyGallery, isSaved, removeEntry, restoreEntry } from "../studio/gallery.js";
+import { activeEntryId, addEntry, emptyGallery, isSaved, removeEntry, restoreEntry } from "../studio/gallery.js";
 import { clearState, loadGallery, loadState, saveGallery, saveState } from "../studio/storage.js";
 
 const stage = document.getElementById("stage");
@@ -271,6 +271,19 @@ function renderGallery() {
     list.appendChild(item);
   }
   galleryList.appendChild(list);
+  syncGallerySelection();
+}
+
+function syncGallerySelection() {
+  if (!galleryList) return;
+  const activeId = activeEntryId(gallery, state);
+  for (const open of galleryList.querySelectorAll(".gallery-open")) {
+    const item = open.closest(".gallery-item");
+    const selected = open.dataset.galleryId === activeId;
+    if (item) item.classList.toggle("is-active", selected);
+    if (selected) open.setAttribute("aria-current", "true");
+    else open.removeAttribute("aria-current");
+  }
 }
 
 function saveLook() {
@@ -362,6 +375,7 @@ function update(options = {}) {
   }
   syncInputs();
   syncSelection();
+  syncGallerySelection();
   renderStage();
   if (options.persist !== false) saveState(storage(), state);
   if (options.url !== false) syncUrl();

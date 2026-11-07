@@ -96,6 +96,11 @@ export function isSaved(record, state) {
   return normalizeGalleryRecord(record).entries.some((entry) => entry.id === id);
 }
 
+export function activeEntryId(record, state) {
+  const id = stateSignature(state);
+  return normalizeGalleryRecord(record).entries.some((entry) => entry.id === id) ? id : null;
+}
+
 export function restoreEntry(entry, current = DEFAULTS) {
   const base = normalizeState(current);
   const normalized = normalizeEntry(entry);

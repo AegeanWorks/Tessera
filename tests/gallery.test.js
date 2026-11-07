@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import {
   GALLERY_LIMIT,
   GALLERY_VERSION,
+  activeEntryId,
   addEntry,
   emptyGallery,
   entryName,
@@ -61,6 +62,15 @@ test("normalizeEntry keeps only visual state and freezes the record", () => {
   assert.equal(normalizeEntry({}), null);
   assert.equal(normalizeEntry({ state: "nope" }), null);
   assert.equal(normalizeEntry({ state: [] }), null);
+});
+
+test("activeEntryId names the saved look currently on stage", () => {
+  let gallery = addEntry(emptyGallery(), LOOK, "2026-10-30T00:00:00.000Z");
+  gallery = addEntry(gallery, { ...LOOK, motif: "wave" }, "2026-10-30T00:01:00.000Z");
+  assert.equal(activeEntryId(gallery, LOOK), stateSignature(LOOK));
+  assert.equal(activeEntryId(gallery, { ...LOOK, guides: true, motion: true }), stateSignature(LOOK));
+  assert.equal(activeEntryId(gallery, { ...LOOK, seed: 99 }), null);
+  assert.equal(activeEntryId(emptyGallery(), LOOK), null);
 });
 
 test("addEntry puts the newest look first and collapses a duplicate", () => {

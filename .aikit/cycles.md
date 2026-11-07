@@ -85,3 +85,31 @@ the committed proof.
 - **Tests**: failing-first static guard `control cards size to their content in the two-column layout`;
   suite 109/109.
 - **Release**: v0.5.3.
+
+## Cycle 4 — The gallery never showed which saved look was live
+
+- **Area**: Progression and saves. After saving three looks and restoring one,
+  every gallery entry looked identical; there was no marker tying the stage
+  back to the saved entry it came from.
+- **Evidence before**: old-build worktree `e624d13` served on port 4392,
+  `cycle4-before-gallery-1440.png`: three deterministic saves (Kilim Comb,
+  Kilim Wave, Aegean Wave), then restoring the oldest leaves all three entries
+  unmarked (`markedCount: 0`, no `aria-current`) even though the stage is
+  Aegean Wave.
+- **Fix**: `activeEntryId(record, state)` in `src/studio/gallery.js` reuses the
+  visual signature (toggles ignored). `renderGallery` and every state update
+  call `syncGallerySelection()`, which adds `.is-active` and
+  `aria-current="true"` to exactly the matching entry. The active entry gets
+  the same ink border and cyan glow as the selected motif/palette.
+- **Evidence after**: `cycle4-after-gallery-1440.png` at the same 1440x900
+  viewport and same three saves: the restored oldest entry is outlined and
+  carries `aria-current="true"`; the other two stay plain. Saving the newest
+  look also marks it immediately.
+- **Played run**: `cycle4-play.mjs` saves three looks with real CDP clicks,
+  restores the oldest by clicking its entry, and reads the marker state. Before:
+  `oneActiveMarker: false`; after: `oneActiveMarker: true`, active name
+  `Aegean Wave · seed 7 · r6 w3 v42`, ARIA current true.
+- **Tests**: failing-first `activeEntryId names the saved look currently on stage`;
+  static guard `the gallery marks the saved look currently on stage`; suite
+  111/111.
+- **Release**: v0.5.4.

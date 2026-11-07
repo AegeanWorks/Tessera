@@ -127,6 +127,15 @@ test("the motif picker previews every visual change", () => {
   assert.ok(app.includes("requestAnimationFrame"), "preview refreshes should coalesce into one frame");
 });
 
+test("the gallery marks the saved look currently on stage", () => {
+  const app = read("src/ui/app.js");
+  const styles = read("src/styles.css");
+  assert.ok(app.includes("activeEntryId"));
+  assert.ok(app.includes('aria-current'));
+  assert.ok(app.includes("syncGallerySelection()"));
+  assert.match(styles, /\.gallery-item\.is-active \.gallery-open/);
+});
+
 test("keyboard shortcuts are wired without hijacking form fields", () => {
   const app = read("src/ui/app.js");
   for (const key of ['key === "r"', 'key === "c"', 'key === "e"', 'key === "p"', 'key === "s"', 'key === "l"']) {

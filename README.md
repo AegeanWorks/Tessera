@@ -48,7 +48,7 @@ Tessera is a zero-dependency static studio. Eight motifs and eight palettes gene
 | Export PNG `P` | Rasterize the current look at the selected size as a `.png` file |
 | Save look `S` | Store the current pattern in the local gallery (up to 12) |
 | Copy link `L` | Copy a URL that restores the current motif, palette and geometry |
-| Gallery | Click a thumbnail to restore a saved look; the × removes it |
+| Gallery | Click a thumbnail to restore a saved look; the current look is outlined; the × removes it |
 
 ## What Is Tessera
 
@@ -69,7 +69,7 @@ Each motif reads three arguments — a seeded random source, a line weight and a
 
 ## Saved Looks
 
-The Gallery block stores up to 12 patterns in a second versioned record, `tessera.gallery.v1`. Entries are newest first, and the visual signature — motif, palette, repeat, weight, warp and seed — is the id, so saving the same look again only moves it to the front. Restoring a look preserves the current tile-guide and glow-drift toggles. **Copy link** writes the full state into the URL query, so a shared link restores the look without touching the recipient's gallery. A corrupt or unsupported record is refused instead of being repaired in place.
+The Gallery block stores up to 12 patterns in a second versioned record, `tessera.gallery.v1`. Entries are newest first, and the visual signature — motif, palette, repeat, weight, warp and seed — is the id, so saving the same look again only moves it to the front. The entry that matches the current stage is outlined, so the active saved look is visible at a glance. Restoring a look preserves the current tile-guide and glow-drift toggles. **Copy link** writes the full state into the URL query, so a shared link restores the look without touching the recipient's gallery. A corrupt or unsupported record is refused instead of being repaired in place.
 
 ## What's Inside
 
