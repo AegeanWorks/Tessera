@@ -23,7 +23,7 @@ import {
   reseedState,
   thumbKey,
 } from "../studio/state.js";
-import { activeEntryId, addEntry, emptyGallery, isSaved, removeEntry, restoreEntry } from "../studio/gallery.js";
+import { activeEntryId, addEntry, emptyGallery, isSaved, neighborEntryId, removeEntry, restoreEntry } from "../studio/gallery.js";
 import { clearState, loadGallery, loadState, saveGallery, saveState } from "../studio/storage.js";
 
 const stage = document.getElementById("stage");
@@ -306,9 +306,17 @@ function loadLook(id) {
 function deleteLook(id) {
   const entry = gallery.entries.find((item) => item.id === id);
   if (!entry) return;
+  const focusId = neighborEntryId(gallery, id);
   gallery = removeEntry(gallery, id);
   saveGallery(storage(), gallery);
   renderGallery();
+  let focusTarget = null;
+  if (focusId && galleryList) {
+    focusTarget = [...galleryList.querySelectorAll(".gallery-open")].find(
+      (button) => button.dataset.galleryId === focusId,
+    );
+  }
+  (focusTarget || saveLookButton)?.focus();
   announce(`Removed ${entry.name}.`);
 }
 

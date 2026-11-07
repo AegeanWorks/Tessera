@@ -8,6 +8,7 @@ import {
   emptyGallery,
   entryName,
   isSaved,
+  neighborEntryId,
   normalizeEntry,
   normalizeGalleryRecord,
   removeEntry,
@@ -125,6 +126,20 @@ test("removeEntry drops one look and leaves the rest in order", () => {
   assert.equal(removed.entries.length, 1);
   assert.equal(removed.entries[0].name, "Sage Wave · seed 13 · r5 w2 v72");
   assert.deepEqual(removeEntry(removed, "missing").entries, removed.entries);
+});
+
+test("neighborEntryId keeps keyboard focus near the deleted row", () => {
+  let gallery = emptyGallery();
+  for (const seed of [3, 2, 1]) {
+    gallery = addEntry(gallery, { ...LOOK, seed }, `2026-10-30T00:00:0${seed}.000Z`);
+  }
+  const [first, second, third] = gallery.entries;
+  assert.equal(neighborEntryId(gallery, first.id), second.id);
+  assert.equal(neighborEntryId(gallery, second.id), third.id);
+  assert.equal(neighborEntryId(gallery, third.id), second.id);
+  assert.equal(neighborEntryId(gallery, "missing"), null);
+  const one = addEntry(emptyGallery(), LOOK);
+  assert.equal(neighborEntryId(one, one.entries[0].id), null);
 });
 
 test("restoreEntry brings back the look and keeps the current toggles", () => {

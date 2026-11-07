@@ -101,6 +101,15 @@ export function activeEntryId(record, state) {
   return normalizeGalleryRecord(record).entries.some((entry) => entry.id === id) ? id : null;
 }
 
+export function neighborEntryId(record, removedId) {
+  const base = normalizeGalleryRecord(record);
+  const index = base.entries.findIndex((entry) => entry.id === removedId);
+  if (index < 0) return null;
+  const remaining = base.entries.filter((entry) => entry.id !== removedId);
+  if (!remaining.length) return null;
+  return remaining[Math.min(index, remaining.length - 1)].id;
+}
+
 export function restoreEntry(entry, current = DEFAULTS) {
   const base = normalizeState(current);
   const normalized = normalizeEntry(entry);

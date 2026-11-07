@@ -136,3 +136,29 @@ the committed proof.
 - **Tests**: failing-first `muted microcopy meets AA contrast on the darkest panel`;
   suite 112/112.
 - **Release**: v0.5.5.
+
+## Cycle 6 — Deleting a saved look dropped keyboard focus
+
+- **Area**: Gallery progression / keyboard accessibility. Activating a delete
+  button removes that row from the DOM; focus fell back to `<body>`, so a
+  keyboard user lost their place and had to tab back into the gallery.
+- **Evidence before**: old-build worktree `01f13ae` served on port 4394,
+  `cycle6-before-after-delete-1440.png`: three saves, focus the first delete
+  button, press Enter. The row is removed and `activeElement` becomes `BODY`
+  (`focusMovedToNextEntry: false`).
+- **Fix**: `neighborEntryId(record, removedId)` chooses the row that takes the
+  deleted row's position (the previous row when deleting the last one, null
+  when the gallery empties). `deleteLook` focuses that row's open button, or
+  Save look when nothing remains.
+- **Evidence after**: `cycle6-after-after-delete-1440.png` at the same state and
+  viewport: deleting the first of three leaves the Kilim Wave row focused with
+  a visible focus ring (`focusVisible: true`); the toast still names the removed
+  look. The pure test covers first/middle/last/single/missing cases.
+- **Played run**: `cycle6-play.mjs` saves three looks, scrolls to the gallery,
+  focuses the first delete button, presses real Enter, and reads the active
+  element. Before: `BODY`. After: `gallery-open`, label
+  `Load Kilim Wave · seed 7 · r6 w3 v42`.
+- **Tests**: failing-first `neighborEntryId keeps keyboard focus near the deleted row`;
+  static guard `deleting a saved look keeps keyboard focus in the gallery`;
+  suite 114/114.
+- **Release**: v0.5.6.

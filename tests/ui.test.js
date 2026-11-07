@@ -136,6 +136,12 @@ test("the gallery marks the saved look currently on stage", () => {
   assert.match(styles, /\.gallery-item\.is-active \.gallery-open/);
 });
 
+test("deleting a saved look keeps keyboard focus in the gallery", () => {
+  const app = read("src/ui/app.js");
+  assert.ok(app.includes("neighborEntryId"));
+  assert.match(app, /\(focusTarget \|\| saveLookButton\)\?\.focus\(\)/);
+});
+
 test("keyboard shortcuts are wired without hijacking form fields", () => {
   const app = read("src/ui/app.js");
   for (const key of ['key === "r"', 'key === "c"', 'key === "e"', 'key === "p"', 'key === "s"', 'key === "l"']) {

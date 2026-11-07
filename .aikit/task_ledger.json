@@ -5,29 +5,12 @@
     "last_phase": "implementation",
     "active_phase": 4,
     "status": "in_progress",
-    "updated_at": 1794081024.5507896,
+    "updated_at": 1794081653.9139824,
     "owner": "opencode:tessera-cycles",
     "started_by": "opencode:tessera-cycles",
     "continuations": []
   },
   "checkpoints": [
-    {
-      "task_id": "tessera-v1",
-      "phase": "phase 4",
-      "phase_num": 4,
-      "description": "[5/5] Final verification: 74/74 Node tests, 4/4 project gates, static embed contract OK, 108 motif/palette/seed SVGs parsed in-browser with zero console errors, no overflow at 320/390/768/1024/1440/1920. checklists: passed",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1793310924.456921,
-      "timestamp_str": "2026-10-30 00:55:24",
-      "agent": "kilo:tessera",
-      "handoff": {
-        "state": "all project files remain uncommitted on master",
-        "next": "commit only after explicit user authorization",
-        "open": "AegeanWorks Live catalog validates AGL-1.1 only, Tessera is AL-1.1",
-        "evidence": "npm test 74 pass, aikit check 4/4, matrix 108/108, site validate_source reports only the AGL-1.1 header mismatch."
-      }
-    },
     {
       "task_id": "tessera-v1",
       "phase": "completed",
@@ -285,6 +268,17 @@
       "status": "in_progress",
       "timestamp": 1794081024.5507896,
       "timestamp_str": "2026-11-07 22:50:24",
+      "agent": "opencode:tessera-cycles"
+    },
+    {
+      "task_id": "tessera-quality-cycles-v1",
+      "phase": "implementation",
+      "phase_num": 4,
+      "description": "[7] Cycle 6 (extension) shipped: deleting a gallery look moves focus to the neighbouring entry, or Save look when empty, via neighborEntryId; failing-first pure test and static guard; 114/114 tests, verify:static OK, aikit check 4/4. Real Enter deletion of the first of three rows on the old build left BODY focused; the new build focuses Load Kilim Wave with a visible ring. checklists: passed",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794081653.9139824,
+      "timestamp_str": "2026-11-07 23:00:53",
       "agent": "opencode:tessera-cycles"
     }
   ]
