@@ -192,6 +192,18 @@ export function describeState(state) {
   return parts.join(", ");
 }
 
+export function thumbKey(state) {
+  const normalized = normalizeState(state);
+  return [
+    normalized.palette,
+    normalized.seed,
+    normalized.weight,
+    normalized.warp,
+    normalized.rotate,
+    normalized.flip,
+  ].join(":");
+}
+
 export function geometrySuffix(state) {
   const normalized = normalizeState(state);
   return `-r${normalized.repeat}w${normalized.weight}v${normalized.warp}`;

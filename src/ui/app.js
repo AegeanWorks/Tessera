@@ -21,6 +21,7 @@ import {
   presetState,
   randomizeState,
   reseedState,
+  thumbKey,
 } from "../studio/state.js";
 import { addEntry, emptyGallery, isSaved, removeEntry, restoreEntry } from "../studio/gallery.js";
 import { clearState, loadGallery, loadState, saveGallery, saveState } from "../studio/storage.js";
@@ -52,7 +53,8 @@ const copyLinkButton = document.getElementById("copy-link");
 const toast = document.getElementById("toast");
 
 let state = normalizeState(DEFAULTS);
-let lastPalette = state.palette;
+let lastThumbKey = "";
+let thumbFrame = 0;
 let pngSize = DEFAULT_EXPORT_SIZE;
 let gallery = emptyGallery();
 let toastTimer = 0;
@@ -130,6 +132,15 @@ function refreshMotifThumbs() {
       { width: 132, height: 92, repeat: 2, decorative: true, idPrefix: `thumb-${motifId}` },
     );
   }
+}
+
+function scheduleMotifThumbs() {
+  if (!motifGrid || thumbFrame) return;
+  const request = window.requestAnimationFrame || ((callback) => window.setTimeout(callback, 16));
+  thumbFrame = request(() => {
+    thumbFrame = 0;
+    refreshMotifThumbs();
+  });
 }
 
 function buildPaletteButtons() {
@@ -344,9 +355,10 @@ function syncUrl() {
 }
 
 function update(options = {}) {
-  if (state.palette !== lastPalette) {
-    lastPalette = state.palette;
-    refreshMotifThumbs();
+  const nextThumbKey = thumbKey(state);
+  if (nextThumbKey !== lastThumbKey) {
+    lastThumbKey = nextThumbKey;
+    scheduleMotifThumbs();
   }
   syncInputs();
   syncSelection();
@@ -579,9 +591,9 @@ function initialState() {
 
 function mount() {
   state = initialState();
-  lastPalette = state.palette;
   gallery = loadGallery(storage()) || emptyGallery();
   buildMotifButtons();
+  lastThumbKey = thumbKey(state);
   buildPaletteButtons();
   buildPresetButtons();
   buildPngSizes();

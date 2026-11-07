@@ -1,15 +1,14 @@
 {
   "version": 1,
   "active_task": {
-    "task_id": "tessera-motifs-v1",
-    "last_phase": "phase 4",
-    "active_phase": 5,
-    "status": "completed",
-    "updated_at": 1793362360.1132145,
-    "owner": "opencode:tessera-motifs",
-    "started_by": "opencode:tessera-motifs",
-    "continuations": [],
-    "completed_at": 1793362365.4117115
+    "task_id": "tessera-quality-cycles-v1",
+    "last_phase": "implementation",
+    "active_phase": 4,
+    "status": "in_progress",
+    "updated_at": 1794077254.1961653,
+    "owner": "opencode:tessera-cycles",
+    "started_by": "opencode:tessera-cycles",
+    "continuations": []
   },
   "checkpoints": [
     {
@@ -248,6 +247,35 @@
       "timestamp": 1793362365.411713,
       "timestamp_str": "2026-10-30 15:12:45",
       "agent": "opencode:tessera-motifs"
+    },
+    {
+      "task_id": "tessera-quality-cycles-v1",
+      "phase": "planning",
+      "phase_num": 2,
+      "description": "[1/6] Plan six continuous improvement cycles for Tessera: honest motif-picker previews, keyboard shortcuts after button focus, gallery restore feedback, export verification, mobile readability, and stage interaction polish; each cycle carries before/after screenshots plus a scripted play run",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794077133.287531,
+      "timestamp_str": "2026-11-07 21:45:33",
+      "agent": "opencode:tessera-cycles",
+      "impact_assessment": {
+        "why": "The studio is feature-complete for v0.5.x, but scripted play found stale motif previews and shortcuts that stop after a button click; the remaining cycles will inspect the gallery, export and mobile surfaces for the same class of feedback gaps.",
+        "benefits": "Each shipped cycle is a small, test-backed fix with browser evidence, so the studio stays visually truthful and keyboard-fast without adding dependencies or changing the state format.",
+        "risks": "contract: no runtime contract change beyond a pure thumbKey helper; dependency: none; concurrency: one writer per state and gallery record; state: no URL or localStorage schema change.",
+        "mitigation": "Add failing pure/static tests first, keep each diff limited to one area, and verify with the same seeded 1440x900 CDP run before and after; the full npm, static-contract and AIKit gates run before every commit."
+      },
+      "plan_digest": "b52931f5bf547c94ec3e16856135270a70e51c91ea93d8a89d84384b3c7117fc"
+    },
+    {
+      "task_id": "tessera-quality-cycles-v1",
+      "phase": "implementation",
+      "phase_num": 4,
+      "description": "[2/6] Cycle 1 shipped: motif picker previews now refresh for palette, seed, weight, warp, rotate and flip via pure thumbKey + one rAF; failing-first state test and static UI guard; 108/108 tests, verify:static OK, aikit check 4/4; deterministic CDP run at 1440x900 seed 4170 weight 6 changed all eight thumbnails after the fix (unchanged before) while the stage hash stayed dfae932e, and default 1440/390 captures are byte-identical to baseline. checklists: passed",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794077254.1961653,
+      "timestamp_str": "2026-11-07 21:47:34",
+      "agent": "opencode:tessera-cycles"
     }
   ]
 }

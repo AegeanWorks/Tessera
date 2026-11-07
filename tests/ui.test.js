@@ -120,6 +120,13 @@ test("the app imports only local studio modules", () => {
   assert.ok(app.includes("bindSelect("));
 });
 
+test("the motif picker previews every visual change", () => {
+  const app = read("src/ui/app.js");
+  assert.ok(app.includes("thumbKey(state)"), "the app should key motif previews to the visual state");
+  assert.ok(app.includes("scheduleMotifThumbs()"), "visual changes should refresh the motif previews");
+  assert.ok(app.includes("requestAnimationFrame"), "preview refreshes should coalesce into one frame");
+});
+
 test("keyboard shortcuts are wired without hijacking form fields", () => {
   const app = read("src/ui/app.js");
   for (const key of ['key === "r"', 'key === "c"', 'key === "e"', 'key === "p"', 'key === "s"', 'key === "l"']) {

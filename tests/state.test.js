@@ -16,6 +16,7 @@ import {
   presetState,
   randomizeState,
   reseedState,
+  thumbKey,
 } from "../src/studio/state.js";
 import { createRandom } from "../src/studio/random.js";
 import { MOTIF_IDS } from "../src/studio/motifs.js";
@@ -73,6 +74,30 @@ test("normalizeState accepts only known rotations and flips", () => {
   assert.equal(normalizeState({ flip: "diagonal" }).flip, DEFAULTS.flip);
   assert.deepEqual(ROTATIONS, [0, 90, 180, 270]);
   assert.deepEqual(FLIPS, ["none", "x", "y"]);
+});
+
+test("thumbKey changes with every field a motif picker previews", () => {
+  const base = normalizeState(DEFAULTS);
+  const key = thumbKey(base);
+  for (const patch of [
+    { palette: "kilim" },
+    { seed: 99 },
+    { weight: 6 },
+    { warp: 90 },
+    { rotate: 90 },
+    { flip: "x" },
+  ]) {
+    assert.notEqual(thumbKey(normalizeState({ ...base, ...patch })), key, JSON.stringify(patch));
+  }
+  for (const patch of [
+    { motif: "mosaic" },
+    { repeat: 10 },
+    { guides: true },
+    { motion: true },
+  ]) {
+    assert.equal(thumbKey(normalizeState({ ...base, ...patch })), key, JSON.stringify(patch));
+  }
+  assert.equal(thumbKey({ ...base, seed: 99999 }), thumbKey({ ...base, seed: LIMITS.seed.max }));
 });
 
 test("encodeState round-trips through decodeSearch", () => {
