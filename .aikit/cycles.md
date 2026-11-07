@@ -357,3 +357,27 @@ the committed proof.
 - **Tests**: failing-first static guard `gallery persistence failures are reported`;
   suite 124/124.
 - **Release**: v0.6.4.
+
+## Cycle 15 — The clipboard fallback dropped keyboard focus
+
+- **Area**: Copy-link / clipboard feedback and keyboard continuity. When the
+  async Clipboard API is unavailable or rejects, `copyText` creates a hidden
+  textarea, selects it and runs `execCommand("copy")`; removing the textarea
+  left focus on `<body>`, so a keyboard user lost their place after copying.
+- **Evidence before**: old-build worktree `5ab88f3` served on port 4406,
+  `cycle15-before-copy-focus-1440.png`: focus Copy link, press `L` with the
+  fallback forced; toast says `Share link copied…` but `activeElement` becomes
+  `BODY` and no focus ring remains.
+- **Fix**: capture `document.activeElement` before the fallback, and after
+  removing the textarea restore it with `focus({ preventScroll: true })` when it
+  is still connected. Clipboard API success is untouched.
+- **Evidence after**: `cycle15-after-copy-focus-1440.png` at the same state and
+  viewport: the toast still succeeds and the Copy link button regains its
+  visible focus ring. `focusRestored: true`, `focusVisible: true`.
+- **Played run**: `cycle15-play.mjs` forces `writeText` to reject, stubs
+  `execCommand` to count calls, focuses Copy link and presses real `L`. Before:
+  fallback ran once but focus moved to `BODY`. After: fallback ran once, focus
+  returned to `copy-link`, and the toast fit.
+- **Tests**: failing-first static guard `clipboard fallback restores keyboard focus`;
+  suite 125/125.
+- **Release**: v0.6.5.

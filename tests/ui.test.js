@@ -149,6 +149,12 @@ test("gallery persistence failures are reported", () => {
   assert.ok(app.includes("for this session only"));
 });
 
+test("clipboard fallback restores keyboard focus", () => {
+  const app = read("src/ui/app.js");
+  assert.ok(app.includes("previousFocus"));
+  assert.ok(app.includes("preventScroll: true"));
+});
+
 test("deleting a saved look keeps keyboard focus in the gallery", () => {
   const app = read("src/ui/app.js");
   assert.ok(app.includes("neighborEntryId"));

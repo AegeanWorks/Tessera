@@ -450,6 +450,7 @@ function svgText() {
 }
 
 async function copyText(text, successMessage) {
+  const previousFocus = document.activeElement;
   try {
     if (navigator.clipboard && window.isSecureContext) {
       await navigator.clipboard.writeText(text);
@@ -473,6 +474,9 @@ async function copyText(text, successMessage) {
     announce("Copy is unavailable in this browser.");
   } finally {
     area.remove();
+    if (previousFocus instanceof HTMLElement && previousFocus.isConnected && previousFocus !== document.body) {
+      previousFocus.focus({ preventScroll: true });
+    }
   }
 }
 

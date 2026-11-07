@@ -47,7 +47,7 @@ Tessera is a zero-dependency static studio. Eight motifs and eight palettes gene
 | PNG size | Pick Wallpaper (2560 × 1440), Full HD, 4K, Phone or Square |
 | Export PNG `P` | Rasterize the current look at the selected size as a `.png` file |
 | Save look `S` | Store the current pattern in the local gallery (up to 12) |
-| Copy link `L` | Copy a URL that restores the current motif, palette and geometry |
+| Copy link `L` | Copy a URL that restores the current motif, palette and geometry; focus returns to the button after copying |
 | Gallery | Click a thumbnail to restore a saved look; the current look is outlined; the × removes it |
 
 ## What Is Tessera

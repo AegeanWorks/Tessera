@@ -5,7 +5,7 @@
     "last_phase": "implementation",
     "active_phase": 4,
     "status": "in_progress",
-    "updated_at": 1794087410.3430102,
+    "updated_at": 1794087971.844626,
     "owner": "opencode:tessera-cycles",
     "started_by": "opencode:tessera-cycles",
     "continuations": []
@@ -99,17 +99,6 @@
         "mitigation": "Add failing pure/static tests first, keep each diff limited to one area, and verify with the same seeded 1440x900 CDP run before and after; the full npm, static-contract and AIKit gates run before every commit."
       },
       "plan_digest": "b52931f5bf547c94ec3e16856135270a70e51c91ea93d8a89d84384b3c7117fc"
-    },
-    {
-      "task_id": "tessera-quality-cycles-v1",
-      "phase": "implementation",
-      "phase_num": 4,
-      "description": "[2/6] Cycle 1 shipped: motif picker previews now refresh for palette, seed, weight, warp, rotate and flip via pure thumbKey + one rAF; failing-first state test and static UI guard; 108/108 tests, verify:static OK, aikit check 4/4; deterministic CDP run at 1440x900 seed 4170 weight 6 changed all eight thumbnails after the fix (unchanged before) while the stage hash stayed dfae932e, and default 1440/390 captures are byte-identical to baseline. checklists: passed",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1794077254.1961653,
-      "timestamp_str": "2026-11-07 21:47:34",
-      "agent": "opencode:tessera-cycles"
     },
     {
       "task_id": "tessera-quality-cycles-v1",
@@ -252,6 +241,17 @@
       "status": "in_progress",
       "timestamp": 1794087410.3430102,
       "timestamp_str": "2026-11-08 00:36:50",
+      "agent": "opencode:tessera-cycles"
+    },
+    {
+      "task_id": "tessera-quality-cycles-v1",
+      "phase": "implementation",
+      "phase_num": 4,
+      "description": "[16] Cycle 15 (extension) shipped: legacy clipboard fallback now restores the pre-copy focus with preventScroll, so Copy link keeps its keyboard place after execCommand; failing-first static guard; 125/125 tests, verify:static OK, aikit check 4/4. Forced fallback: old build moved focus to BODY; new build returns to copy-link with a visible ring, toast still 'Share link copied to the clipboard.' checklists: passed",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794087971.844626,
+      "timestamp_str": "2026-11-08 00:46:11",
       "agent": "opencode:tessera-cycles"
     }
   ]
