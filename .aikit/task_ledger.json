@@ -5,29 +5,12 @@
     "last_phase": "implementation",
     "active_phase": 4,
     "status": "in_progress",
-    "updated_at": 1794083797.536883,
+    "updated_at": 1794084384.0006237,
     "owner": "opencode:tessera-cycles",
     "started_by": "opencode:tessera-cycles",
     "continuations": []
   },
   "checkpoints": [
-    {
-      "task_id": "tessera-gallery-v1",
-      "phase": "phase 2",
-      "phase_num": 2,
-      "description": "[1/3] Pure gallery model (visual signature, add/remove/restore, 12-entry cap); versioned localStorage record with corrupt-safe loading; failing-first tests",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1793345055.056707,
-      "timestamp_str": "2026-10-30 10:24:15",
-      "agent": "opencode:tessera-gallery",
-      "impact_assessment": {
-        "why": "Every look is ephemeral unless the URL is kept: there is no way to save a few candidates, compare them, or return to one after a reload, and sharing requires selecting the address bar. A local gallery makes the studio useful across sessions without accounts or a backend.",
-        "benefits": "Up to 12 looks survive reloads and can be restored in one click; duplicates collapse by visual signature; a Copy link action shares the exact current state; corrupt or unsupported records never break the studio.",
-        "risks": "contract: new gallery.js, storage record and sidebar block; dependency: none (localStorage only); concurrency: one record written on explicit save/delete; state: new tessera.gallery.v1 key, studio state and URL schema untouched.",
-        "mitigation": "Keep the model pure and the storage boundary in storage.js; cap and dedupe in the model; preserve guides/motion on restore like presets; failing-first tests for cap, dedupe, version refusal, corruption and hostile stores; browser e2e for save, reload, restore and delete."
-      }
-    },
     {
       "task_id": "tessera-gallery-v1",
       "phase": "phase 4",
@@ -269,6 +252,17 @@
       "status": "in_progress",
       "timestamp": 1794083797.536883,
       "timestamp_str": "2026-11-07 23:36:37",
+      "agent": "opencode:tessera-cycles"
+    },
+    {
+      "task_id": "tessera-quality-cycles-v1",
+      "phase": "implementation",
+      "phase_num": 4,
+      "description": "[12] Cycle 11 (extension) shipped: preset rail marks the matching visual preset with is-active + aria-current, and editing any look field clears it via activePresetId; failing-first state test and static guard; 119/119 tests, verify:static OK, aikit check 4/4. Old build showed zero markers after Iris drift; new build shows exactly one (iris-drift), then zero after New seed. checklists: passed",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794084384.0006237,
+      "timestamp_str": "2026-11-07 23:46:24",
       "agent": "opencode:tessera-cycles"
     }
   ]

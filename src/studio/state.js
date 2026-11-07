@@ -169,6 +169,17 @@ export function applyPreset(id, current = DEFAULTS) {
   });
 }
 
+const PRESET_VISUAL_KEYS = Object.freeze(["motif", "palette", "repeat", "weight", "warp", "seed"]);
+
+export function activePresetId(state) {
+  const normalized = normalizeState(state);
+  for (const preset of PRESETS) {
+    const look = presetState(preset.id);
+    if (look && PRESET_VISUAL_KEYS.every((key) => look[key] === normalized[key])) return preset.id;
+  }
+  return null;
+}
+
 function pickDifferent(list, current, random) {
   const candidate = pick(list, random);
   if (candidate !== current) return candidate;

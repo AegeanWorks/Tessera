@@ -13,6 +13,7 @@ import { renderSvg } from "../studio/svg.js";
 import {
   DEFAULTS,
   PRESETS,
+  activePresetId,
   applyPreset,
   decodeSearch,
   encodeState,
@@ -359,6 +360,15 @@ function syncSelection() {
   if (paletteGrid) {
     for (const button of paletteGrid.querySelectorAll(".palette-button")) {
       button.setAttribute("aria-pressed", button.dataset.palette === state.palette ? "true" : "false");
+    }
+  }
+  if (presetList) {
+    const activeId = activePresetId(state);
+    for (const button of presetList.querySelectorAll(".preset-button")) {
+      const selected = button.dataset.preset === activeId;
+      button.classList.toggle("is-active", selected);
+      if (selected) button.setAttribute("aria-current", "true");
+      else button.removeAttribute("aria-current");
     }
   }
 }

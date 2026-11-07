@@ -41,7 +41,7 @@ Tessera is a zero-dependency static studio. Eight motifs and eight palettes gene
 | Rotate / Flip | Turn the tile by 90° steps or mirror it horizontally or vertically |
 | New seed | Reroll the generated variation without changing the motif |
 | Glow drift / Tile guides | Animate hue subtly, or overlay the repeating tile grid |
-| Presets | Load a curated motif and palette pairing |
+| Presets | Load a curated look; the matching preset is outlined until you edit it |
 | Randomize `R` | Jump to a new motif, palette and seed |
 | Copy SVG `C` / Export SVG `E` | Copy the SVG source, or download it as a `.svg` file |
 | PNG size | Pick Wallpaper (2560 × 1440), Full HD, 4K, Phone or Square |

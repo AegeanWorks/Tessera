@@ -6,6 +6,7 @@ import {
   LIMITS,
   PRESETS,
   ROTATIONS,
+  activePresetId,
   applyPreset,
   decodeSearch,
   describeState,
@@ -145,6 +146,14 @@ test("every preset resolves to a valid state", () => {
 test("every motif has a curated preset", () => {
   const covered = new Set(PRESETS.map((preset) => preset.state.motif));
   assert.deepEqual(MOTIF_IDS.filter((id) => !covered.has(id)), []);
+});
+
+test("activePresetId names the preset matching the visual state", () => {
+  const preset = presetState("iris-drift");
+  assert.equal(activePresetId(preset), "iris-drift");
+  assert.equal(activePresetId({ ...preset, rotate: 90, flip: "x", guides: true, motion: true }), "iris-drift");
+  assert.equal(activePresetId({ ...preset, seed: 1 }), null);
+  assert.equal(activePresetId(normalizeState(DEFAULTS)), null);
 });
 
 test("applyPreset keeps personal toggles and transforms", () => {

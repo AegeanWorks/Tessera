@@ -258,3 +258,26 @@ the committed proof.
   preset rail remains within the viewport.
 - **Tests**: failing-first `preset buttons show a visual preview`; suite 117/117.
 - **Release**: v0.6.0.
+
+## Cycle 11 — The preset rail never showed which look was active
+
+- **Area**: Catalogue orientation. After clicking a preset, every row looked the
+  same; the stage changed but the rail gave no confirmation of which curated
+  look was loaded, and editing a value gave no cue that the look had diverged.
+- **Evidence before**: old-build worktree `ca23bc0` served on port 4399,
+  `cycle11-before-presets-after-click-1440.png`: clicking Iris drift loads
+  Drift/Iris seed 23, but `activeCount: 0` and no `aria-current`.
+- **Fix**: `activePresetId(state)` compares the six visual look fields
+  (motif, palette, repeat, weight, warp, seed) and ignores personal transforms
+  and toggles, matching `applyPreset`. `syncSelection` sets `.is-active` and
+  `aria-current="true"` on that row, so any later edit clears the marker.
+- **Evidence after**: `cycle11-after-presets-after-click-1440.png` at the same
+  viewport and loaded state: Iris drift is outlined and carries
+  `aria-current="true"`. Clicking New seed clears the outline while the stage
+  keeps the edited seed.
+- **Played run**: `cycle11-play.mjs` clicks Iris drift, then New seed. Before:
+  no marker ever. After: exactly one marker (`iris-drift`), then zero after the
+  seed edit.
+- **Tests**: failing-first `activePresetId names the preset matching the visual state`;
+  static guard `the preset rail marks the active preset`; suite 119/119.
+- **Release**: v0.6.1.
