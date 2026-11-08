@@ -158,3 +158,10 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Context**: `addEntry` rebuilt every save from the visual state, so pressing Save look on an already-saved, renamed look replaced the custom name with the auto name and announced the auto name. Renaming was effectively lost on the next save.
 - **Decision**: When `addEntry` finds an existing entry with the same visual signature, it keeps that entry's name while refreshing `savedAt` and moving it to the front. New signatures still get the auto name; backups still merge through `mergeEntry` and keep their names.
 - **Consequences**: Custom names survive repeated saves of the same look, and the toast names the look the user sees. Renaming a look that is not currently saved still creates a new auto-named entry when saved; the name is display metadata only, and the signature remains the identity. No storage or save-format change.
+
+### ADR-022: Printing prints the pattern, not the studio chrome
+- **Date**: 2026-11-08
+- **Status**: Accepted
+- **Context**: The studio had no print styles. Printing kept the topbar, controls, footer and shortcuts, used light text on a white page, and produced a 2635px document; the pattern shared the page with unusable UI.
+- **Decision**: Add `@media print` rules that hide the skip link, grain, topbar actions and tagline, controls, footer, toast and notes; keep a compact brand, the stage and its caption; set a white page with dark text via print-only tokens in `theme.css`; give the stage frame an aspect-ratio height and `print-color-adjust: exact` so the palette prints; set `@page` margins. The screen theme is unchanged.
+- **Consequences**: Ctrl+P produces one clean page with the pattern and its palette; the dark stage uses ink, but the pattern is the content. Links and controls are not printed; exporting SVG/PNG remains the editable/raster path. No state, storage or dependency change.

@@ -537,6 +537,18 @@ test("forced-colors mode keeps switch and selection cues", () => {
   assert.ok(forced.includes(".gallery-item.is-active .gallery-open"));
 });
 
+test("printing shows the pattern without the studio chrome", () => {
+  const styles = read("src/styles.css");
+  const theme = read("src/theme.css");
+  const print = styles.slice(styles.indexOf("@media print"));
+  assert.ok(print.includes(".controls"));
+  assert.ok(print.includes("display: none"));
+  assert.ok(print.includes("print-color-adjust: exact"));
+  assert.ok(print.includes("aspect-ratio"));
+  assert.ok(theme.includes("--print-bg"));
+  assert.ok(theme.includes("--print-ink"));
+});
+
 test("the favicon is a local, self-contained SVG", () => {
   const icon = read("src/favicon.svg");
   assert.ok(icon.startsWith("<svg"));

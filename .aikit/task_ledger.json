@@ -5,7 +5,7 @@
     "last_phase": "in_progress",
     "active_phase": 4,
     "status": "in_progress",
-    "updated_at": 1794114708.8358123,
+    "updated_at": 1794115297.1070867,
     "owner": "opencode:tessera-cycles",
     "started_by": "opencode:tessera-cycles",
     "continuations": []
@@ -99,17 +99,6 @@
         "mitigation": "Add failing pure/static tests first, keep each diff limited to one area, and verify with the same seeded 1440x900 CDP run before and after; the full npm, static-contract and AIKit gates run before every commit."
       },
       "plan_digest": "b52931f5bf547c94ec3e16856135270a70e51c91ea93d8a89d84384b3c7117fc"
-    },
-    {
-      "task_id": "tessera-quality-cycles-v1",
-      "phase": "in_progress",
-      "phase_num": 4,
-      "description": "[36] Cycle 35 (extension) shipped: cross-tab synchronization. A storage listener for the studio and gallery keys re-reads state and gallery in other tabs, clears their undo history on external edits, refreshes saved looks without changing the stage, and announces both syncs. ADR-014. Failing-first static guard. 160/160 tests, verify:static OK, aikit check 4/4. Two-tab play: before tab B stayed Wave, empty and quiet after tab A changed and saved; after B synced to Ridge, URL motif=ridge, toast exact, gallery gained Aegean Ridge, delete cleared it, undo disabled. checklists: passed",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1794104852.2285428,
-      "timestamp_str": "2026-11-08 05:27:32",
-      "agent": "opencode:tessera-cycles"
     },
     {
       "task_id": "tessera-quality-cycles-v1",
@@ -252,6 +241,17 @@
       "status": "in_progress",
       "timestamp": 1794114708.8358123,
       "timestamp_str": "2026-11-08 08:11:48",
+      "agent": "opencode:tessera-cycles"
+    },
+    {
+      "task_id": "tessera-quality-cycles-v1",
+      "phase": "in_progress",
+      "phase_num": 4,
+      "description": "[50] Cycle 49 (extension) shipped: print layout. Print-only tokens in theme.css (white page, dark ink/muted/line) and @media print in styles.css hide skip link, grain, topbar actions/tagline, controls, footer, toast and notes; keep compact brand, stage and caption; stage aspect-ratio 1004/570, exact color, @page 12mm. ADR-022; README Print row/sentence. Failing-first static guard. 178/178 tests, verify:static OK, aikit check 4/4. Played print-preview run at 1440 and A4: before body light on transparent, controls/footer/actions visible, page 2635/2669px; after body rgb(17,24,39) on white, chrome none, stage 1198x680/794x451, print-color-adjust exact, page 900/1123, overflowX 0. checklists: passed",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794115297.1070867,
+      "timestamp_str": "2026-11-08 08:21:37",
       "agent": "opencode:tessera-cycles"
     }
   ]

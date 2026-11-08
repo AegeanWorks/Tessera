@@ -1276,3 +1276,37 @@ the committed proof.
 - **Tests**: failing-first `addEntry keeps a custom name when the same look is
   saved again`; suite 177/177.
 - **Release**: v0.7.16.
+
+## Cycle 49 — Printing produced the studio chrome, not a pattern page
+
+- **Area**: print/layout, an untouched medium. There was no print stylesheet;
+  print media kept the topbar actions, the 360px controls column, the footer
+  and shortcuts, used light text on the paper's white, and produced a 2635px
+  document at 1440 (2669px at A4 width). The pattern shared the page with
+  unusable UI.
+- **Evidence before**: old-build worktree `05618a2` served on port 4434;
+  `cycle49-play.mjs` emulated Chromium print media. Before: body color
+  `rgb(230, 237, 247)` on a transparent background, controls `grid`, footer
+  `flex`, topbar actions `flex`, stage 1004×570, `print-color-adjust` economy,
+  page height 2635 at 1440 and 2669 at 794. `cycle49-before-print-1440.png` and
+  `-print-a4.png` show the full studio.
+- **Fix**: add print-only tokens to `theme.css` (white page, dark ink, muted
+  and line) and an `@media print` block to `styles.css`: hide the skip link,
+  grain, topbar actions and tagline, controls, footer, toast and notes; keep a
+  compact brand, the stage and its caption; set white page and dark text; give
+  the stage frame an aspect ratio, square corners and exact color; set
+  `@page` margins. ADR-022 records the contract; README gains a Print row and
+  sentence.
+- **Evidence after**: `cycle49-after-print-1440.png` shows only the brand,
+  pattern and caption on white; `-print-a4.png` fits one A4 page. Body is
+  `rgb(17, 24, 39)` on white, controls/footer/actions are `none`, the stage is
+  1198×680 at 1440 and 794×451 at A4, `print-color-adjust` exact, page height
+  900/1123, `overflowX: 0`.
+- **Played run**: `cycle49-play.mjs` emulates Chromium print media at 1440×900
+  and 794×1123 (A4) and reads the print snapshot. Before: full chrome, light
+  text, 2635/2669px. After: chrome hidden, dark ink on white, stage scaled,
+  exact color, one A4 page. This is a browser print-preview play, not a
+  physical printer.
+- **Tests**: failing-first `printing shows the pattern without the studio
+  chrome`; suite 178/178.
+- **Release**: v0.7.17.

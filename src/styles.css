@@ -1498,3 +1498,86 @@ select:hover {
     outline-offset: -2px;
   }
 }
+
+@page {
+  margin: 12mm;
+}
+
+@media print {
+  body {
+    background: var(--print-bg);
+    color: var(--print-ink);
+  }
+
+  .skip-link,
+  .page-grain,
+  .topbar-actions,
+  .topbar-tagline,
+  aside.controls,
+  .footer,
+  .toast,
+  .storage-note,
+  .motion-note {
+    display: none !important;
+  }
+
+  .topbar {
+    max-width: none;
+    padding: 0 0 8mm;
+    border: 0;
+  }
+
+  .brand {
+    color: var(--print-ink);
+  }
+
+  .brand-mark {
+    filter: none;
+    print-color-adjust: exact;
+  }
+
+  .brand-tile-d {
+    fill: var(--print-ink);
+  }
+
+  .studio {
+    display: block;
+    max-width: none;
+    padding: 0;
+  }
+
+  .stage-panel {
+    position: static;
+    width: 100%;
+  }
+
+  .stage-frame {
+    height: auto;
+    aspect-ratio: 1004 / 570;
+    max-height: 180mm;
+    border-color: var(--print-line);
+    border-radius: 0;
+    box-shadow: none;
+    print-color-adjust: exact;
+    break-inside: avoid;
+  }
+
+  .stage-caption {
+    display: block;
+    padding: 8mm 0 0;
+    break-inside: avoid;
+  }
+
+  .stage-caption h1 {
+    color: var(--print-ink);
+    font-size: 24pt;
+  }
+
+  .eyebrow {
+    color: var(--print-muted);
+  }
+
+  .stage-note {
+    display: none;
+  }
+}
