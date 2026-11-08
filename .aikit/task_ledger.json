@@ -5,7 +5,7 @@
     "last_phase": "in_progress",
     "active_phase": 4,
     "status": "in_progress",
-    "updated_at": 1794109004.3619032,
+    "updated_at": 1794109602.890242,
     "owner": "opencode:tessera-cycles",
     "started_by": "opencode:tessera-cycles",
     "continuations": []
@@ -99,17 +99,6 @@
         "mitigation": "Add failing pure/static tests first, keep each diff limited to one area, and verify with the same seeded 1440x900 CDP run before and after; the full npm, static-contract and AIKit gates run before every commit."
       },
       "plan_digest": "b52931f5bf547c94ec3e16856135270a70e51c91ea93d8a89d84384b3c7117fc"
-    },
-    {
-      "task_id": "tessera-quality-cycles-v1",
-      "phase": "in_progress",
-      "phase_num": 4,
-      "description": "[28] Cycle 27 (extension) shipped: readGallery reports unreadable/unavailable, gallery shows role=status warning and saving starts a fresh collection; failing-first storage test and static guard; 143/143 tests, verify:static OK, aikit check 4/4. Corrupt-record play: before generic empty/no role, after warning+role at 1440/320 with no overflow; Save look recovers to 1 entry. checklists: passed",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1794100020.10898,
-      "timestamp_str": "2026-11-08 04:07:00",
-      "agent": "opencode:tessera-cycles"
     },
     {
       "task_id": "tessera-quality-cycles-v1",
@@ -252,6 +241,17 @@
       "status": "in_progress",
       "timestamp": 1794109004.3619032,
       "timestamp_str": "2026-11-08 06:36:44",
+      "agent": "opencode:tessera-cycles"
+    },
+    {
+      "task_id": "tessera-quality-cycles-v1",
+      "phase": "in_progress",
+      "phase_num": 4,
+      "description": "[42] Cycle 41 (extension) shipped: reduced-motion settle skip. settleStage returns early when prefersReducedMotion, so no is-settling class or timer is added; the normal settle still runs. Failing-first static guard. 166/166 tests, verify:static OK, aikit check 4/4. Played real clicks: before reduce still added the class; after reduce class false/animation none/opacity 1 while the normal settle stayed class true/tessera-settle 0.32s/opacity 0.871 at the same Ridge/Nocturne state; 320 no overflow. checklists: passed",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794109602.890242,
+      "timestamp_str": "2026-11-08 06:46:42",
       "agent": "opencode:tessera-cycles"
     }
   ]

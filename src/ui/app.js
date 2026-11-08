@@ -723,7 +723,7 @@ function syncUrl() {
 }
 
 function settleStage() {
-  if (!stage) return;
+  if (!stage || prefersReducedMotion()) return;
   window.clearTimeout(settleTimer);
   stage.classList.remove("is-settling");
   void stage.offsetWidth;

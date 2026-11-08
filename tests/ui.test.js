@@ -270,6 +270,11 @@ test("the preset rail marks the active preset", () => {
   assert.match(styles, /\.preset-button\.is-active\s*\{/);
 });
 
+test("reduced motion skips the settle", () => {
+  const app = read("src/ui/app.js");
+  assert.match(app, /function settleStage\(\)\s*\{[^}]*prefersReducedMotion\(\)/);
+});
+
 test("discrete look changes settle the stage", () => {
   const app = read("src/ui/app.js");
   const styles = read("src/styles.css");

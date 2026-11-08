@@ -1044,3 +1044,28 @@ the committed proof.
 - **Tests**: failing-first `discrete look changes settle the stage`; suite
   165/165.
 - **Release**: v0.7.8.
+
+## Cycle 41 — Reduced motion still got the settle’s first frame
+
+- **Area**: accessibility/reduced motion. The cycle 40 settle still added
+  `is-settling` under `prefers-reduced-motion: reduce`; the duration collapsed
+  but the class/timer ran, and the cycle 40 capture showed the dim/scale first
+  frame.
+- **Evidence before**: old-build worktree `199e889` served on port 4432,
+  `cycle41-before-reduced-ridge-1440.png`: `settling: true` with
+  `animationName: tessera-settle` and duration `1e-05s`; the normal settle also
+  ran at 0.32s.
+- **Fix**: `settleStage()` returns early when `prefersReducedMotion()` is true,
+  so no class or timer is added; the normal settle is unchanged. No state or
+  save change.
+- **Evidence after**: `cycle41-after-reduced-ridge-1440.png` (class false,
+  animation none, opacity 1) vs `cycle41-after-normal-ridge-1440.png` (class
+  true, `tessera-settle` 0.32s, opacity 0.871) at the same Ridge/Nocturne state
+  and viewport; `cycle41-after-reduced-320.png` fits. The cross-build reduced
+  pair is before class true vs after false.
+- **Played run**: `cycle41-play.mjs` clicks Ridge, then Nocturne and Ridge under
+  reduce, then toggles reduce off and clicks Ridge again. Before: the reduce
+  clicks still added the class. After: reduce clicks have class false, animation
+  none, opacity 1; the normal settle still runs at 0.32s; 320 `overflowX: 0`.
+- **Tests**: failing-first `reduced motion skips the settle`; suite 166/166.
+- **Release**: v0.7.9.
