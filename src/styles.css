@@ -1457,3 +1457,31 @@ select:hover {
     animation: none;
   }
 }
+
+@media (forced-colors: active) {
+  .switch-track {
+    border-color: CanvasText;
+    background: Canvas;
+    transition: none;
+  }
+
+  .switch-track::after {
+    background: CanvasText;
+    transition: none;
+  }
+
+  .switch input:checked + .switch-track {
+    border-color: Highlight;
+    background: Highlight;
+  }
+
+  .switch input:checked + .switch-track::after {
+    background: HighlightText;
+  }
+
+  .preset-button.is-active,
+  .gallery-item.is-active .gallery-open {
+    outline: 2px solid Highlight;
+    outline-offset: -2px;
+  }
+}

@@ -137,3 +137,10 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Context**: The studio is silent; feedback is visual and toast-only. Any sound must not add assets, network requests or autoplay.
 - **Decision**: Add a `sound` preference (off by default) to the studio state and URL, a “Sound cues” switch, and a lazy WebAudio context with a short sine/gain envelope on motif, palette, preset or gallery-load selection, save and export. The gallery signature ignores sound; presets and restores preserve the preference. Audio is best-effort and silent when WebAudio is unavailable or blocked.
 - **Consequences**: Cues are opt-in, local and file-free; the preference persists and travels in share links; the silent default preserves the current experience; no dependency or save-version change.
+
+### ADR-019: Forced-colors mode uses system colors for state cues
+- **Date**: 2026-11-08
+- **Status**: Accepted
+- **Context**: In forced-colors mode the UA maps author backgrounds to Canvas, so the switches lost their thumb and checked track, and the active preset and active saved look lost the border and glow that name them. State was still exposed to assistive technology, but not visually.
+- **Decision**: Under `@media (forced-colors: active)`, draw the switch track with Canvas/CanvasText, the checked track with Highlight/HighlightText, disable the switch transition, and give `.preset-button.is-active` and `.gallery-item.is-active .gallery-open` a 2px Highlight outline. The stage keeps its authored palette because the pattern is the content.
+- **Consequences**: High-contrast users see the thumb, the checked state, the active preset and the active saved look, with colors that follow the OS theme; the decorative stage keeps the studio palette. No state, storage, dependency or save-format change.

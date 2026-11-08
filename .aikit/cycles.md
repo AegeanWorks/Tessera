@@ -1157,3 +1157,36 @@ the committed proof.
 - **Tests**: failing-first `renaming a saved look returns focus to its row`;
   suite 173/173.
 - **Release**: v0.7.12.
+
+## Cycle 45 — Forced-colors mode erased switch and selection cues
+
+- **Area**: accessibility/UI readability in forced-colors mode. The UA maps
+  author backgrounds to Canvas, so the switch track and thumb both became
+  white, hiding the thumb and the checked state. The active preset and active
+  saved look relied on border, background and glow, which were flattened too.
+- **Evidence before**: old-build worktree `959dae6` served on port 4434 under
+  emulated forced-colors; `cycle45-play.mjs`: switch off and on are both
+  `rgb(255, 255, 255)` for track and thumb, so only the 16px thumb shift hints
+  at state; active preset and gallery `outlineStyle` are `none`;
+  `cycle45-before-forced-seed-on-1440.png` shows three empty pills and
+  `-presets-1440.png` / `-gallery-1440.png` show no active cue.
+- **Fix**: add a `@media (forced-colors: active)` block: the switch track uses
+  Canvas/CanvasText, the checked track uses Highlight/HighlightText, the switch
+  transition is disabled, and `.preset-button.is-active` plus
+  `.gallery-item.is-active .gallery-open` get a 2px Highlight outline with a
+  -2px offset. The stage keeps its authored palette because the pattern is the
+  content. ADR-019 records the contract.
+- **Evidence after**: `cycle45-after-forced-seed-on-1440.png` shows black off
+  thumbs and a purple checked track with a white thumb; `-presets-1440.png`
+  outlines Aegean tide; `-gallery-1440.png` outlines the active Aegean Wave
+  row; `-forced-320.png` keeps the cues and fits.
+- **Played run**: `cycle45-play.mjs` emulates forced-colors, toggles Sound
+  cues, loads Aegean tide, saves a look, switches to Ridge and saves another,
+  then loads the first. Before: both switch states are white-on-white and no
+  active outlines. After: the off thumb is black, the checked track is purple
+  with a translated white thumb, and the active preset and gallery row have
+  solid 2px outlines. State is identical (sound on, 2 rows, aegean-tide,
+  `Aegean Wave · seed 7 · r6 w3 v46`); 320 `overflowX: 0`.
+- **Tests**: failing-first `forced-colors mode keeps switch and selection
+  cues`; suite 174/174.
+- **Release**: v0.7.13.

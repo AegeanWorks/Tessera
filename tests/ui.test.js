@@ -505,6 +505,15 @@ test("the studio honours reduced motion and coarse pointers", () => {
   assert.ok(styles.includes("min-height: 44px"));
 });
 
+test("forced-colors mode keeps switch and selection cues", () => {
+  const styles = read("src/styles.css");
+  const forced = styles.slice(styles.indexOf("@media (forced-colors: active)"));
+  assert.ok(forced.includes(".switch-track"));
+  assert.ok(forced.includes("Highlight"));
+  assert.ok(forced.includes(".preset-button.is-active"));
+  assert.ok(forced.includes(".gallery-item.is-active .gallery-open"));
+});
+
 test("the favicon is a local, self-contained SVG", () => {
   const icon = read("src/favicon.svg");
   assert.ok(icon.startsWith("<svg"));
