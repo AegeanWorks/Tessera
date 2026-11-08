@@ -118,7 +118,7 @@ test("the app imports only local studio modules", () => {
   assert.ok(app.includes("saveLook("));
   assert.ok(app.includes("copyLink("));
   assert.ok(app.includes("renderGallery("));
-  assert.ok(app.includes("loadGallery("));
+  assert.ok(app.includes("readGallery("));
   assert.ok(app.includes("rotateInput"));
   assert.ok(app.includes("flipInput"));
   assert.ok(app.includes("bindSelect("));
@@ -319,6 +319,13 @@ test("320px layout keeps preset names and topbar actions readable", () => {
   assert.match(narrow, /\.preset-button\s*\{[^}]*grid-template-columns:\s*44px/);
   assert.match(narrow, /\.preset-name\s*\{[^}]*white-space:\s*normal/);
   assert.match(narrow, /\.gallery-name\s*\{[^}]*white-space:\s*normal/);
+});
+
+test("a refused gallery record is surfaced in the gallery", () => {
+  const app = read("src/ui/app.js");
+  assert.ok(app.includes("readGallery"));
+  assert.ok(app.includes("galleryIssue"));
+  assert.ok(app.includes("Saved looks could not be read"));
 });
 
 test("theme.css is the only stylesheet with raw color values", () => {

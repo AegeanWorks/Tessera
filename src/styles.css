@@ -960,6 +960,12 @@ select:hover {
   line-height: 1.5;
 }
 
+.gallery-empty.is-warning {
+  padding-left: 8px;
+  border-left: 2px solid var(--pink);
+  color: var(--text-soft);
+}
+
 .gallery-foot {
   display: flex;
   align-items: center;

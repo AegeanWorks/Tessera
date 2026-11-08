@@ -667,3 +667,31 @@ the committed proof.
 - **Tests**: failing-first `formatExportResult names the size and payload of the last PNG`;
   suite 141/141.
 - **Release**: v0.6.16.
+
+## Cycle 27 — Corrupt saved-look storage looked like an empty gallery
+
+- **Area**: saved-look gallery recovery. A corrupt or unsupported
+  `tessera.gallery.v1` record was silently discarded, so the Gallery block
+  showed the fresh-install message “No saved looks yet” even though saved looks
+  had existed and could not be read.
+- **Evidence before**: old-build worktree `065fa77` served on port 4418,
+  `cycle27-before-corrupt-gallery-1440.png` / `-320.png`: a planted corrupt
+  record yields the generic empty text, no warning styling and no live-region
+  role; saving still works and shows one entry.
+- **Fix**: `readGallery(storage)` now returns `{ gallery, issue }` with
+  `null`, `unreadable` or `unavailable`; `loadGallery` stays as a thin wrapper.
+  The UI stores `galleryIssue`, renders
+  `Saved looks could not be read. Save a new look to start a fresh collection.`
+  with `.gallery-empty.is-warning` and `role="status"`, and shows a session-only
+  warning when storage is unavailable. Saving a look clears the issue and
+  starts a fresh collection.
+- **Evidence after**: `cycle27-after-corrupt-gallery-1440.png` / `-320.png`
+  at the same state show the warning with a left accent bar and `role="status"`;
+  the 320 capture fits without horizontal overflow.
+- **Played run**: `cycle27-play.mjs` plants the corrupt record, reloads, and
+  inspects both widths. Before: generic text, no warning class or role. After:
+  warning text, `is-warning`, role `status`, no overflow; clicking Save look
+  recovers to 1 entry and toast `Saved Aegean Wave · seed 7 · r6 w3 v42.`
+- **Tests**: failing-first `readGallery distinguishes empty, corrupt and unavailable stores`
+  plus a corrupt-gallery static guard; suite 143/143.
+- **Release**: v0.6.17.

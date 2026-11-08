@@ -42,17 +42,28 @@ export function clearState(storage) {
   }
 }
 
-export function loadGallery(storage) {
-  if (!storage) return null;
+export function readGallery(storage) {
+  if (!storage) return { gallery: null, issue: "unavailable" };
+  let raw;
   try {
-    const raw = storage.getItem(GALLERY_KEY);
-    if (!raw) return null;
-    const data = JSON.parse(raw);
-    if (!data || data.version !== GALLERY_VERSION || !Array.isArray(data.entries)) return null;
-    return normalizeGalleryRecord(data);
+    raw = storage.getItem(GALLERY_KEY);
   } catch {
-    return null;
+    return { gallery: null, issue: "unavailable" };
   }
+  if (!raw) return { gallery: null, issue: null };
+  try {
+    const data = JSON.parse(raw);
+    if (!data || data.version !== GALLERY_VERSION || !Array.isArray(data.entries)) {
+      return { gallery: null, issue: "unreadable" };
+    }
+    return { gallery: normalizeGalleryRecord(data), issue: null };
+  } catch {
+    return { gallery: null, issue: "unreadable" };
+  }
+}
+
+export function loadGallery(storage) {
+  return readGallery(storage).gallery;
 }
 
 export function saveGallery(storage, record) {

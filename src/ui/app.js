@@ -38,7 +38,7 @@ import {
   removeEntry,
   restoreEntry,
 } from "../studio/gallery.js";
-import { clearGallery, clearState, loadGallery, loadState, saveGallery, saveState } from "../studio/storage.js";
+import { clearGallery, clearState, loadState, readGallery, saveGallery, saveState } from "../studio/storage.js";
 
 const stage = document.getElementById("stage");
 const motifGrid = document.getElementById("motif-grid");
@@ -76,6 +76,7 @@ let lastThumbKey = "";
 let thumbFrame = 0;
 let pngSize = DEFAULT_EXPORT_SIZE;
 let gallery = emptyGallery();
+let galleryIssue = null;
 let galleryRovingId = "";
 let clearArmed = false;
 let clearTimer = 0;
@@ -266,8 +267,15 @@ function renderGallery() {
   if (!gallery.entries.length) {
     galleryRovingId = "";
     const empty = document.createElement("p");
-    empty.className = "gallery-empty";
-    empty.textContent = "No saved looks yet. Save the current pattern to start a collection.";
+    const warning = galleryIssue === "unreadable" || galleryIssue === "unavailable";
+    empty.className = warning ? "gallery-empty is-warning" : "gallery-empty";
+    if (warning) empty.setAttribute("role", "status");
+    empty.textContent =
+      galleryIssue === "unreadable"
+        ? "Saved looks could not be read. Save a new look to start a fresh collection."
+        : galleryIssue === "unavailable"
+          ? "Browser storage is unavailable. Saved looks will last for this session only."
+          : "No saved looks yet. Save the current pattern to start a collection.";
     galleryList.appendChild(empty);
     return;
   }
@@ -391,6 +399,7 @@ function clearAllLooks() {
   disarmClear();
   gallery = emptyGallery();
   galleryRovingId = "";
+  galleryIssue = null;
   const persisted = clearGallery(storage());
   renderGallery();
   saveLookButton?.focus();
@@ -404,6 +413,7 @@ function saveLook() {
   const evicted = evictedId ? gallery.entries.find((item) => item.id === evictedId) : null;
   gallery = addEntry(gallery, state);
   galleryRovingId = gallery.entries[0].id;
+  galleryIssue = null;
   const persisted = saveGallery(storage(), gallery);
   renderGallery();
   const entry = gallery.entries[0];
@@ -809,7 +819,9 @@ function initialState() {
 
 function mount() {
   state = initialState();
-  gallery = loadGallery(storage()) || emptyGallery();
+  const galleryRead = readGallery(storage());
+  gallery = galleryRead.gallery || emptyGallery();
+  galleryIssue = galleryRead.issue;
   buildMotifButtons();
   lastThumbKey = thumbKey(state);
   buildPaletteButtons();

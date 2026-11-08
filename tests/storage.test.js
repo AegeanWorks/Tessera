@@ -8,6 +8,7 @@ import {
   clearState,
   loadGallery,
   loadState,
+  readGallery,
   saveGallery,
   saveState,
 } from "../src/studio/storage.js";
@@ -116,6 +117,17 @@ test("a missing, corrupt, unsupported or malformed gallery is refused", () => {
   assert.equal(loadGallery(storage), null);
   storage.setItem(GALLERY_KEY, JSON.stringify({ version: GALLERY_VERSION, entries: "nope" }));
   assert.equal(loadGallery(storage), null);
+});
+
+test("readGallery distinguishes empty, corrupt and unavailable stores", () => {
+  const storage = memoryStorage();
+  assert.deepEqual(readGallery(storage), { gallery: null, issue: null });
+  storage.setItem(GALLERY_KEY, "{oops");
+  assert.equal(readGallery(storage).issue, "unreadable");
+  storage.setItem(GALLERY_KEY, JSON.stringify({ version: GALLERY_VERSION + 1, entries: [] }));
+  assert.equal(readGallery(storage).issue, "unreadable");
+  assert.equal(readGallery(null).issue, "unavailable");
+  assert.equal(readGallery(BROKEN).issue, "unavailable");
 });
 
 test("clearGallery removes the record and tolerates a hostile store", () => {
