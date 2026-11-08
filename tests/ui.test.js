@@ -328,6 +328,16 @@ test("a refused gallery record is surfaced in the gallery", () => {
   assert.ok(app.includes("Saved looks could not be read"));
 });
 
+test("pattern changes can be undone and redone", () => {
+  const html = read("index.html");
+  const app = read("src/ui/app.js");
+  assert.match(html, /id="undo"[^>]*aria-keyshortcuts="Control\+Z Meta\+Z"[^>]*disabled/);
+  assert.match(html, /id="redo"[^>]*aria-keyshortcuts="Control\+Shift\+Z Meta\+Shift\+Z"[^>]*disabled/);
+  assert.ok(app.includes("commitHistory"));
+  assert.ok(app.includes("stepBack"));
+  assert.ok(app.includes("stepForward"));
+});
+
 test("pattern changes warn when the browser rejects storage writes", () => {
   const html = read("index.html");
   const app = read("src/ui/app.js");

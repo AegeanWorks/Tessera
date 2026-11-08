@@ -721,3 +721,35 @@ the committed proof.
 - **Tests**: failing-first `pattern changes warn when the browser rejects storage writes`;
   suite 144/144.
 - **Release**: v0.6.18.
+
+## Cycle 29 — Pattern edits had no undo or redo
+
+- **Area**: progression/history. Every motif, palette, preset, randomize,
+  reseed, gallery load or slider change overwrote the previous state, and
+  Ctrl/Cmd+Z did nothing; the only recovery was a saved look, reset, reload or
+  a copied URL. No history module or test existed.
+- **Evidence before**: old-build worktree `d7e7861` served on port 4420,
+  `cycle29-before-changed-1440.png` / `-after-undo-1440.png`: pressing Ctrl+Z
+  after choosing Ridge leaves Ridge in place, and a full Repeat drag stays at 9;
+  no Undo/Redo controls exist in the Presets block.
+- **Fix**: add pure stack helpers in `src/studio/history.js` (limit 30) and
+  record one snapshot when a discrete action completes or a slider `change`
+  ends, ignoring no-op edits and clearing redo on a new edit. Undo/Redo buttons
+  in the Presets block carry `aria-keyshortcuts` and disabled states;
+  Ctrl/Cmd+Z and Shift+Ctrl/Cmd+Z use the same helpers. Restored states go
+  through `update()`, so storage and the URL stay in sync. ADR-013 records the
+  session-only scope.
+- **Evidence after**: same-build pairs `cycle29-after-changed-1440.png` (Ridge)
+  vs `cycle29-after-after-undo-1440.png` (Wave), and
+  `cycle29-after-after-drag-1440.png` (Repeat 9) vs
+  `cycle29-after-after-drag-undo-1440.png` (Repeat 6). At 320,
+  `cycle29-after-history-320.png` shows Undo/Redo above Reset with
+  `historyWidth: 250` and `overflowX: 0`.
+- **Played run**: `cycle29-play.mjs` uses a real pointer click, real range drag
+  and CDP keyboard chords. Before: no buttons, Ctrl+Z no-op, Ridge/Repeat 9
+  remain. After: undo returns Wave, redo returns Ridge, one Ctrl+Z returns the
+  dragged Repeat from 9 to 6, the URL mirrors both states, and both buttons
+  disable at the right ends of the stack.
+- **Tests**: failing-first history stack cases plus the static
+  `pattern changes can be undone and redone` guard; suite 151/151.
+- **Release**: v0.6.19.

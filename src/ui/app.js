@@ -38,12 +38,15 @@ import {
   removeEntry,
   restoreEntry,
 } from "../studio/gallery.js";
+import { pushHistory, stepBack, stepForward } from "../studio/history.js";
 import { clearGallery, clearState, loadState, readGallery, saveGallery, saveState } from "../studio/storage.js";
 
 const stage = document.getElementById("stage");
 const motifGrid = document.getElementById("motif-grid");
 const paletteGrid = document.getElementById("palette-grid");
 const presetList = document.getElementById("preset-list");
+const undoButton = document.getElementById("undo");
+const redoButton = document.getElementById("redo");
 const repeatInput = document.getElementById("repeat");
 const weightInput = document.getElementById("weight");
 const warpInput = document.getElementById("warp");
@@ -73,6 +76,9 @@ const storageNote = document.getElementById("storage-note");
 const toast = document.getElementById("toast");
 
 let state = normalizeState(DEFAULTS);
+let historyBaseline = state;
+let pastStates = [];
+let futureStates = [];
 let lastThumbKey = "";
 let thumbFrame = 0;
 let pngSize = DEFAULT_EXPORT_SIZE;
@@ -120,6 +126,62 @@ function syncStorageNote(persisted) {
   }
 }
 
+function sameState(a, b) {
+  return encodeState(a) === encodeState(b);
+}
+
+function syncHistoryButtons() {
+  if (undoButton) undoButton.disabled = pastStates.length === 0;
+  if (redoButton) redoButton.disabled = futureStates.length === 0;
+}
+
+function commitHistory() {
+  if (sameState(state, historyBaseline)) return false;
+  pastStates = pushHistory(pastStates, historyBaseline);
+  futureStates = [];
+  historyBaseline = state;
+  syncHistoryButtons();
+  return true;
+}
+
+function undo() {
+  commitHistory();
+  const step = stepBack(pastStates, futureStates, state);
+  if (!step) return;
+  pastStates = step.past;
+  futureStates = step.future;
+  state = step.state;
+  historyBaseline = state;
+  update();
+  announce("Undid the last change.");
+}
+
+function redo() {
+  commitHistory();
+  const step = stepForward(pastStates, futureStates, state);
+  if (!step) return;
+  pastStates = step.past;
+  futureStates = step.future;
+  state = step.state;
+  historyBaseline = state;
+  update();
+  announce("Redid the last change.");
+}
+
+function randomizeLook() {
+  state = randomizeState(state, Math.random);
+  commitHistory();
+  update();
+  announce("A new pattern, picked at random.");
+}
+
+function reseedLook() {
+  state = reseedState(state, Math.random);
+  commitHistory();
+  update();
+  announce(`Seed ${state.seed}.`);
+}
+
 function motifOptions() {
   return motifList();
 }
@@ -155,6 +217,7 @@ function buildMotifButtons() {
     button.append(icon, label);
     button.addEventListener("click", () => {
       state = normalizeState({ ...state, motif: motif.id });
+      commitHistory();
       update();
     });
     motifGrid.appendChild(button);
@@ -211,6 +274,7 @@ function buildPaletteButtons() {
     button.append(swatches, name);
     button.addEventListener("click", () => {
       state = normalizeState({ ...state, palette: palette.id });
+      commitHistory();
       update();
     });
     paletteGrid.appendChild(button);
@@ -249,6 +313,7 @@ function buildPresetButtons() {
     button.append(thumb, name, note);
     button.addEventListener("click", () => {
       state = applyPreset(preset.id, state);
+      commitHistory();
       update();
       announce(`Loaded the ${preset.name} preset.`);
     });
@@ -440,6 +505,7 @@ function loadLook(id) {
   const entry = gallery.entries.find((item) => item.id === id);
   if (!entry) return;
   state = restoreEntry(entry, state);
+  commitHistory();
   update();
   announce(`Loaded ${entry.name}.`);
 }
@@ -562,6 +628,7 @@ function update(options = {}) {
   renderStage();
   if (options.persist !== false) syncStorageNote(saveState(storage(), state));
   if (options.url !== false) syncUrl();
+  syncHistoryButtons();
 }
 
 function svgText() {
@@ -704,12 +771,14 @@ function bindRange(input, key) {
     state = normalizeState({ ...state, [key]: input.value });
     update();
   });
+  input.addEventListener("change", () => commitHistory());
 }
 
 function bindSwitch(input, key) {
   if (!input) return;
   input.addEventListener("change", () => {
     state = normalizeState({ ...state, [key]: input.checked });
+    commitHistory();
     update();
   });
 }
@@ -718,6 +787,7 @@ function bindSelect(input, key) {
   if (!input) return;
   input.addEventListener("change", () => {
     state = normalizeState({ ...state, [key]: input.value });
+    commitHistory();
     update();
   });
 }
@@ -745,17 +815,10 @@ function bindActions() {
   const copy = document.getElementById("copy");
   const exportButton = document.getElementById("export");
 
-  randomize?.addEventListener("click", () => {
-    state = randomizeState(state, Math.random);
-    update();
-    announce("A new pattern, picked at random.");
-  });
-
-  reseed?.addEventListener("click", () => {
-    state = reseedState(state, Math.random);
-    update();
-    announce(`Seed ${state.seed}.`);
-  });
+  randomize?.addEventListener("click", randomizeLook);
+  reseed?.addEventListener("click", reseedLook);
+  undoButton?.addEventListener("click", undo);
+  redoButton?.addEventListener("click", redo);
 
   copy?.addEventListener("click", copySvg);
   exportButton?.addEventListener("click", exportSvg);
@@ -793,14 +856,21 @@ function isTextEntry(target) {
 
 function bindKeyboard() {
   document.addEventListener("keydown", (event) => {
-    if (event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey) return;
-    if (isTextEntry(event.target)) return;
+    if (event.defaultPrevented) return;
     const key = event.key.toLowerCase();
+    const chord = (event.ctrlKey || event.metaKey) && !event.altKey;
+    const editingText = isTextEntry(event.target) && event.target.tagName !== "SELECT";
+    if (chord && key === "z" && !editingText) {
+      event.preventDefault();
+      if (event.shiftKey) redo();
+      else undo();
+      return;
+    }
+    if (event.altKey || event.ctrlKey || event.metaKey) return;
+    if (isTextEntry(event.target)) return;
     if (key === "r") {
       event.preventDefault();
-      state = randomizeState(state, Math.random);
-      update();
-      announce("A new pattern, picked at random.");
+      randomizeLook();
     } else if (key === "c") {
       event.preventDefault();
       copySvg();
@@ -830,6 +900,9 @@ function initialState() {
 
 function mount() {
   state = initialState();
+  historyBaseline = state;
+  pastStates = [];
+  futureStates = [];
   const galleryRead = readGallery(storage());
   gallery = galleryRead.gallery || emptyGallery();
   galleryIssue = galleryRead.issue;
@@ -846,6 +919,7 @@ function mount() {
   reset?.addEventListener("click", () => {
     const persisted = clearState(storage());
     state = normalizeState(DEFAULTS);
+    commitHistory();
     update();
     announce(persistedNotice("Reset the pattern to its defaults.", persisted));
   });

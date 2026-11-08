@@ -5,7 +5,7 @@
     "last_phase": "in_progress",
     "active_phase": 4,
     "status": "in_progress",
-    "updated_at": 1794100838.5353942,
+    "updated_at": 1794101619.0210147,
     "owner": "opencode:tessera-cycles",
     "started_by": "opencode:tessera-cycles",
     "continuations": []
@@ -99,17 +99,6 @@
         "mitigation": "Add failing pure/static tests first, keep each diff limited to one area, and verify with the same seeded 1440x900 CDP run before and after; the full npm, static-contract and AIKit gates run before every commit."
       },
       "plan_digest": "b52931f5bf547c94ec3e16856135270a70e51c91ea93d8a89d84384b3c7117fc"
-    },
-    {
-      "task_id": "tessera-quality-cycles-v1",
-      "phase": "implementation",
-      "phase_num": 4,
-      "description": "[17] Cycle 16 (extension) shipped: two-step Clear all action in the gallery foot, armed for 4s with Confirm label and toast, disarms on blur, clears storage, disables when empty and returns focus to Save look; failing-first static guard and markup inventory; 126/126 tests, verify:static OK, aikit check 4/4. Played 3-look flow: one click arms without clearing, blur disarms, two clicks clear, storage key removed, toast 'Cleared 3 saved looks.', mobile foot fits at 390. checklists: passed",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1794089155.3493478,
-      "timestamp_str": "2026-11-08 01:05:55",
-      "agent": "opencode:tessera-cycles"
     },
     {
       "task_id": "tessera-quality-cycles-v1",
@@ -252,6 +241,17 @@
       "status": "in_progress",
       "timestamp": 1794100838.5353942,
       "timestamp_str": "2026-11-08 04:20:38",
+      "agent": "opencode:tessera-cycles"
+    },
+    {
+      "task_id": "tessera-quality-cycles-v1",
+      "phase": "in_progress",
+      "phase_num": 4,
+      "description": "[30] Cycle 29 (extension) shipped: session undo/redo history (limit 30) via pure history stack helpers, one snapshot per discrete action or completed slider drag, redo cleared on new edits, Undo/Redo buttons in Presets with aria-keyshortcuts, Ctrl/Cmd+Z and Shift+Ctrl/Cmd+Z, restored states sync storage and URL; failing-first 6 history tests plus static guard; 151/151 tests, verify:static OK, aikit check 4/4. Played real click/drag/chords: before no controls and Ctrl+Z no-op with Ridge and Repeat 9 unchanged; after undo Wave, redo Ridge, drag undo 9->6 in one step, 320 buttons fit. checklists: passed",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794101619.0210147,
+      "timestamp_str": "2026-11-08 04:33:39",
       "agent": "opencode:tessera-cycles"
     }
   ]

@@ -46,6 +46,7 @@ Tessera is a zero-dependency static studio. Eight motifs and eight palettes gene
 | Presets | Load a curated look; the matching preset is outlined until you edit it |
 | Reset pattern | Return the live pattern to the studio defaults; saved looks stay in the gallery |
 | Randomize `R` | Jump to a new motif, palette and seed |
+| Undo / Redo | Step backward or forward through pattern edits made in this session (Ctrl+Z / Shift+Ctrl+Z, Cmd on macOS); a slider drag counts as one step |
 | Copy SVG `C` / Export SVG `E` | Copy the SVG source, or download it as a `.svg` file |
 | PNG size | Pick Wallpaper (2560 × 1440), Full HD, 4K, Phone or Square |
 | Export PNG `P` | Rasterize the current look at the selected size as a `.png` file; the panel keeps the size, payload and filename of the last export |
@@ -68,7 +69,7 @@ Every pattern is one tile drawn in a `100 × 100` coordinate space and repeated 
 | Loom | A woven lattice of over-and-under bands |
 | Drift | Dotted currents on a sine field |
 
-Each motif reads three arguments — a seeded random source, a line weight and a warp amount — and returns a list of primitive elements. Colors are palette *roles* (`ink`, `accent`, `highlight`, `paper`, `bg`), so a palette swap recolors props without touching geometry. Settings live in a versioned localStorage record under `tessera.studio.v1`, mirrored in the URL query so a look can be shared or captured. If the browser rejects a settings write, a note above the controls says the change lasts for this session only. Tile transforms rotate the geometry in 90° steps and mirror it inside the tile; rectangular motifs swap their repeat dimensions at 90° and 270°, so the pattern stays seamless. PNG export draws the same SVG into a canvas at a stated wallpaper, phone or square size; the SVG stays the editable master.
+Each motif reads three arguments — a seeded random source, a line weight and a warp amount — and returns a list of primitive elements. Colors are palette *roles* (`ink`, `accent`, `highlight`, `paper`, `bg`), so a palette swap recolors props without touching geometry. Settings live in a versioned localStorage record under `tessera.studio.v1`, mirrored in the URL query so a look can be shared or captured. If the browser rejects a settings write, a note above the controls says the change lasts for this session only. Pattern edits keep a 30-step in-memory history: discrete changes and each completed slider drag are one step, new edits clear redo, and undo/redo update both the URL and stored state; the history itself does not survive a reload. Tile transforms rotate the geometry in 90° steps and mirror it inside the tile; rectangular motifs swap their repeat dimensions at 90° and 270°, so the pattern stays seamless. PNG export draws the same SVG into a canvas at a stated wallpaper, phone or square size; the SVG stays the editable master.
 
 ## Saved Looks
 
@@ -102,6 +103,7 @@ tessera/
 │   ├── studio/
 │   │   ├── export.js          <- PNG size table and export names
 │   │   ├── gallery.js         <- saved looks, signature ids and the 12 cap
+│   │   ├── history.js         <- in-memory undo and redo stacks
 │   │   ├── motifs.js          <- eight pure motif builders
 │   │   ├── navigation.js        <- grid arrow-key target math
 │   │   ├── palettes.js        <- eight palettes as color roles
@@ -118,6 +120,7 @@ tessera/
 └── tests/
     ├── export.test.js         <- sizes, fallback and PNG names
     ├── gallery.test.js        <- signatures, dedupe, cap and restore
+    ├── history.test.js        <- undo/redo stacks and caps
     ├── motifs.test.js         <- determinism, roles, tile ratios
     ├── navigation.test.js   <- grid direction, Home and End
     ├── palettes.test.js       <- complete role sets and fallbacks
