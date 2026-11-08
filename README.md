@@ -8,6 +8,8 @@
 
 A seamless pattern studio: compose geometric tiles in the browser and export crisp SVG.
 
+> **Archived**: Feature-complete at v0.7.19 after 52 improvement cycles ended in a documented dry pass. (archived 2026-11-08). This project is read-only; its GitHub repository is archived.
+
 Tessera is a zero-dependency static studio. Nine motifs and nine palettes generate endless seamless tiles entirely in the browser: tune repeats, line weight and warp, rotate or mirror the tile, reroll a seed, save a few looks, then export a clean, editable SVG, copy it to the clipboard, download a wallpaper-sized PNG, or share the exact state as a link. No uploads, no tracking and no network at runtime.
 
 ## ⚡ 30-Second Cold-Start Quick Reference
