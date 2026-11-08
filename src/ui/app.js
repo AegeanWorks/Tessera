@@ -670,6 +670,7 @@ function startRename(id) {
   const input = document.createElement("input");
   input.type = "text";
   input.className = "gallery-rename-input";
+  input.dataset.galleryRenameId = id;
   input.value = entry.name;
   input.maxLength = 80;
   input.setAttribute("aria-label", `New name for ${entry.name}`);
@@ -1185,6 +1186,15 @@ function bindStorageSync() {
       announce("Settings updated from another tab.");
     } else if (event.key === GALLERY_KEY) {
       const active = document.activeElement;
+      const renameDraft =
+        active instanceof HTMLInputElement && active.classList.contains("gallery-rename-input")
+          ? {
+              id: active.dataset.galleryRenameId || "",
+              value: active.value,
+              start: active.selectionStart,
+              end: active.selectionEnd,
+            }
+          : null;
       const focusId =
         active instanceof HTMLElement
           ? active.dataset.galleryId || active.dataset.galleryDelete || active.dataset.galleryRename || ""
@@ -1194,8 +1204,28 @@ function bindStorageSync() {
       const read = readGallery(storage());
       gallery = read.gallery || emptyGallery();
       galleryIssue = read.issue;
-      galleryRovingId = focusId;
+      galleryRovingId = renameDraft?.id || focusId;
       renderGallery();
+      if (renameDraft) {
+        const reopened = gallery.entries.some((entry) => entry.id === renameDraft.id);
+        if (reopened) {
+          startRename(renameDraft.id);
+          const input = galleryList?.querySelector(".gallery-rename-input");
+          if (input) {
+            input.value = renameDraft.value;
+            input.focus({ preventScroll: true });
+            if (typeof renameDraft.start === "number" && typeof renameDraft.end === "number") {
+              input.setSelectionRange(renameDraft.start, renameDraft.end);
+            }
+          } else {
+            saveLookButton?.focus({ preventScroll: true });
+          }
+        } else {
+          saveLookButton?.focus({ preventScroll: true });
+        }
+        announce("Saved looks updated from another tab.");
+        return;
+      }
       let target = null;
       if (focusId) {
         const selector = focusDelete ? ".gallery-delete" : focusRename ? ".gallery-rename" : ".gallery-open";

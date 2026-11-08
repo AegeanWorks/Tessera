@@ -1310,3 +1310,31 @@ the committed proof.
 - **Tests**: failing-first `printing shows the pattern without the studio
   chrome`; suite 178/178.
 - **Release**: v0.7.17.
+
+## Cycle 50 — A cross-tab gallery update discarded an open rename
+
+- **Area**: progression/saves, cross-tab concurrency. The storage listener
+  rebuilt the gallery whenever another tab saved or deleted. If this tab had
+  the inline rename form open, the form vanished, the draft was lost, and focus
+  fell to the body; cycle 37 only preserved focus for the open and delete
+  buttons.
+- **Evidence before**: old-build worktree `2799bdb` served on port 4434;
+  `cycle50-play.mjs` used two tabs: tab A saved a Wave look, opened rename and
+  typed `Draft Name`; tab B switched to Ridge and saved. Before: tab A has
+  `formOpen: false`, `inputValue: null`, focus `BODY`, two rows;
+  `cycle50-before-sync-1440.png` shows Ridge and Wave with no form.
+- **Fix**: tag the rename input with `data-gallery-rename-id`, capture the
+  draft value and selection before the sync render, and after the render
+  reopen that entry's form with the draft and focus when the entry still
+  exists; if it disappeared, focus Save look. The sync announcement is
+  unchanged. ADR-023 records the contract; README notes the preserved draft.
+- **Evidence after**: `cycle50-after-sync-1440.png` shows the Ridge row plus the
+  Wave row replaced by the form with `Draft Name` and focus in the input;
+  `-after-save-1440.png` shows `Draft Name` saved; `-sync-320.png` fits.
+- **Played run**: the two-tab run keeps the form open with `Draft Name`, focus
+  in the input, two items and the sync toast after tab B saves; saving renames
+  the look (`Renamed to Draft Name.`) and returns focus to the rename button;
+  320 `overflowX: 0`.
+- **Tests**: failing-first `an external gallery update keeps an open rename
+  draft`; suite 179/179.
+- **Release**: v0.7.18.

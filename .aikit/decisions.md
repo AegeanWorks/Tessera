@@ -165,3 +165,10 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Context**: The studio had no print styles. Printing kept the topbar, controls, footer and shortcuts, used light text on a white page, and produced a 2635px document; the pattern shared the page with unusable UI.
 - **Decision**: Add `@media print` rules that hide the skip link, grain, topbar actions and tagline, controls, footer, toast and notes; keep a compact brand, the stage and its caption; set a white page with dark text via print-only tokens in `theme.css`; give the stage frame an aspect-ratio height and `print-color-adjust: exact` so the palette prints; set `@page` margins. The screen theme is unchanged.
 - **Consequences**: Ctrl+P produces one clean page with the pattern and its palette; the dark stage uses ink, but the pattern is the content. Links and controls are not printed; exporting SVG/PNG remains the editable/raster path. No state, storage or dependency change.
+
+### ADR-023: Cross-tab gallery sync preserves an open rename draft
+- **Date**: 2026-11-08
+- **Status**: Accepted
+- **Context**: The storage listener rebuilt the gallery whenever another tab saved or deleted. If this tab had the inline rename form open, the form vanished, the draft was lost and focus fell to the body; cycle 37 only preserved focus for the open and delete buttons.
+- **Decision**: Tag the rename input with its entry id, capture the draft value and selection before the sync render, and after the render reopen that entry's form with the draft and focus when the entry still exists; if it disappeared, focus Save look. The sync announcement is unchanged.
+- **Consequences**: A rename in progress survives gallery changes from other tabs, including the text selection; a draft for an entry deleted elsewhere is discarded with focus on Save look. No storage or save-format change.

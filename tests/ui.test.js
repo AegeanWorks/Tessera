@@ -428,6 +428,15 @@ test("external gallery sync keeps keyboard focus", () => {
   assert.ok(app.includes("saveLookButton?.focus"));
 });
 
+test("an external gallery update keeps an open rename draft", () => {
+  const app = read("src/ui/app.js");
+  const sync = app.slice(app.indexOf("function bindStorageSync"), app.indexOf("function bindReducedMotion"));
+  assert.ok(sync.includes("gallery-rename-input"));
+  assert.ok(sync.includes("renameDraft"));
+  assert.ok(sync.includes("startRename(renameDraft.id)"));
+  assert.ok(app.includes("dataset.galleryRenameId"));
+});
+
 test("other tabs update this one through storage events", () => {
   const app = read("src/ui/app.js");
   assert.ok(app.includes('addEventListener("storage"'));
