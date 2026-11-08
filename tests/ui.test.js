@@ -177,6 +177,14 @@ test("range drags persist once", () => {
   assert.match(bindRange, /addEventListener\("change"[\s\S]*?commitHistory\(\);\s*update\(\)/);
 });
 
+test("saved looks can be renamed", () => {
+  const app = read("src/ui/app.js");
+  assert.ok(app.includes("startRename"));
+  assert.ok(app.includes("galleryRename"));
+  assert.ok(app.includes("renameEntry"));
+  assert.ok(app.includes("mergeEntry"));
+});
+
 test("the gallery can be backed up and restored", () => {
   const html = read("index.html");
   const app = read("src/ui/app.js");

@@ -86,6 +86,24 @@ export function addEntry(record, state, savedAt = new Date().toISOString()) {
   });
 }
 
+export function renameEntry(record, id, name) {
+  const base = normalizeGalleryRecord(record);
+  const clean = String(name ?? "").trim().slice(0, 80);
+  if (!clean) return base;
+  return normalizeGalleryRecord({
+    entries: base.entries.map((entry) => (entry.id === id ? { ...entry, name: clean } : entry)),
+  });
+}
+
+export function mergeEntry(record, entry) {
+  const base = normalizeGalleryRecord(record);
+  const normalized = normalizeEntry(entry);
+  if (!normalized) return base;
+  return normalizeGalleryRecord({
+    entries: [normalized, ...base.entries.filter((item) => item.id !== normalized.id)],
+  });
+}
+
 export function removeEntry(record, id) {
   const base = normalizeGalleryRecord(record);
   return normalizeGalleryRecord({ entries: base.entries.filter((item) => item.id !== id) });

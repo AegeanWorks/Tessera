@@ -123,3 +123,10 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Context**: Motif, palette, preset, randomize, load, undo and transform changes replaced the stage instantly. The studio already had Glow drift and a reduced-motion rule, so a short settle could make a deliberate change legible without touching state or storage.
 - **Decision**: Add `settleStage()` and a `settle` option to `update`. Discrete look changes add an `is-settling` class for a 320ms opacity/scale animation on the stage SVG. Slider drags, switches, the initial mount and gallery-only updates do not settle. The existing reduced-motion media rule collapses the animation.
 - **Consequences**: Look changes feel deliberate and restart cleanly when changed rapidly. Slider drags stay immediate; reduced-motion users see the final frame with no motion; the effect is CSS-only, adds no dependency and changes no save format.
+
+### ADR-017: Saved looks can carry custom names
+- **Date**: 2026-11-08
+- **Status**: Accepted
+- **Context**: Gallery entries are auto-named from the palette, motif, seed and geometry. The stored entry already includes a `name` and backups include it, but there was no rename path and the restore recomputed the auto name through `addEntry`.
+- **Decision**: Add `renameEntry` (rename by signature, trim and limit to 80, ignore empty names) and `mergeEntry` (normalize and place an imported entry first, preserving its name). The gallery row gets a ✎ button that swaps the row for an inline input with Save/Cancel; Enter submits, Escape cancels. New saves keep auto names; the visual signature stays the identity. Backups restore through `mergeEntry` so custom names survive.
+- **Consequences**: Names are display metadata; the saved look's visual identity and dedupe are unchanged. Custom names persist locally and travel in backups; an empty name is refused; the 12-look cap still applies.

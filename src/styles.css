@@ -944,7 +944,7 @@ select:hover {
   align-items: center;
   gap: 10px;
   width: 100%;
-  padding: 6px 30px 6px 6px;
+  padding: 6px 56px 6px 6px;
   border: 1px solid var(--line);
   border-radius: 10px;
   color: var(--text-soft);
@@ -1013,6 +1013,47 @@ select:hover {
 .gallery-delete:hover {
   border-color: var(--line-bright);
   color: var(--text);
+}
+
+.gallery-rename {
+  position: absolute;
+  top: 4px;
+  right: 32px;
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  color: var(--muted);
+  background: var(--panel-soft);
+  font-size: 13px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.gallery-rename:hover {
+  border-color: var(--line-bright);
+  color: var(--text);
+}
+
+.gallery-rename-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  gap: 6px;
+  align-items: center;
+}
+
+.gallery-rename-input {
+  min-width: 0;
+  height: 34px;
+  padding: 0 8px;
+  border: 1px solid var(--line-bright);
+  border-radius: 8px;
+  color: var(--text);
+  background: var(--bg-control);
+  font-size: 12px;
 }
 
 .gallery-empty {
@@ -1341,12 +1382,19 @@ select:hover {
   }
 
   .gallery-open {
-    padding-right: 54px;
+    padding-right: 100px;
   }
 
   .gallery-delete {
     width: 44px;
     height: 44px;
+  }
+
+  .gallery-rename {
+    width: 44px;
+    height: 44px;
+    right: 52px;
+    font-size: 16px;
   }
 
   .gallery-clear {
@@ -1384,7 +1432,7 @@ select:hover {
 
   .gallery-open {
     grid-template-columns: 48px minmax(0, 1fr);
-    padding-right: 48px;
+    padding-right: 100px;
   }
 
   .gallery-name {

@@ -9,10 +9,12 @@ import {
   entryName,
   evictionCandidate,
   isSaved,
+  mergeEntry,
   neighborEntryId,
   normalizeEntry,
   normalizeGalleryRecord,
   removeEntry,
+  renameEntry,
   restoreEntry,
   stateSignature,
 } from "../src/studio/gallery.js";
@@ -41,6 +43,27 @@ test("entryName names the palette, the motif, the seed and any transform", () =>
   assert.equal(entryName(LOOK), "Sage Mosaic · seed 13 · r5 w2 v72");
   assert.equal(entryName({ ...LOOK, rotate: 90, flip: "x" }), "Sage Mosaic · seed 13 · r5 w2 v72 · 90° X");
   assert.equal(entryName({ motif: "nope", palette: "nope", seed: 99999 }), "Aegean Wave · seed 9999 · r6 w3 v42");
+});
+
+test("renameEntry changes only the name and ignores an empty name", () => {
+  const saved = addEntry(emptyGallery(), LOOK);
+  const id = saved.entries[0].id;
+  const renamed = renameEntry(saved, id, "  Studio mosaic  ");
+  assert.equal(renamed.entries[0].name, "Studio mosaic");
+  assert.equal(renamed.entries[0].id, id);
+  assert.deepEqual(renamed.entries[0].state, saved.entries[0].state);
+  assert.equal(renameEntry(renamed, id, "   ").entries[0].name, "Studio mosaic");
+  assert.equal(renameEntry(renamed, "missing", "New").entries[0].name, "Studio mosaic");
+});
+
+test("mergeEntry keeps a custom name through a backup restore", () => {
+  const entry = normalizeEntry({ state: LOOK, name: "Studio mosaic", savedAt: "2026-11-08T00:00:00.000Z" });
+  const restored = mergeEntry(emptyGallery(), entry);
+  assert.equal(restored.entries[0].name, "Studio mosaic");
+  assert.equal(restored.entries[0].id, entry.id);
+  const updated = mergeEntry(restored, { ...entry, name: "Mosaic two" });
+  assert.equal(updated.entries[0].name, "Mosaic two");
+  assert.equal(updated.entries.length, 1);
 });
 
 test("normalizeEntry keeps only visual state and freezes the record", () => {

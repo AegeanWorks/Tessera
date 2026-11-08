@@ -35,9 +35,11 @@ import {
   emptyGallery,
   evictionCandidate,
   isSaved,
+  mergeEntry,
   neighborEntryId,
   normalizeGalleryRecord,
   removeEntry,
+  renameEntry,
   restoreEntry,
 } from "../studio/gallery.js";
 import { pushHistory, stepBack, stepForward } from "../studio/history.js";
@@ -434,7 +436,16 @@ function renderGallery() {
     remove.textContent = "×";
     remove.addEventListener("click", () => deleteLook(entry.id));
 
-    item.append(open, remove);
+    const rename = document.createElement("button");
+    rename.type = "button";
+    rename.className = "gallery-rename";
+    rename.dataset.galleryRename = entry.id;
+    rename.setAttribute("aria-label", `Rename ${entry.name}`);
+    rename.title = `Rename ${entry.name}`;
+    rename.textContent = "✎";
+    rename.addEventListener("click", () => startRename(entry.id));
+
+    item.append(open, rename, remove);
     list.appendChild(item);
   }
   galleryList.appendChild(list);
@@ -452,12 +463,14 @@ function syncGallerySelection() {
   const items = [...galleryList.querySelectorAll(".gallery-item")];
   items.forEach((item, index) => {
     const open = item.querySelector(".gallery-open");
+    const rename = item.querySelector(".gallery-rename");
     const remove = item.querySelector(".gallery-delete");
     const selected = open?.dataset.galleryId === activeId;
     item.classList.toggle("is-active", selected);
     if (selected) open?.setAttribute("aria-current", "true");
     else open?.removeAttribute("aria-current");
     if (open) open.tabIndex = index === rovingIndex ? 0 : -1;
+    if (rename) rename.tabIndex = index === rovingIndex ? 0 : -1;
     if (remove) remove.tabIndex = index === rovingIndex ? 0 : -1;
   });
 }
@@ -476,8 +489,10 @@ function bindGalleryNavigation(grid) {
     galleryRovingId = open?.dataset.galleryId ?? "";
     rows.forEach((item, rowIndex) => {
       const rowOpen = item.querySelector(".gallery-open");
+      const rowRename = item.querySelector(".gallery-rename");
       const rowDelete = item.querySelector(".gallery-delete");
       if (rowOpen) rowOpen.tabIndex = rowIndex === target ? 0 : -1;
+      if (rowRename) rowRename.tabIndex = rowIndex === target ? 0 : -1;
       if (rowDelete) rowDelete.tabIndex = rowIndex === target ? 0 : -1;
     });
     open?.focus();
@@ -564,7 +579,7 @@ async function restoreGallery(file) {
     if (!record.entries.length) throw new Error("empty");
     let next = gallery;
     for (const entry of [...record.entries].reverse()) {
-      next = addEntry(next, entry.state, entry.savedAt);
+      next = mergeEntry(next, entry);
     }
     gallery = next;
     galleryIssue = null;
@@ -604,6 +619,56 @@ function loadLook(id) {
   commitHistory();
   update({ settle: true });
   announce(`Loaded ${entry.name}.`);
+}
+
+function startRename(id) {
+  const entry = gallery.entries.find((item) => item.id === id);
+  if (!entry || !galleryList) return;
+  const open = [...galleryList.querySelectorAll(".gallery-open")].find(
+    (button) => button.dataset.galleryId === id,
+  );
+  const row = open ? open.closest(".gallery-item") : null;
+  if (!row) return;
+  const form = document.createElement("form");
+  form.className = "gallery-rename-form";
+  const input = document.createElement("input");
+  input.type = "text";
+  input.className = "gallery-rename-input";
+  input.value = entry.name;
+  input.maxLength = 80;
+  input.setAttribute("aria-label", `New name for ${entry.name}`);
+  const save = document.createElement("button");
+  save.type = "submit";
+  save.className = "btn btn-small";
+  save.textContent = "Save";
+  const cancel = document.createElement("button");
+  cancel.type = "button";
+  cancel.className = "btn btn-small";
+  cancel.textContent = "Cancel";
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const name = input.value.trim();
+    if (!name) {
+      input.focus();
+      return;
+    }
+    gallery = renameEntry(gallery, id, name);
+    galleryRovingId = id;
+    const persisted = saveGallery(storage(), gallery);
+    renderGallery();
+    announce(persistedNotice(`Renamed to ${name}.`, persisted));
+  });
+  cancel.addEventListener("click", () => renderGallery());
+  input.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      event.preventDefault();
+      renderGallery();
+    }
+  });
+  form.append(input, save, cancel);
+  row.replaceChildren(form);
+  input.focus();
+  input.select();
 }
 
 function deleteLook(id) {
@@ -1002,8 +1067,12 @@ function bindStorageSync() {
       announce("Settings updated from another tab.");
     } else if (event.key === GALLERY_KEY) {
       const active = document.activeElement;
-      const focusId = active instanceof HTMLElement ? active.dataset.galleryId || active.dataset.galleryDelete || "" : "";
+      const focusId =
+        active instanceof HTMLElement
+          ? active.dataset.galleryId || active.dataset.galleryDelete || active.dataset.galleryRename || ""
+          : "";
       const focusDelete = active instanceof HTMLElement && active.classList.contains("gallery-delete");
+      const focusRename = active instanceof HTMLElement && active.classList.contains("gallery-rename");
       const read = readGallery(storage());
       gallery = read.gallery || emptyGallery();
       galleryIssue = read.issue;
@@ -1011,9 +1080,15 @@ function bindStorageSync() {
       renderGallery();
       let target = null;
       if (focusId) {
-        target = [...galleryList.querySelectorAll(focusDelete ? ".gallery-delete" : ".gallery-open")].find(
-          (button) => (focusDelete ? button.dataset.galleryDelete : button.dataset.galleryId) === focusId,
-        );
+        const selector = focusDelete ? ".gallery-delete" : focusRename ? ".gallery-rename" : ".gallery-open";
+        target = [...galleryList.querySelectorAll(selector)].find((button) => {
+          const value = focusDelete
+            ? button.dataset.galleryDelete
+            : focusRename
+              ? button.dataset.galleryRename
+              : button.dataset.galleryId;
+          return value === focusId;
+        });
       }
       if (target) target.focus({ preventScroll: true });
       else if (focusId) saveLookButton?.focus({ preventScroll: true });

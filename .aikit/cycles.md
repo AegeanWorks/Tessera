@@ -1069,3 +1069,33 @@ the committed proof.
   none, opacity 1; the normal settle still runs at 0.32s; 320 `overflowX: 0`.
 - **Tests**: failing-first `reduced motion skips the settle`; suite 166/166.
 - **Release**: v0.7.9.
+
+## Cycle 42 — Saved looks could not be named
+
+- **Area**: progression/saves. Every saved look was auto-named from palette,
+  motif, seed and geometry; there was no rename path. The backup envelope
+  stores an entry `name`, but `restoreGallery` merged through `addEntry`, which
+  recomputed the auto name and discarded the imported one.
+- **Evidence before**: old-build worktree `be6b63e` served on port 4433,
+  `cycle42-before-auto-1440.png`: a saved Ridge look shows only the auto name
+  and no rename control; the restore loop used `addEntry(next, entry.state)`.
+- **Fix**: add `renameEntry` (trim/limit to 80, ignore empty) and `mergeEntry`
+  (preserve the imported name, dedupe by signature) in `gallery.js`; the gallery
+  row gets a ✎ button and an inline form with Save/Cancel (Enter submits, Escape
+  cancels); new saves keep auto names; the backup restore now uses `mergeEntry`.
+  ADR-017 records the naming contract.
+- **Evidence after**: `cycle42-after-auto-1440.png` (auto name plus ✎) vs
+  `-renamed-1440.png` (`Studio Ridge`, toast `Renamed to Studio Ridge.`) at the
+  same row/viewport; `-reloaded-1440.png` keeps the custom name;
+  `-restored-1440.png` shows the custom name after backup, clear and file-input
+  restore with `Restored 1 saved look.`; `-renamed-320.png` fits.
+- **Played run**: `cycle42-play.mjs` saves Ridge, opens the ✎ form, inserts
+  `Studio Ridge` with real text input and clicks the real Save button, reloads,
+  backs up (the JSON entry name is `Studio Ridge`), clears, restores through the
+  hidden file input, and reads `Studio Ridge` again; 320 `overflowX: 0`. The
+  first attempt used a CDP Enter that did not submit the form; the final run
+  clicks Save (the app form itself is unchanged).
+- **Tests**: failing-first `renameEntry changes only the name and ignores an
+  empty name`, `mergeEntry keeps a custom name through a backup restore`, and
+  the `saved looks can be renamed` guard; suite 169/169.
+- **Release**: v0.7.10.
