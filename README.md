@@ -8,7 +8,7 @@
 
 A seamless pattern studio: compose geometric tiles in the browser and export crisp SVG.
 
-Tessera is a zero-dependency static studio. Eight motifs and eight palettes generate endless seamless tiles entirely in the browser: tune repeats, line weight and warp, rotate or mirror the tile, reroll a seed, save a few looks, then export a clean, editable SVG, copy it to the clipboard, download a wallpaper-sized PNG, or share the exact state as a link. No uploads, no tracking and no network at runtime.
+Tessera is a zero-dependency static studio. Nine motifs and nine palettes generate endless seamless tiles entirely in the browser: tune repeats, line weight and warp, rotate or mirror the tile, reroll a seed, save a few looks, then export a clean, editable SVG, copy it to the clipboard, download a wallpaper-sized PNG, or share the exact state as a link. No uploads, no tracking and no network at runtime.
 
 ## ⚡ 30-Second Cold-Start Quick Reference
 
@@ -35,8 +35,8 @@ Tessera is a zero-dependency static studio. Eight motifs and eight palettes gene
 
 | Input | Action |
 |---|---|
-| Motif tiles | Switch between Wave, Ridge, Comb, Pinwheel, Arcade, Mosaic, Loom and Drift |
-| Palettes | Recolor with Aegean, Kilim, Riso, Nocturne, Sage, Ember, Terra or Iris |
+| Motif tiles | Switch between Wave, Ridge, Comb, Pinwheel, Arcade, Mosaic, Loom, Drift and Bloom |
+| Palettes | Recolor with Aegean, Kilim, Riso, Nocturne, Sage, Ember, Terra, Iris or Lagoon |
 | Picker grids | Arrow keys move focus inside Motif, Palette and Presets; Enter or Space applies the focused choice |
 | Gallery rows | Arrow keys move between saved-look rows; Tab reaches the current row’s delete button |
 | Repeat / Line weight / Warp | Reshape the tile density, stroke weight and curvature |
@@ -69,6 +69,7 @@ Every pattern is one tile drawn in a `100 × 100` coordinate space and repeated 
 | Mosaic | A seeded tessera field with visible grout |
 | Loom | A woven lattice of over-and-under bands |
 | Drift | Dotted currents on a sine field |
+| Bloom | Four rosettes pinned on a lattice |
 
 Each motif reads three arguments — a seeded random source, a line weight and a warp amount — and returns a list of primitive elements. Colors are palette *roles* (`ink`, `accent`, `highlight`, `paper`, `bg`), so a palette swap recolors props without touching geometry. Settings live in a versioned localStorage record under `tessera.studio.v1`, mirrored in the URL query so a look can be shared or captured. If the browser rejects a settings write, a note above the controls says the change lasts for this session only. Pattern edits keep a 30-step in-memory history: discrete changes and each completed slider drag are one step, new edits clear redo, and undo/redo update both the URL and stored state; the history itself does not survive a reload. Tile transforms rotate the geometry in 90° steps and mirror it inside the tile; rectangular motifs swap their repeat dimensions at 90° and 270°, so the pattern stays seamless. PNG export draws the same SVG into a canvas at a stated wallpaper, phone or square size; the SVG stays the editable master.
 
@@ -105,9 +106,9 @@ tessera/
 │   │   ├── export.js          <- PNG size table and export names
 │   │   ├── gallery.js         <- saved looks, signature ids and the 12 cap
 │   │   ├── history.js         <- in-memory undo and redo stacks
-│   │   ├── motifs.js          <- eight pure motif builders
+│   │   ├── motifs.js          <- nine pure motif builders
 │   │   ├── navigation.js        <- grid arrow-key target math
-│   │   ├── palettes.js        <- eight palettes as color roles
+│   │   ├── palettes.js        <- nine palettes as color roles
 │   │   ├── random.js          <- seeded mulberry32 generator
 │   │   ├── raster.js          <- DOM-free SVG-to-PNG orchestration
 │   │   ├── state.js           <- normalization, presets, URL codec
@@ -160,6 +161,7 @@ The studio accepts its full state as a query string, so any configuration can be
 | `/?preset=sage-mosaic` | Mosaic with visible grout |
 | `/?motif=loom&palette=terra` | Woven loom in clay and sage |
 | `/?motif=drift&palette=iris` | Dotted currents in teal and indigo |
+| `/?preset=lagoon-bloom` | Four rosettes in teal and coral |
 | `/?motif=mosaic&palette=kilim&repeat=8&warp=80&seed=123` | Any explicit combination |
 | `/?motif=comb&rotate=90&flip=x&seed=123` | A quarter-turned, mirrored comb |
 | `/?guides=1` | Tile guides overlay |

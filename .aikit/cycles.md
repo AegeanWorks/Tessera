@@ -805,3 +805,32 @@ the committed proof.
 - **Tests**: failing-first `the studio exposes a complete keyboard reference`;
   suite 153/153.
 - **Release**: v0.6.21.
+
+## Cycle 32 — The catalogue stopped at eight motifs and eight palettes
+
+- **Area**: graphics/content catalogue. The studio had 8 motifs × 8 palettes
+  (64 pairings) since v0.5.0; the picker showed no rosette structure and no
+  teal/coral palette.
+- **Evidence before**: old-build worktree `39ee7f5` served on port 4423,
+  `cycle32-before-catalogue-1440.png` and `cycle32-before-motif-320.png`: eight
+  motif buttons (last row Loom/Drift) and eight palettes; no Bloom or Lagoon.
+- **Fix**: add `buildBloom` (four contained rosettes, five or six seeded petals,
+  ring/core/diamond accents, every circle inside the tile) to `motifs.js`,
+  `lagoon` (teal/coral/sand) to `palettes.js`, and the `lagoon-bloom` preset.
+  Update the motif/palette tables, counts, controls and screenshot URL in the
+  README. The tile contract and save format are unchanged; the catalogue is now
+  9 × 9 = 81 pairings.
+- **Evidence after**: same-build `cycle32-after-wave-1440.png` (Wave/Aegean) vs
+  `cycle32-after-bloom-1440.png` (Bloom/Lagoon); `cycle32-after-palette-1440.png`
+  shows Lagoon selected; `cycle32-after-motif-320.png` shows the ninth Bloom
+  button and Lagoon palette fitting with `bloomWidth: 78` and `overflowX: 0`.
+  The 320 picker pair is 8 buttons before vs 9 after.
+- **Played run**: `cycle32-play.mjs` clicks Bloom and Lagoon with real pointer
+  events, saves the look (`Saved Lagoon Bloom · seed 7 · r6 w3 v42.`), resets to
+  Wave/Aegean, restores the saved look, then applies the Lagoon bloom preset
+  (`aria-current="true"`). Before: 8/8 catalogue, no Bloom/Lagoon/preset. After:
+  9/9, selection, save/restore and preset all verified; 320 fits.
+- **Tests**: failing-first `bloom is part of the catalogue and stays inside the
+  tile`, `lagoon is part of the catalogue`, `bloom has a curated lagoon preset`;
+  suite 156/156.
+- **Release**: v0.7.0.

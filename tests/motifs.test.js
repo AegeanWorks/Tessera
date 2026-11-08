@@ -110,6 +110,23 @@ test("loom and drift are part of the catalogue", () => {
   assert.equal(getMotif("drift").tile.width, 100);
 });
 
+test("bloom is part of the catalogue and stays inside the tile", () => {
+  assert.ok(MOTIF_IDS.includes("bloom"));
+  const bloom = getMotif("bloom");
+  assert.equal(bloom.id, "bloom");
+  assert.equal(bloom.tile.width, 100);
+  for (let seed = 1; seed < 30; seed += 1) {
+    const elements = bloom.build({ random: createRandom(seed), weight: 6, warp: 1 });
+    assert.ok(elements.length > 0);
+    for (const circle of elements.filter((element) => element.tag === "circle")) {
+      assert.ok(circle.cx - circle.r >= 0, `seed ${seed} clips the left edge`);
+      assert.ok(circle.cx + circle.r <= 100, `seed ${seed} clips the right edge`);
+      assert.ok(circle.cy - circle.r >= 0, `seed ${seed} clips the top edge`);
+      assert.ok(circle.cy + circle.r <= 100, `seed ${seed} clips the bottom edge`);
+    }
+  }
+});
+
 test("motifList mirrors the ids in order", () => {
   assert.deepEqual(
     motifList().map((motif) => motif.id),

@@ -64,6 +64,13 @@ export const PALETTES = Object.freeze({
     highlight: "#fbbf24",
     paper: "#e0e7ff",
   }),
+  lagoon: freezePalette("lagoon", "Lagoon", "Teal, coral and sunlit sand.", {
+    bg: "#04191b",
+    ink: "#2dd4bf",
+    accent: "#fb7185",
+    highlight: "#fde68a",
+    paper: "#f0fdfa",
+  }),
 });
 
 export const PALETTE_IDS = Object.freeze(Object.keys(PALETTES));

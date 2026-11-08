@@ -35,6 +35,12 @@ test("paletteList mirrors the ids", () => {
   assert.deepEqual(ids, PALETTE_IDS);
 });
 
+test("lagoon is part of the catalogue", () => {
+  assert.ok(PALETTE_IDS.includes("lagoon"));
+  assert.equal(PALETTES.lagoon.colors.ink, "#2dd4bf");
+  assert.equal(PALETTES.lagoon.colors.accent, "#fb7185");
+});
+
 test("terra and iris are part of the catalogue", () => {
   assert.ok(PALETTE_IDS.includes("terra"));
   assert.ok(PALETTE_IDS.includes("iris"));

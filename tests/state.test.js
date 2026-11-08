@@ -150,6 +150,15 @@ test("every motif has a curated preset", () => {
   assert.deepEqual(MOTIF_IDS.filter((id) => !covered.has(id)), []);
 });
 
+test("bloom has a curated lagoon preset", () => {
+  const preset = PRESETS.find((item) => item.id === "lagoon-bloom");
+  assert.ok(preset);
+  assert.equal(preset.state.motif, "bloom");
+  assert.equal(preset.state.palette, "lagoon");
+  assert.equal(presetState("lagoon-bloom").motif, "bloom");
+  assert.equal(presetState("lagoon-bloom").palette, "lagoon");
+});
+
 test("activePresetId names the preset matching the visual state", () => {
   const preset = presetState("iris-drift");
   assert.equal(activePresetId(preset), "iris-drift");

@@ -74,6 +74,12 @@ export const PRESETS = Object.freeze([
     note: "Drift / Iris",
     state: Object.freeze({ motif: "drift", palette: "iris", repeat: 6, weight: 2, warp: 68, seed: 23 }),
   }),
+  Object.freeze({
+    id: "lagoon-bloom",
+    name: "Lagoon bloom",
+    note: "Bloom / Lagoon",
+    state: Object.freeze({ motif: "bloom", palette: "lagoon", repeat: 5, weight: 3, warp: 52, seed: 29 }),
+  }),
 ]);
 
 const STATE_KEYS = Object.freeze([

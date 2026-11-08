@@ -380,6 +380,75 @@ function buildDrift({ random, weight, warp }) {
   return elements;
 }
 
+function round2(value) {
+  return Math.round(value * 100) / 100;
+}
+
+function buildBloom({ random, weight, warp }) {
+  const elements = [];
+  const centers = [
+    [25, 25],
+    [75, 25],
+    [25, 75],
+    [75, 75],
+  ];
+  const petals = 5 + (random() < 0.5 ? 0 : 1);
+  const ring = 9 + warp * 6;
+  const petalRadius = 2.2 + warp * 1.6 + weight * 0.12;
+  const lineWidth = 0.4 + weight * 0.35;
+  const rotation = random() * Math.PI * 2;
+  const fillThreshold = 0.14 + warp * 0.18;
+  centers.forEach(([cx, cy], index) => {
+    const role = index % 2 === 0 ? "ink" : "accent";
+    const echo = role === "ink" ? "accent" : "highlight";
+    elements.push({
+      tag: "circle",
+      cx,
+      cy,
+      r: ring,
+      ...stroke(role, lineWidth, 0.82),
+    });
+    for (let petal = 0; petal < petals; petal += 1) {
+      const angle = rotation + (petal * Math.PI * 2) / petals + index * (Math.PI / petals);
+      const px = round2(cx + Math.cos(angle) * ring * 0.72);
+      const py = round2(cy + Math.sin(angle) * ring * 0.72);
+      const pr = round2(petalRadius * (0.85 + random() * 0.3));
+      const fill = random() < fillThreshold ? (petal % 2 === 0 ? "highlight" : echo) : "none";
+      elements.push({
+        tag: "circle",
+        cx: px,
+        cy: py,
+        r: pr,
+        fill,
+        "fill-opacity": fill === "none" ? undefined : 0.16 + warp * 0.12,
+        ...stroke(petal % 2 === 0 ? role : echo, lineWidth * 0.7, 0.72),
+      });
+    }
+    elements.push({
+      tag: "circle",
+      cx,
+      cy,
+      r: 2.2 + weight * 0.22,
+      fill: "bg",
+      stroke: "paper",
+      "stroke-width": lineWidth * 0.7,
+      opacity: 0.9,
+    });
+    elements.push(dot(cx, cy, 0.9 + weight * 0.15, "paper", 0.8));
+  });
+  const corner = 3 + weight * 0.25;
+  elements.push({
+    tag: "path",
+    d: `M50 ${50 - corner} L${50 + corner} 50 L50 ${50 + corner} L${50 - corner} 50 Z`,
+    fill: "highlight",
+    "fill-opacity": 0.14,
+    stroke: "highlight",
+    "stroke-width": 0.35,
+    opacity: 0.8,
+  });
+  return elements;
+}
+
 function motif(id, name, note, build, tile = { width: 100, height: 100 }) {
   return Object.freeze({
     id,
@@ -405,6 +474,7 @@ export const MOTIFS = Object.freeze({
   mosaic: motif("mosaic", "Mosaic", "A seeded tessera field with visible grout.", buildMosaic),
   loom: motif("loom", "Loom", "A woven lattice of over-and-under bands.", buildLoom),
   drift: motif("drift", "Drift", "Dotted currents on a sine field.", buildDrift),
+  bloom: motif("bloom", "Bloom", "Four rosettes pinned on a lattice.", buildBloom),
 });
 
 export const MOTIF_IDS = Object.freeze(Object.keys(MOTIFS));
