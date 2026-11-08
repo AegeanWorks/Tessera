@@ -5,7 +5,7 @@
     "last_phase": "in_progress",
     "active_phase": 4,
     "status": "in_progress",
-    "updated_at": 1794111426.1976478,
+    "updated_at": 1794112077.8351512,
     "owner": "opencode:tessera-cycles",
     "started_by": "opencode:tessera-cycles",
     "continuations": []
@@ -99,17 +99,6 @@
         "mitigation": "Add failing pure/static tests first, keep each diff limited to one area, and verify with the same seeded 1440x900 CDP run before and after; the full npm, static-contract and AIKit gates run before every commit."
       },
       "plan_digest": "b52931f5bf547c94ec3e16856135270a70e51c91ea93d8a89d84384b3c7117fc"
-    },
-    {
-      "task_id": "tessera-quality-cycles-v1",
-      "phase": "in_progress",
-      "phase_num": 4,
-      "description": "[31] Cycle 30 (extension) shipped: reduced-motion honesty for Glow: chip reads Glow paused, persistent note under the switches, aria-describedby links the switch, live media updates, state unchanged; failing-first static guard; 152/152 tests, verify:static OK, aikit check 4/4. Emulated reduce play: before chip Glow/no note/animation none; after Glow paused/note/aria link, then no-preference restores Glow/hidden note/tessera-drift; 320 note width 250 no overflow. checklists: passed",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1794102085.958442,
-      "timestamp_str": "2026-11-08 04:41:25",
-      "agent": "opencode:tessera-cycles"
     },
     {
       "task_id": "tessera-quality-cycles-v1",
@@ -252,6 +241,17 @@
       "status": "in_progress",
       "timestamp": 1794111426.1976478,
       "timestamp_str": "2026-11-08 07:17:06",
+      "agent": "opencode:tessera-cycles"
+    },
+    {
+      "task_id": "tessera-quality-cycles-v1",
+      "phase": "in_progress",
+      "phase_num": 4,
+      "description": "[45] Cycle 44 (extension) shipped: gallery rename focus return. focusGalleryRename(entryId) finds the rebuilt row's gallery-rename button and focuses it with preventScroll after submit, Cancel and Escape; .gallery-rename:focus-visible joins the shared ring selector. Failing-first static guard. 173/173 tests, verify:static OK, aikit check 4/4. Played run: saved a look, renamed to Focus proof via real typing and Enter, then Escape and Cancel; before all three ended on BODY, after all three on the same rename button with focus-visible true; 320 no overflow. checklists: passed",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794112077.8351512,
+      "timestamp_str": "2026-11-08 07:27:57",
       "agent": "opencode:tessera-cycles"
     }
   ]

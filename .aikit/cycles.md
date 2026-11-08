@@ -1128,3 +1128,32 @@ the committed proof.
   `restoreEntry keeps the current sound preference`, and the `sound cues are
   optional and synthesized` guard; suite 172/172.
 - **Release**: v0.7.11.
+
+## Cycle 44 — Renaming a saved look dropped keyboard focus
+
+- **Area**: progression/saves, keyboard focus. The inline rename form replaced
+  the row, then rebuilt the gallery on submit, Escape and Cancel. The focused
+  control was removed and focus fell to `BODY`; the ✎ control was also missing
+  from the shared `:focus-visible` ring list.
+- **Evidence before**: old-build worktree `c618485` served on port 4434,
+  `cycle44-play.mjs`: after submit, Escape and Cancel the active element is
+  `BODY` with `:focus-visible` false; `cycle44-before-renamed-1440.png` and
+  `-cancelled-320.png` show no focus ring.
+- **Fix**: add `focusGalleryRename(entryId)`, which finds the rebuilt row's ✎
+  button by `data-gallery-rename` and focuses it with `preventScroll: true`;
+  call it after submit, Cancel and Escape. Add
+  `.gallery-rename:focus-visible` to the shared ring selector. No state,
+  storage or save-format change.
+- **Evidence after**: `cycle44-after-renamed-1440.png`,
+  `-escaped-1440.png` and `-cancelled-1440.png` at the same state and viewport
+  show the teal ring on ✎ where the before captures show none;
+  `-cancelled-320.png` keeps the ring and fits.
+- **Played run**: `cycle44-play.mjs` saves a look, opens rename, types
+  `Focus proof`, submits with a real Enter on the focused Save button, then
+  opens/Escape and opens/Cancel with real Enter. Before: all three end on
+  `BODY`. After: all three land on the same row's rename button with
+  `:focus-visible` true and the same `data-gallery-rename` id; the name
+  persists, 320 `overflowX: 0`.
+- **Tests**: failing-first `renaming a saved look returns focus to its row`;
+  suite 173/173.
+- **Release**: v0.7.12.

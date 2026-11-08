@@ -689,18 +689,32 @@ function startRename(id) {
     const persisted = saveGallery(storage(), gallery);
     renderGallery();
     announce(persistedNotice(`Renamed to ${name}.`, persisted));
+    focusGalleryRename(id);
   });
-  cancel.addEventListener("click", () => renderGallery());
+  cancel.addEventListener("click", () => {
+    renderGallery();
+    focusGalleryRename(id);
+  });
   input.addEventListener("keydown", (event) => {
     if (event.key === "Escape") {
       event.preventDefault();
       renderGallery();
+      focusGalleryRename(id);
     }
   });
   form.append(input, save, cancel);
   row.replaceChildren(form);
   input.focus();
   input.select();
+}
+
+function focusGalleryRename(entryId) {
+  const target = galleryList
+    ? [...galleryList.querySelectorAll(".gallery-rename")].find(
+        (button) => button.dataset.galleryRename === entryId,
+      )
+    : null;
+  target?.focus({ preventScroll: true });
 }
 
 function deleteLook(id) {

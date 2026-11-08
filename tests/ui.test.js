@@ -185,6 +185,15 @@ test("saved looks can be renamed", () => {
   assert.ok(app.includes("mergeEntry"));
 });
 
+test("renaming a saved look returns focus to its row", () => {
+  const app = read("src/ui/app.js");
+  const css = read("src/styles.css");
+  const rename = app.slice(app.indexOf("function startRename"), app.indexOf("function deleteLook"));
+  assert.ok(rename.includes("function focusGalleryRename"));
+  assert.equal(rename.match(/focusGalleryRename\(id\)/g)?.length, 3);
+  assert.ok(css.includes(".gallery-rename:focus-visible"));
+});
+
 test("the gallery can be backed up and restored", () => {
   const html = read("index.html");
   const app = read("src/ui/app.js");

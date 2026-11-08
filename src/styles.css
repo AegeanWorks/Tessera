@@ -225,6 +225,7 @@ kbd {
 .palette-button:focus-visible,
 .preset-button:focus-visible,
 .gallery-open:focus-visible,
+.gallery-rename:focus-visible,
 .gallery-delete:focus-visible,
 .gallery-clear:focus-visible,
 select:focus-visible,
