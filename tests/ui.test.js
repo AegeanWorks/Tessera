@@ -303,6 +303,14 @@ test("the preset rail supports vertical arrow navigation", () => {
   assert.ok(app.includes("rovingIndex"));
 });
 
+test("gallery rows support roving arrow navigation", () => {
+  const app = read("src/ui/app.js");
+  assert.ok(app.includes("bindGalleryNavigation"));
+  assert.ok(app.includes("galleryRovingId"));
+  assert.ok(app.includes(".gallery-open"));
+  assert.ok(app.includes(".gallery-delete"));
+});
+
 test("theme.css is the only stylesheet with raw color values", () => {
   const styles = read("src/styles.css");
   assert.ok(!/#[0-9a-f]{3,8}\b/i.test(styles), "styles.css should use theme tokens");

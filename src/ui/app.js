@@ -75,6 +75,7 @@ let lastThumbKey = "";
 let thumbFrame = 0;
 let pngSize = DEFAULT_EXPORT_SIZE;
 let gallery = emptyGallery();
+let galleryRovingId = "";
 let clearArmed = false;
 let clearTimer = 0;
 let toastTimer = 0;
@@ -262,6 +263,7 @@ function renderGallery() {
   syncClearButton();
   galleryList.replaceChildren();
   if (!gallery.entries.length) {
+    galleryRovingId = "";
     const empty = document.createElement("p");
     empty.className = "gallery-empty";
     empty.textContent = "No saved looks yet. Save the current pattern to start a collection.";
@@ -316,13 +318,44 @@ function renderGallery() {
 function syncGallerySelection() {
   if (!galleryList) return;
   const activeId = activeEntryId(gallery, state);
-  for (const open of galleryList.querySelectorAll(".gallery-open")) {
-    const item = open.closest(".gallery-item");
-    const selected = open.dataset.galleryId === activeId;
-    if (item) item.classList.toggle("is-active", selected);
-    if (selected) open.setAttribute("aria-current", "true");
-    else open.removeAttribute("aria-current");
+  if (activeId) galleryRovingId = activeId;
+  if (!gallery.entries.some((entry) => entry.id === galleryRovingId)) {
+    galleryRovingId = gallery.entries[0]?.id ?? "";
   }
+  const rovingIndex = gallery.entries.findIndex((entry) => entry.id === galleryRovingId);
+  const items = [...galleryList.querySelectorAll(".gallery-item")];
+  items.forEach((item, index) => {
+    const open = item.querySelector(".gallery-open");
+    const remove = item.querySelector(".gallery-delete");
+    const selected = open?.dataset.galleryId === activeId;
+    item.classList.toggle("is-active", selected);
+    if (selected) open?.setAttribute("aria-current", "true");
+    else open?.removeAttribute("aria-current");
+    if (open) open.tabIndex = index === rovingIndex ? 0 : -1;
+    if (remove) remove.tabIndex = index === rovingIndex ? 0 : -1;
+  });
+}
+
+function bindGalleryNavigation(grid) {
+  if (!grid) return;
+  grid.addEventListener("keydown", (event) => {
+    const row = event.target.closest?.(".gallery-item");
+    if (!row) return;
+    const rows = [...grid.querySelectorAll(".gallery-item")];
+    const index = rows.indexOf(row);
+    const target = gridTargetIndex(index, 1, rows.length, event.key);
+    if (target === null) return;
+    event.preventDefault();
+    const open = rows[target].querySelector(".gallery-open");
+    galleryRovingId = open?.dataset.galleryId ?? "";
+    rows.forEach((item, rowIndex) => {
+      const rowOpen = item.querySelector(".gallery-open");
+      const rowDelete = item.querySelector(".gallery-delete");
+      if (rowOpen) rowOpen.tabIndex = rowIndex === target ? 0 : -1;
+      if (rowDelete) rowDelete.tabIndex = rowIndex === target ? 0 : -1;
+    });
+    open?.focus();
+  });
 }
 
 function disarmClear() {
@@ -356,6 +389,7 @@ function clearAllLooks() {
   if (!count) return;
   disarmClear();
   gallery = emptyGallery();
+  galleryRovingId = "";
   const persisted = clearGallery(storage());
   renderGallery();
   saveLookButton?.focus();
@@ -368,6 +402,7 @@ function saveLook() {
   const evictedId = alreadySaved ? null : evictionCandidate(gallery, state);
   const evicted = evictedId ? gallery.entries.find((item) => item.id === evictedId) : null;
   gallery = addEntry(gallery, state);
+  galleryRovingId = gallery.entries[0].id;
   const persisted = saveGallery(storage(), gallery);
   renderGallery();
   const entry = gallery.entries[0];
@@ -391,6 +426,7 @@ function deleteLook(id) {
   const entry = gallery.entries.find((item) => item.id === id);
   if (!entry) return;
   const focusId = neighborEntryId(gallery, id);
+  galleryRovingId = focusId || "";
   gallery = removeEntry(gallery, id);
   const persisted = saveGallery(storage(), gallery);
   renderGallery();
@@ -720,6 +756,7 @@ function bindActions() {
   bindGridNavigation(motifGrid);
   bindGridNavigation(paletteGrid);
   bindGridNavigation(presetList);
+  bindGalleryNavigation(galleryList);
 }
 
 function isTextEntry(target) {

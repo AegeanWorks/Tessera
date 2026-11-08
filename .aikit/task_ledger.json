@@ -5,7 +5,7 @@
     "last_phase": "implementation",
     "active_phase": 4,
     "status": "in_progress",
-    "updated_at": 1794096376.3201773,
+    "updated_at": 1794097195.1988266,
     "owner": "opencode:tessera-cycles",
     "started_by": "opencode:tessera-cycles",
     "continuations": []
@@ -99,17 +99,6 @@
         "mitigation": "Add failing pure/static tests first, keep each diff limited to one area, and verify with the same seeded 1440x900 CDP run before and after; the full npm, static-contract and AIKit gates run before every commit."
       },
       "plan_digest": "b52931f5bf547c94ec3e16856135270a70e51c91ea93d8a89d84384b3c7117fc"
-    },
-    {
-      "task_id": "tessera-quality-cycles-v1",
-      "phase": "implementation",
-      "phase_num": 4,
-      "description": "[12] Cycle 11 (extension) shipped: preset rail marks the matching visual preset with is-active + aria-current, and editing any look field clears it via activePresetId; failing-first state test and static guard; 119/119 tests, verify:static OK, aikit check 4/4. Old build showed zero markers after Iris drift; new build shows exactly one (iris-drift), then zero after New seed. checklists: passed",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1794084384.0006237,
-      "timestamp_str": "2026-11-07 23:46:24",
-      "agent": "opencode:tessera-cycles"
     },
     {
       "task_id": "tessera-quality-cycles-v1",
@@ -252,6 +241,17 @@
       "status": "in_progress",
       "timestamp": 1794096376.3201773,
       "timestamp_str": "2026-11-08 03:06:16",
+      "agent": "opencode:tessera-cycles"
+    },
+    {
+      "task_id": "tessera-quality-cycles-v1",
+      "phase": "implementation",
+      "phase_num": 4,
+      "description": "[25] Cycle 24 (extension) shipped: gallery rows now use roving tabindex with Up/Down/Home/End row navigation; only current row open+delete are tab stops; active/save/delete/clear roving updates; failing-first static guard and 139/139 tests, verify:static OK, aikit check 4/4. Played 3-look gallery: first->second->third, Home/End, Enter loads first, mobile ArrowDown reaches second, one row tab stop. checklists: passed",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794097195.1988266,
+      "timestamp_str": "2026-11-08 03:19:55",
       "agent": "opencode:tessera-cycles"
     }
   ]

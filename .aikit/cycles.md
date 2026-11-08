@@ -593,3 +593,28 @@ the committed proof.
 - **Tests**: failing-first one-column `gridTargetIndex` cases; static guard
   `the preset rail supports vertical arrow navigation`; suite 138/138.
 - **Release**: v0.6.13.
+
+## Cycle 24 — Gallery rows ignored arrow keys
+
+- **Area**: Keyboard navigation in saved looks. Every gallery open/delete button
+  was a tab stop (up to 24 stops at the cap), and ArrowUp/Down/Home/End did
+  nothing.
+- **Evidence before**: old-build worktree `c812a39` served on port 4415,
+  `cycle24-before-gallery-down-1440.png` / `-390.png`: three saved looks, focus
+  the first row, press ArrowDown; focus stays on the first row and all six
+  buttons report `tabIndex 0`.
+- **Fix**: add gallery row roving state. Only the current row’s open and delete
+  buttons are tabbable; ArrowUp/Down move rows, Home/End jump, and Enter opens
+  the focused look. The current row keeps its delete button reachable by Tab.
+  Save, delete, clear and restore all update the roving row.
+- **Evidence after**: `cycle24-after-gallery-down-1440.png` and
+  `-390.png` at the same three-look state show the focus ring on Kilim Wave
+  while Kilim Comb remains the active outline. Down again reaches Aegean Wave,
+  Home/End jump correctly, Enter loads Kilim Comb.
+- **Played run**: `cycle24-play.mjs` saves three looks, focuses the first row,
+  then uses real ArrowDown/Home/End/Enter keys. Before: all arrows no-op.
+  After: second row → third row, Home/End correct, Enter loads the first row,
+  one row of tab stops, mobile ArrowDown reaches row two.
+- **Tests**: failing-first static guard `gallery rows support roving arrow navigation`;
+  suite 139/139.
+- **Release**: v0.6.14.

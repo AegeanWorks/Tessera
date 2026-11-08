@@ -38,6 +38,7 @@ Tessera is a zero-dependency static studio. Eight motifs and eight palettes gene
 | Motif tiles | Switch between Wave, Ridge, Comb, Pinwheel, Arcade, Mosaic, Loom and Drift |
 | Palettes | Recolor with Aegean, Kilim, Riso, Nocturne, Sage, Ember, Terra or Iris |
 | Picker grids | Arrow keys move focus inside Motif, Palette and Presets; Enter or Space applies the focused choice |
+| Gallery rows | Arrow keys move between saved-look rows; Tab reaches the current row’s delete button |
 | Repeat / Line weight / Warp | Reshape the tile density, stroke weight and curvature |
 | Rotate / Flip | Turn the tile by 90° steps or mirror it horizontally or vertically; the stage badge names the active transform |
 | New seed | Reroll the generated variation without changing the motif |
