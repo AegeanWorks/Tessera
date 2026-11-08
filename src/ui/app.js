@@ -924,11 +924,22 @@ function bindStorageSync() {
       update({ persist: false });
       announce("Settings updated from another tab.");
     } else if (event.key === GALLERY_KEY) {
+      const active = document.activeElement;
+      const focusId = active instanceof HTMLElement ? active.dataset.galleryId || active.dataset.galleryDelete || "" : "";
+      const focusDelete = active instanceof HTMLElement && active.classList.contains("gallery-delete");
       const read = readGallery(storage());
       gallery = read.gallery || emptyGallery();
       galleryIssue = read.issue;
-      galleryRovingId = "";
+      galleryRovingId = focusId;
       renderGallery();
+      let target = null;
+      if (focusId) {
+        target = [...galleryList.querySelectorAll(focusDelete ? ".gallery-delete" : ".gallery-open")].find(
+          (button) => (focusDelete ? button.dataset.galleryDelete : button.dataset.galleryId) === focusId,
+        );
+      }
+      if (target) target.focus({ preventScroll: true });
+      else if (focusId) saveLookButton?.focus({ preventScroll: true });
       announce("Saved looks updated from another tab.");
     }
   });

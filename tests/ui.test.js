@@ -336,6 +336,14 @@ test("320px layout keeps preset names and topbar actions readable", () => {
   assert.match(narrow, /\.gallery-name\s*\{[^}]*white-space:\s*normal/);
 });
 
+test("external gallery sync keeps keyboard focus", () => {
+  const app = read("src/ui/app.js");
+  assert.ok(app.includes("focusId"));
+  assert.ok(app.includes("galleryDelete"));
+  assert.ok(app.includes("target.focus"));
+  assert.ok(app.includes("saveLookButton?.focus"));
+});
+
 test("other tabs update this one through storage events", () => {
   const app = read("src/ui/app.js");
   assert.ok(app.includes('addEventListener("storage"'));

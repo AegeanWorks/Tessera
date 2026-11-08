@@ -934,3 +934,29 @@ the committed proof.
   320 fits with badge right 287 and `overflowX: 0`.
 - **Tests**: failing-first `the stage badge labels repeat and seed`; suite 161/161.
 - **Release**: v0.7.4.
+
+## Cycle 37 — External gallery updates dropped keyboard focus
+
+- **Area**: accessibility/focus. Cycle 35’s cross-tab gallery refresh replaced
+  the saved-look rows, so a tab focused on a gallery row lost focus to BODY even
+  when the row survived.
+- **Evidence before**: old-build worktree `84990fc` served on port 4428,
+  `cycle37-before-tab-b-after-save-1440.png`: B’s focused Ridge row remains in
+  the two-row gallery, but there is no focus ring and `activeTag: BODY`;
+  `-after-delete-1440.png` is also BODY.
+- **Fix**: before the external `renderGallery()`, capture the focused open or
+  delete control’s id; after the render, restore the matching control, or focus
+  Save look if that entry disappeared. Set `galleryRovingId` from the focused
+  row and announce after restoration. Open buttons use `data-gallery-id`; delete
+  buttons use `data-gallery-delete`.
+- **Evidence after**: `cycle37-after-tab-b-focused-1440.png` (Ridge ring),
+  `-after-save-1440.png` (same Ridge id focused after A saves Bloom), and
+  `-after-delete-1440.png` (Save look focused after Ridge is deleted). Same
+  viewport/state; gallery 2 → 1.
+- **Played run**: `cycle37-play.mjs` opens two tabs, focuses B’s Ridge row, then
+  A saves Bloom and deletes Ridge. Before: BODY after both events. After: the
+  same gallery-open id after the save and `save-look` after the delete; counts
+  2 and 1; the gallery sync toast shows.
+- **Tests**: failing-first `external gallery sync keeps keyboard focus`;
+  suite 162/162.
+- **Release**: v0.7.5.

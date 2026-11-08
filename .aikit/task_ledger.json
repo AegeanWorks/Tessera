@@ -5,7 +5,7 @@
     "last_phase": "in_progress",
     "active_phase": 4,
     "status": "in_progress",
-    "updated_at": 1794105285.255476,
+    "updated_at": 1794105965.8565905,
     "owner": "opencode:tessera-cycles",
     "started_by": "opencode:tessera-cycles",
     "continuations": []
@@ -99,17 +99,6 @@
         "mitigation": "Add failing pure/static tests first, keep each diff limited to one area, and verify with the same seeded 1440x900 CDP run before and after; the full npm, static-contract and AIKit gates run before every commit."
       },
       "plan_digest": "b52931f5bf547c94ec3e16856135270a70e51c91ea93d8a89d84384b3c7117fc"
-    },
-    {
-      "task_id": "tessera-quality-cycles-v1",
-      "phase": "implementation",
-      "phase_num": 4,
-      "description": "[24] Cycle 23 (extension) shipped: preset rail now uses roving tabindex + one-column grid navigation (Up/Down/Home/End), active/first only tab stop; failing-first navigation cases and static guard; 138/138 tests, verify:static OK, aikit check 4/4. Played Aegean tide -> Kilim ridge -> Riso comb -> Iris drift, Enter selects Aegean tide; 390 ArrowDown reaches Kilim ridge with visible focus. checklists: passed",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1794096376.3201773,
-      "timestamp_str": "2026-11-08 03:06:16",
-      "agent": "opencode:tessera-cycles"
     },
     {
       "task_id": "tessera-quality-cycles-v1",
@@ -252,6 +241,17 @@
       "status": "in_progress",
       "timestamp": 1794105285.255476,
       "timestamp_str": "2026-11-08 05:34:45",
+      "agent": "opencode:tessera-cycles"
+    },
+    {
+      "task_id": "tessera-quality-cycles-v1",
+      "phase": "in_progress",
+      "phase_num": 4,
+      "description": "[38] Cycle 37 (extension) shipped: external gallery sync focus. The cross-tab gallery refresh now captures the focused open or delete id, rebuilds the rows, restores the matching control, or focuses Save look when the entry disappeared; galleryRovingId follows the focused row. Failing-first static guard. 162/162 tests, verify:static OK, aikit check 4/4. Two-tab play: before focus fell to BODY after A saved Bloom and deleted Ridge; after the same Ridge row stayed focused after the save and Save look after the delete, gallery 2 to 1, sync toast. checklists: passed",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794105965.8565905,
+      "timestamp_str": "2026-11-08 05:46:05",
       "agent": "opencode:tessera-cycles"
     }
   ]
