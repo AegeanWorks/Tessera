@@ -570,3 +570,26 @@ the committed proof.
   `navigation.js` and `navigation.test.js` as missing from the README tree;
   both were added and the full 4/4 gate set re-ran green.
 - **Release**: v0.6.12.
+
+## Cycle 23 — The preset rail ignored arrow keys
+
+- **Area**: Keyboard navigation. The eight preset buttons were all tab stops and
+  ArrowUp/Down/Home/End did nothing, unlike the motif and palette pickers after
+  cycle 22.
+- **Evidence before**: old-build worktree `de2e076` served on port 4414,
+  `cycle23-before-preset-down-1440.png` / `-390.png`: focus Aegean tide, press
+  ArrowDown; focus stays put and all eight presets report `tabIndex 0`.
+- **Fix**: reuse `gridTargetIndex` with `data-columns="1"` and roving tabindex on
+  the preset rail; only the active preset (or first when none is active) is
+  tabbable, ArrowUp/Down step rows, Home/End jump, and Enter/Space loads.
+- **Evidence after**: `cycle23-after-preset-down-1440.png` and
+  `cycle23-after-preset-down-390.png` at the same default state show the focus
+  ring on Kilim ridge while no preset is selected. Down again reaches Riso comb,
+  End reaches Iris drift, Enter loads Aegean tide.
+- **Played run**: `cycle23-play.mjs` focuses the first preset, uses real arrow
+  keys and Enter at 1440, then clears storage and repeats at 390. Before: all
+  arrows no-op. After: Kilim ridge → Riso comb → Iris drift, Enter marks Aegean
+  tide current, one tab stop per rail.
+- **Tests**: failing-first one-column `gridTargetIndex` cases; static guard
+  `the preset rail supports vertical arrow navigation`; suite 138/138.
+- **Release**: v0.6.13.

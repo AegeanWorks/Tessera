@@ -455,13 +455,17 @@ function syncSelection() {
     }
   }
   if (presetList) {
+    const buttons = [...presetList.querySelectorAll(".preset-button")];
     const activeId = activePresetId(state);
-    for (const button of presetList.querySelectorAll(".preset-button")) {
+    let rovingIndex = buttons.findIndex((button) => button.dataset.preset === activeId);
+    if (rovingIndex < 0) rovingIndex = 0;
+    buttons.forEach((button, index) => {
       const selected = button.dataset.preset === activeId;
       button.classList.toggle("is-active", selected);
+      button.tabIndex = index === rovingIndex ? 0 : -1;
       if (selected) button.setAttribute("aria-current", "true");
       else button.removeAttribute("aria-current");
-    }
+    });
   }
 }
 
@@ -715,6 +719,7 @@ function bindActions() {
   bindSwitch(guidesInput, "guides");
   bindGridNavigation(motifGrid);
   bindGridNavigation(paletteGrid);
+  bindGridNavigation(presetList);
 }
 
 function isTextEntry(target) {

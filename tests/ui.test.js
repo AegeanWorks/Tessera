@@ -295,6 +295,14 @@ test("picker grids support roving arrow navigation", () => {
   assert.ok(app.includes(".tabIndex"));
 });
 
+test("the preset rail supports vertical arrow navigation", () => {
+  const html = read("index.html");
+  const app = read("src/ui/app.js");
+  assert.ok(html.includes('id="preset-list" role="group" aria-label="Presets" data-columns="1"'));
+  assert.ok(app.includes("bindGridNavigation(presetList)"));
+  assert.ok(app.includes("rovingIndex"));
+});
+
 test("theme.css is the only stylesheet with raw color values", () => {
   const styles = read("src/styles.css");
   assert.ok(!/#[0-9a-f]{3,8}\b/i.test(styles), "styles.css should use theme tokens");

@@ -5,7 +5,7 @@
     "last_phase": "implementation",
     "active_phase": 4,
     "status": "in_progress",
-    "updated_at": 1794095768.8697965,
+    "updated_at": 1794096376.3201773,
     "owner": "opencode:tessera-cycles",
     "started_by": "opencode:tessera-cycles",
     "continuations": []
@@ -99,17 +99,6 @@
         "mitigation": "Add failing pure/static tests first, keep each diff limited to one area, and verify with the same seeded 1440x900 CDP run before and after; the full npm, static-contract and AIKit gates run before every commit."
       },
       "plan_digest": "b52931f5bf547c94ec3e16856135270a70e51c91ea93d8a89d84384b3c7117fc"
-    },
-    {
-      "task_id": "tessera-quality-cycles-v1",
-      "phase": "implementation",
-      "phase_num": 4,
-      "description": "[11] Cycle 10 (extension) shipped: every preset now renders a decorative 52px preview from presetState, making the eight-look rail scannable; failing-first static guard; 117/117 tests, verify:static OK, aikit check 4/4. Before had zero previews; after has 8/8 distinct thumbnails, names keep >=116px, clicking Iris drift still loads Drift/Iris seed 23. checklists: passed",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1794083797.536883,
-      "timestamp_str": "2026-11-07 23:36:37",
-      "agent": "opencode:tessera-cycles"
     },
     {
       "task_id": "tessera-quality-cycles-v1",
@@ -252,6 +241,17 @@
       "status": "in_progress",
       "timestamp": 1794095768.8697965,
       "timestamp_str": "2026-11-08 02:56:08",
+      "agent": "opencode:tessera-cycles"
+    },
+    {
+      "task_id": "tessera-quality-cycles-v1",
+      "phase": "implementation",
+      "phase_num": 4,
+      "description": "[24] Cycle 23 (extension) shipped: preset rail now uses roving tabindex + one-column grid navigation (Up/Down/Home/End), active/first only tab stop; failing-first navigation cases and static guard; 138/138 tests, verify:static OK, aikit check 4/4. Played Aegean tide -> Kilim ridge -> Riso comb -> Iris drift, Enter selects Aegean tide; 390 ArrowDown reaches Kilim ridge with visible focus. checklists: passed",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794096376.3201773,
+      "timestamp_str": "2026-11-08 03:06:16",
       "agent": "opencode:tessera-cycles"
     }
   ]

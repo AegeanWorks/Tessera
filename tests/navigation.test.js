@@ -13,6 +13,14 @@ test("gridTargetIndex moves within the motif and palette rows", () => {
   assert.equal(gridTargetIndex(6, 3, 8, "ArrowRight"), 7);
 });
 
+test("gridTargetIndex supports a one-column preset rail", () => {
+  assert.equal(gridTargetIndex(2, 1, 8, "ArrowDown"), 3);
+  assert.equal(gridTargetIndex(2, 1, 8, "ArrowUp"), 1);
+  assert.equal(gridTargetIndex(2, 1, 8, "ArrowRight"), null);
+  assert.equal(gridTargetIndex(2, 1, 8, "ArrowLeft"), null);
+  assert.equal(gridTargetIndex(7, 1, 8, "ArrowDown"), null);
+});
+
 test("gridTargetIndex supports Home and End", () => {
   assert.equal(gridTargetIndex(5, 2, 8, "Home"), 0);
   assert.equal(gridTargetIndex(0, 2, 8, "End"), 7);
