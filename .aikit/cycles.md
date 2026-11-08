@@ -834,3 +834,31 @@ the committed proof.
   tile`, `lagoon is part of the catalogue`, `bloom has a curated lagoon preset`;
   suite 156/156.
 - **Release**: v0.7.0.
+
+## Cycle 33 — A corrupt settings record silently reset the studio
+
+- **Area**: saves/persistence, corrupt studio settings read path. Gallery reads
+  and settings writes already warned, but a corrupt `tessera.studio.v1` was
+  silently replaced by defaults.
+- **Evidence before**: old-build worktree `dc25ceb` served on port 4424,
+  `cycle33-before-corrupt-1440.png` / `-320.png`: after planting `{oops` and
+  reloading, the stage shows Wave/Aegean, the storage note is hidden, no toast
+  appears, and the key is still `{oops`.
+- **Fix**: add `readState(storage)` returning `{ state, issue }` (`null`,
+  `unreadable`, `unavailable`); `loadState` delegates to it. The UI stores
+  `stateIssue`, shows “Saved settings could not be read. Starting from the
+  defaults.” in the existing storage note, announces it once, and hides it after
+  the first successful save writes a fresh record. The write-failure path keeps
+  its own message.
+- **Evidence after**: `cycle33-after-corrupt-1440.png` / `-320.png` show the
+  note (360px at 1440, 288px at 320) and the exact toast;
+  `cycle33-after-recovered-1440.png` (same build/session/viewport) shows the
+  note hidden and Ridge after one click, with a valid version-1 record.
+- **Played run**: `cycle33-play.mjs` plants the corrupt record, reloads, reads
+  the note/toast, clicks Ridge, clears the URL and reloads. Before: no warning,
+  defaults, key still corrupt; after: warning exact, click hides the note and
+  writes `"motif":"ridge"`, reload keeps Ridge; 320 fits.
+- **Tests**: failing-first `readState distinguishes empty, corrupt and
+  unavailable stores` plus the `a refused settings record is surfaced` guard;
+  suite 158/158.
+- **Release**: v0.7.1.

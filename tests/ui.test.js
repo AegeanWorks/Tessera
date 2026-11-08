@@ -321,6 +321,14 @@ test("320px layout keeps preset names and topbar actions readable", () => {
   assert.match(narrow, /\.gallery-name\s*\{[^}]*white-space:\s*normal/);
 });
 
+test("a refused settings record is surfaced", () => {
+  const app = read("src/ui/app.js");
+  assert.ok(app.includes("readState"));
+  assert.ok(app.includes("stateIssue"));
+  assert.ok(app.includes("stateReadFailed"));
+  assert.ok(app.includes("Saved settings could not be read"));
+});
+
 test("a refused gallery record is surfaced in the gallery", () => {
   const app = read("src/ui/app.js");
   assert.ok(app.includes("readGallery"));

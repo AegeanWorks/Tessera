@@ -5,17 +5,28 @@ export const STORAGE_KEY = "tessera.studio.v1";
 export const STORAGE_VERSION = 1;
 export const GALLERY_KEY = "tessera.gallery.v1";
 
-export function loadState(storage) {
-  if (!storage) return null;
+export function readState(storage) {
+  if (!storage) return { state: null, issue: "unavailable" };
+  let raw;
   try {
-    const raw = storage.getItem(STORAGE_KEY);
-    if (!raw) return null;
-    const data = JSON.parse(raw);
-    if (!data || data.version !== STORAGE_VERSION || !data.state) return null;
-    return normalizeState(data.state);
+    raw = storage.getItem(STORAGE_KEY);
   } catch {
-    return null;
+    return { state: null, issue: "unavailable" };
   }
+  if (!raw) return { state: null, issue: null };
+  try {
+    const data = JSON.parse(raw);
+    if (!data || data.version !== STORAGE_VERSION || !data.state) {
+      return { state: null, issue: "unreadable" };
+    }
+    return { state: normalizeState(data.state), issue: null };
+  } catch {
+    return { state: null, issue: "unreadable" };
+  }
+}
+
+export function loadState(storage) {
+  return readState(storage).state;
 }
 
 export function saveState(storage, state) {

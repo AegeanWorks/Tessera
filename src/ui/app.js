@@ -39,7 +39,7 @@ import {
   restoreEntry,
 } from "../studio/gallery.js";
 import { pushHistory, stepBack, stepForward } from "../studio/history.js";
-import { clearGallery, clearState, loadState, readGallery, saveGallery, saveState } from "../studio/storage.js";
+import { clearGallery, clearState, readGallery, readState, saveGallery, saveState } from "../studio/storage.js";
 
 const stage = document.getElementById("stage");
 const motifGrid = document.getElementById("motif-grid");
@@ -97,6 +97,8 @@ let galleryRovingId = "";
 let clearArmed = false;
 let clearTimer = 0;
 let statePersisted = true;
+let stateReadFailed = false;
+let stateIssue = null;
 let toastTimer = 0;
 
 function storage() {
@@ -126,12 +128,27 @@ function persistedNotice(message, persisted) {
   return `${message.replace(/\.$/, "")}. Browser storage is unavailable, so this lasts for this session only.`;
 }
 
+const STORAGE_WRITE_NOTE = "Browser storage is unavailable, so pattern changes last for this session only.";
+const STORAGE_READ_NOTE = "Saved settings could not be read. Starting from the defaults.";
+
+function setStorageNote(message, visible) {
+  if (!storageNote) return;
+  if (message) storageNote.textContent = message;
+  storageNote.hidden = !visible;
+}
+
 function syncStorageNote(persisted) {
+  if (persisted && stateReadFailed) {
+    stateReadFailed = false;
+    setStorageNote(null, false);
+  }
   if (persisted === statePersisted) return;
   statePersisted = persisted;
-  if (storageNote) storageNote.hidden = persisted;
   if (!persisted) {
-    announce("Browser storage is unavailable, so pattern changes last for this session only.");
+    setStorageNote(STORAGE_WRITE_NOTE, true);
+    announce(STORAGE_WRITE_NOTE);
+  } else if (!stateReadFailed) {
+    setStorageNote(null, false);
   }
 }
 
@@ -940,7 +957,9 @@ function bindKeyboard() {
 function initialState() {
   const decoded = decodeSearch(window.location.search);
   const preset = decoded.preset ? presetState(decoded.preset) : null;
-  const base = preset || loadState(storage()) || normalizeState(DEFAULTS);
+  const stored = readState(storage());
+  stateIssue = decoded.hasState || preset ? null : stored.issue;
+  const base = preset || stored.state || normalizeState(DEFAULTS);
   if (decoded.hasState) return normalizeState({ ...base, ...decoded.patch });
   return normalizeState(base);
 }
@@ -963,6 +982,11 @@ function mount() {
   bindKeyboard();
   bindReducedMotion();
   update({ persist: false, url: false });
+  if (stateIssue === "unreadable") {
+    stateReadFailed = true;
+    setStorageNote(STORAGE_READ_NOTE, true);
+    announce(STORAGE_READ_NOTE);
+  }
   const reset = document.getElementById("reset");
   reset?.addEventListener("click", () => {
     const persisted = clearState(storage());

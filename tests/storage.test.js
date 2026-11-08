@@ -9,6 +9,7 @@ import {
   loadGallery,
   loadState,
   readGallery,
+  readState,
   saveGallery,
   saveState,
 } from "../src/studio/storage.js";
@@ -104,6 +105,17 @@ test("a saved gallery loads back normalized and versioned", () => {
   assert.equal(raw.version, GALLERY_VERSION);
   assert.equal(raw.entries.length, 1);
   assert.ok(raw.saved_at);
+});
+
+test("readState distinguishes empty, corrupt and unavailable stores", () => {
+  const storage = memoryStorage();
+  assert.deepEqual(readState(storage), { state: null, issue: null });
+  storage.setItem(STORAGE_KEY, "{oops");
+  assert.equal(readState(storage).issue, "unreadable");
+  storage.setItem(STORAGE_KEY, JSON.stringify({ version: STORAGE_VERSION + 1, state: {} }));
+  assert.equal(readState(storage).issue, "unreadable");
+  assert.equal(readState(null).issue, "unavailable");
+  assert.equal(readState(BROKEN).issue, "unavailable");
 });
 
 test("a missing, corrupt, unsupported or malformed gallery is refused", () => {
