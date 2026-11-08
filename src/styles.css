@@ -675,6 +675,15 @@ input[type="range"]::-moz-range-thumb {
   margin-top: 14px;
 }
 
+.motion-note {
+  margin: 10px 0 0;
+  padding-left: 8px;
+  border-left: 2px solid var(--violet);
+  color: var(--text-soft);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
 .switch {
   position: relative;
   display: flex;

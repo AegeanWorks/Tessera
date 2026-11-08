@@ -328,6 +328,17 @@ test("a refused gallery record is surfaced in the gallery", () => {
   assert.ok(app.includes("Saved looks could not be read"));
 });
 
+test("reduced motion announces a paused glow", () => {
+  const html = read("index.html");
+  const app = read("src/ui/app.js");
+  const styles = read("src/styles.css");
+  assert.ok(html.includes('id="motion-note"'));
+  assert.ok(html.includes("Glow drift is paused by your system's reduced-motion setting."));
+  assert.ok(app.includes("prefers-reduced-motion: reduce"));
+  assert.ok(app.includes("Glow paused"));
+  assert.match(styles, /\.motion-note\s*\{[^}]*border-left/);
+});
+
 test("pattern changes can be undone and redone", () => {
   const html = read("index.html");
   const app = read("src/ui/app.js");

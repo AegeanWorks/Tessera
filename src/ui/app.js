@@ -57,6 +57,7 @@ const weightValue = document.getElementById("weight-value");
 const warpValue = document.getElementById("warp-value");
 const seedValue = document.getElementById("seed-value");
 const motionInput = document.getElementById("motion");
+const motionNote = document.getElementById("motion-note");
 const guidesInput = document.getElementById("guides");
 const stageMotif = document.getElementById("stage-motif");
 const stagePalette = document.getElementById("stage-palette");
@@ -74,6 +75,12 @@ const copyLinkButton = document.getElementById("copy-link");
 const clearGalleryButton = document.getElementById("clear-gallery");
 const storageNote = document.getElementById("storage-note");
 const toast = document.getElementById("toast");
+const reducedMotionQuery =
+  typeof window.matchMedia === "function" ? window.matchMedia("(prefers-reduced-motion: reduce)") : null;
+
+function prefersReducedMotion() {
+  return Boolean(reducedMotionQuery && reducedMotionQuery.matches);
+}
 
 let state = normalizeState(DEFAULTS);
 let historyBaseline = state;
@@ -552,10 +559,20 @@ function syncInputs() {
   if (stageTransformDivider) stageTransformDivider.hidden = transform === "";
   if (stageEffects) {
     for (const chip of stageEffects.querySelectorAll("[data-effect]")) {
-      const active = chip.dataset.effect === "guides" ? state.guides : state.motion;
+      const effect = chip.dataset.effect;
+      const active = effect === "guides" ? state.guides : state.motion;
       chip.hidden = !active;
+      if (effect === "motion") {
+        chip.textContent = active && prefersReducedMotion() ? "Glow paused" : "Glow";
+      }
     }
     stageEffects.hidden = !state.guides && !state.motion;
+  }
+  if (motionNote) {
+    const paused = state.motion && prefersReducedMotion();
+    motionNote.hidden = !paused;
+    if (paused) motionInput?.setAttribute("aria-describedby", "motion-note");
+    else motionInput?.removeAttribute("aria-describedby");
   }
   if (stage) {
     stage.dataset.motion = state.motion ? "on" : "off";
@@ -854,6 +871,13 @@ function isTextEntry(target) {
   return false;
 }
 
+function bindReducedMotion() {
+  if (!reducedMotionQuery) return;
+  const refresh = () => syncInputs();
+  if (typeof reducedMotionQuery.addEventListener === "function") reducedMotionQuery.addEventListener("change", refresh);
+  else if (typeof reducedMotionQuery.addListener === "function") reducedMotionQuery.addListener(refresh);
+}
+
 function bindKeyboard() {
   document.addEventListener("keydown", (event) => {
     if (event.defaultPrevented) return;
@@ -914,6 +938,7 @@ function mount() {
   renderGallery();
   bindActions();
   bindKeyboard();
+  bindReducedMotion();
   update({ persist: false, url: false });
   const reset = document.getElementById("reset");
   reset?.addEventListener("click", () => {

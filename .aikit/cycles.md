@@ -753,3 +753,31 @@ the committed proof.
 - **Tests**: failing-first history stack cases plus the static
   `pattern changes can be undone and redone` guard; suite 151/151.
 - **Release**: v0.6.19.
+
+## Cycle 30 — Glow claimed an effect the system had paused
+
+- **Area**: graphics/effects honesty under reduced motion. With
+  `prefers-reduced-motion: reduce` and Glow on, the stage chip still said
+  “Glow” and no note appeared, while the computed stage animation was `none`.
+- **Evidence before**: old-build worktree `5eb5b5d` served on port 4421,
+  `cycle30-before-reduced-stage-1440.png` / `-reduced-note-1440.png`: the Glow
+  switch is on and the chip says “Glow”, but there is no note and
+  `animationName: "none"`.
+- **Fix**: when reduced motion is active and Glow is on, the stage chip reads
+  “Glow paused”, a persistent `.motion-note` appears under the switches, and
+  the checkbox gains `aria-describedby="motion-note"`. A media-query listener
+  updates the label live; Glow state, gallery records and share links are
+  unchanged.
+- **Evidence after**: `cycle30-after-reduced-stage-1440.png` /
+  `-reduced-note-1440.png` show “Glow paused” and the note. The same-build
+  `cycle30-after-active-stage-1440.png` / `-active-note-1440.png` pair restores
+  “Glow”, hides the note and runs `tessera-drift`. At 320,
+  `cycle30-after-reduced-stage-320.png` wraps the chip inside the stage with
+  `overflowX: 0`.
+- **Played run**: `cycle30-play.mjs` emulates `reduce` before load, clicks the
+  Glow switch, reads the chip/note/animation, then switches to `no-preference`.
+  Before: chip “Glow”, no note, animation `none`. After: chip “Glow paused”,
+  exact note, `aria-describedby`, animation `none` under `reduce`; then “Glow”,
+  note hidden and `tessera-drift` under `no-preference`; note width 250 at 320.
+- **Tests**: failing-first `reduced motion announces a paused glow`; suite 152/152.
+- **Release**: v0.6.20.
