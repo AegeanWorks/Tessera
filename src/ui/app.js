@@ -75,6 +75,8 @@ const copyLinkButton = document.getElementById("copy-link");
 const clearGalleryButton = document.getElementById("clear-gallery");
 const storageNote = document.getElementById("storage-note");
 const toast = document.getElementById("toast");
+const shortcutPanel = document.getElementById("shortcuts");
+const shortcutSummary = document.getElementById("shortcuts-summary");
 const reducedMotionQuery =
   typeof window.matchMedia === "function" ? window.matchMedia("(prefers-reduced-motion: reduce)") : null;
 
@@ -871,6 +873,16 @@ function isTextEntry(target) {
   return false;
 }
 
+function toggleShortcuts(force) {
+  if (!shortcutPanel) return;
+  const next = typeof force === "boolean" ? force : !shortcutPanel.open;
+  shortcutPanel.open = next;
+  if (next) {
+    shortcutPanel.scrollIntoView({ block: "nearest" });
+    shortcutSummary?.focus({ preventScroll: true });
+  }
+}
+
 function bindReducedMotion() {
   if (!reducedMotionQuery) return;
   const refresh = () => syncInputs();
@@ -890,8 +902,19 @@ function bindKeyboard() {
       else undo();
       return;
     }
+    if (key === "escape" && shortcutPanel?.open) {
+      event.preventDefault();
+      toggleShortcuts(false);
+      shortcutSummary?.focus({ preventScroll: true });
+      return;
+    }
     if (event.altKey || event.ctrlKey || event.metaKey) return;
     if (isTextEntry(event.target)) return;
+    if (key === "?") {
+      event.preventDefault();
+      toggleShortcuts();
+      return;
+    }
     if (key === "r") {
       event.preventDefault();
       randomizeLook();

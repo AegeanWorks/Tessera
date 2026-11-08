@@ -328,6 +328,32 @@ test("a refused gallery record is surfaced in the gallery", () => {
   assert.ok(app.includes("Saved looks could not be read"));
 });
 
+test("the studio exposes a complete keyboard reference", () => {
+  const html = read("index.html");
+  const app = read("src/ui/app.js");
+  assert.ok(html.includes('id="shortcuts"'));
+  assert.ok(html.includes("Keyboard shortcuts"));
+  for (const label of [
+    "Randomize",
+    "Copy SVG",
+    "Export SVG",
+    "Download PNG",
+    "Save look",
+    "Copy link",
+    "Undo",
+    "Redo",
+    "Move within",
+    "Home",
+    "Enter",
+    "Close",
+  ]) {
+    assert.ok(html.includes(label), `missing ${label}`);
+  }
+  assert.ok(app.includes('key === "?"'));
+  assert.ok(app.includes('key === "escape"'));
+  assert.ok(app.includes("toggleShortcuts"));
+});
+
 test("reduced motion announces a paused glow", () => {
   const html = read("index.html");
   const app = read("src/ui/app.js");

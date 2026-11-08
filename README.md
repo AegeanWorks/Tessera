@@ -47,6 +47,7 @@ Tessera is a zero-dependency static studio. Eight motifs and eight palettes gene
 | Reset pattern | Return the live pattern to the studio defaults; saved looks stay in the gallery |
 | Randomize `R` | Jump to a new motif, palette and seed |
 | Undo / Redo | Step backward or forward through pattern edits made in this session (Ctrl+Z / Shift+Ctrl+Z, Cmd on macOS); a slider drag counts as one step |
+| Keyboard shortcuts `?` | Open the complete key reference at the foot of the studio; Escape closes it, and the summary stays keyboard-operable |
 | Copy SVG `C` / Export SVG `E` | Copy the SVG source, or download it as a `.svg` file |
 | PNG size | Pick Wallpaper (2560 × 1440), Full HD, 4K, Phone or Square |
 | Export PNG `P` | Rasterize the current look at the selected size as a `.png` file; the panel keeps the size, payload and filename of the last export |

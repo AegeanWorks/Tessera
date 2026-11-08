@@ -781,3 +781,27 @@ the committed proof.
   note hidden and `tessera-drift` under `no-preference`; note width 250 at 320.
 - **Tests**: failing-first `reduced motion announces a paused glow`; suite 152/152.
 - **Release**: v0.6.20.
+
+## Cycle 31 — Shortcuts were documented but not discoverable in the studio
+
+- **Area**: UI readability. The topbar showed R/C/E/P/S/L and Undo/Redo carried
+  `aria-keyshortcuts`, but picker arrows, Home/End, Enter/Space, the history
+  chords, `?` and Escape existed only in the README; pressing `?` did nothing.
+- **Evidence before**: old-build worktree `252f9f7` served on port 4422,
+  `cycle31-before-keys-open-1440.png`: after `?` the footer still has only the
+  two status lines, and no `#shortcuts` element exists.
+- **Fix**: add a native `<details id="shortcuts">` in the footer with 13 rows
+  covering actions, history and grid navigation. `?` toggles it and moves focus
+  to the summary; Escape closes it; pointer users operate the summary directly.
+  The list uses two columns at 1440, one at 640, and a 96px key column at 320.
+- **Evidence after**: same-build `cycle31-after-keys-closed-1440.png` (summary
+  closed) vs `cycle31-after-keys-open-1440.png` (full 13-row reference);
+  `cycle31-after-keys-open-320.png` stacks the rows and fits with
+  `panelWidth: 288` and `overflowX: 0`.
+- **Played run**: `cycle31-play.mjs` sends a real Shift+`?`, Escape, and a
+  pointer click on the summary. Before: no panel and `?` is a no-op. After: the
+  panel opens with 13 rows and the summary focused, Escape closes, the click
+  reopens, and the 320 layout fits.
+- **Tests**: failing-first `the studio exposes a complete keyboard reference`;
+  suite 153/153.
+- **Release**: v0.6.21.

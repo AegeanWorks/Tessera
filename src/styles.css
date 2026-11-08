@@ -1048,6 +1048,7 @@ select:hover {
   position: relative;
   z-index: 1;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
@@ -1068,6 +1069,66 @@ select:hover {
   font-family: var(--font-mono);
   font-size: 10px;
   letter-spacing: 0.08em;
+}
+
+.shortcuts {
+  flex-basis: 100%;
+  margin-top: 4px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--line);
+}
+
+.shortcuts summary {
+  width: fit-content;
+  color: var(--text-soft);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.shortcuts summary:hover {
+  color: var(--text);
+}
+
+.shortcuts summary:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.shortcut-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px 24px;
+  margin: 12px 0 0;
+}
+
+.shortcut-row {
+  display: grid;
+  grid-template-columns: 120px minmax(0, 1fr);
+  gap: 10px;
+  align-items: baseline;
+}
+
+.shortcut-row dt {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  color: var(--text-soft);
+}
+
+.shortcut-row dd {
+  margin: 0;
+  color: var(--muted);
+}
+
+@media (max-width: 640px) {
+  .shortcut-list {
+    grid-template-columns: 1fr;
+  }
+
+  .shortcut-row {
+    grid-template-columns: 96px minmax(0, 1fr);
+  }
 }
 
 .toast {
