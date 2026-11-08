@@ -5,7 +5,7 @@
     "last_phase": "in_progress",
     "active_phase": 4,
     "status": "in_progress",
-    "updated_at": 1794104334.6040573,
+    "updated_at": 1794104852.2285428,
     "owner": "opencode:tessera-cycles",
     "started_by": "opencode:tessera-cycles",
     "continuations": []
@@ -99,17 +99,6 @@
         "mitigation": "Add failing pure/static tests first, keep each diff limited to one area, and verify with the same seeded 1440x900 CDP run before and after; the full npm, static-contract and AIKit gates run before every commit."
       },
       "plan_digest": "b52931f5bf547c94ec3e16856135270a70e51c91ea93d8a89d84384b3c7117fc"
-    },
-    {
-      "task_id": "tessera-quality-cycles-v1",
-      "phase": "implementation",
-      "phase_num": 4,
-      "description": "[23] Cycle 22 (extension) shipped: roving tabindex + Arrow/Home/End navigation in motif and palette grids via pure gridTargetIndex; failing-first navigation tests and static guard; 136/136 tests, verify:static OK, aikit check 4/4. Played wave->ridge->arcade->drift, Enter selected drift; palette kilim->nocturne; one tab stop per grid; 390 ArrowRight reaches Ridge. checklists: passed",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1794095496.0379755,
-      "timestamp_str": "2026-11-08 02:51:36",
-      "agent": "opencode:tessera-cycles"
     },
     {
       "task_id": "tessera-quality-cycles-v1",
@@ -252,6 +241,17 @@
       "status": "in_progress",
       "timestamp": 1794104334.6040573,
       "timestamp_str": "2026-11-08 05:18:54",
+      "agent": "opencode:tessera-cycles"
+    },
+    {
+      "task_id": "tessera-quality-cycles-v1",
+      "phase": "in_progress",
+      "phase_num": 4,
+      "description": "[36] Cycle 35 (extension) shipped: cross-tab synchronization. A storage listener for the studio and gallery keys re-reads state and gallery in other tabs, clears their undo history on external edits, refreshes saved looks without changing the stage, and announces both syncs. ADR-014. Failing-first static guard. 160/160 tests, verify:static OK, aikit check 4/4. Two-tab play: before tab B stayed Wave, empty and quiet after tab A changed and saved; after B synced to Ridge, URL motif=ridge, toast exact, gallery gained Aegean Ridge, delete cleared it, undo disabled. checklists: passed",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794104852.2285428,
+      "timestamp_str": "2026-11-08 05:27:32",
       "agent": "opencode:tessera-cycles"
     }
   ]

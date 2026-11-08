@@ -328,6 +328,15 @@ test("320px layout keeps preset names and topbar actions readable", () => {
   assert.match(narrow, /\.gallery-name\s*\{[^}]*white-space:\s*normal/);
 });
 
+test("other tabs update this one through storage events", () => {
+  const app = read("src/ui/app.js");
+  assert.ok(app.includes('addEventListener("storage"'));
+  assert.ok(app.includes("STORAGE_KEY"));
+  assert.ok(app.includes("GALLERY_KEY"));
+  assert.ok(app.includes("Settings updated from another tab"));
+  assert.ok(app.includes("Saved looks updated from another tab"));
+});
+
 test("a refused settings record is surfaced", () => {
   const app = read("src/ui/app.js");
   assert.ok(app.includes("readState"));

@@ -39,7 +39,16 @@ import {
   restoreEntry,
 } from "../studio/gallery.js";
 import { pushHistory, stepBack, stepForward } from "../studio/history.js";
-import { clearGallery, clearState, readGallery, readState, saveGallery, saveState } from "../studio/storage.js";
+import {
+  GALLERY_KEY,
+  STORAGE_KEY,
+  clearGallery,
+  clearState,
+  readGallery,
+  readState,
+  saveGallery,
+  saveState,
+} from "../studio/storage.js";
 
 const stage = document.getElementById("stage");
 const motifGrid = document.getElementById("motif-grid");
@@ -900,6 +909,31 @@ function toggleShortcuts(force) {
   }
 }
 
+function bindStorageSync() {
+  window.addEventListener("storage", (event) => {
+    if (event.key === STORAGE_KEY) {
+      const read = readState(storage());
+      if (!read.state || sameState(read.state, state)) return;
+      state = read.state;
+      stateIssue = null;
+      stateReadFailed = false;
+      setStorageNote(null, false);
+      historyBaseline = state;
+      pastStates = [];
+      futureStates = [];
+      update({ persist: false });
+      announce("Settings updated from another tab.");
+    } else if (event.key === GALLERY_KEY) {
+      const read = readGallery(storage());
+      gallery = read.gallery || emptyGallery();
+      galleryIssue = read.issue;
+      galleryRovingId = "";
+      renderGallery();
+      announce("Saved looks updated from another tab.");
+    }
+  });
+}
+
 function bindReducedMotion() {
   if (!reducedMotionQuery) return;
   const refresh = () => syncInputs();
@@ -981,6 +1015,7 @@ function mount() {
   bindActions();
   bindKeyboard();
   bindReducedMotion();
+  bindStorageSync();
   update({ persist: false, url: false });
   if (stateIssue === "unreadable") {
     stateReadFailed = true;

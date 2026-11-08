@@ -885,3 +885,30 @@ the committed proof.
 - **Tests**: failing-first `the keyboard reference meets the coarse pointer
   target`; suite 159/159.
 - **Release**: v0.7.2.
+
+## Cycle 35 — Open tabs never synchronized
+
+- **Area**: progression/saves, cross-tab consistency. Tabs share
+  `tessera.studio.v1` and `tessera.gallery.v1`, but a change or save in one tab
+  left the other stale; there was no `storage` listener and no cross-tab test.
+- **Evidence before**: old-build worktree `059b78b` served on port 4426,
+  `cycle35-before-tab-b-synced-1440.png` and `-tab-b-gallery-1440.png`: after
+  tab A selects Ridge and saves, tab B still shows Wave/Aegean, an empty gallery
+  and no toast.
+- **Fix**: listen for `storage` events on both keys, re-read through
+  `readState`/`readGallery`, update the other tab without writing back, clear
+  its undo/redo stacks on an external state change, refresh the gallery without
+  touching the stage, and announce the sync. ADR-014 records the contract.
+- **Evidence after**: same-build `cycle35-after-tab-b-initial-1440.png`
+  (Wave/empty) vs `cycle35-after-tab-b-synced-1440.png` (Ridge with
+  `Settings updated from another tab.`); `cycle35-after-tab-b-gallery-1440.png`
+  shows the `Aegean Ridge` saved look and `Saved looks updated from another
+  tab.` The before/after cross-build pair is stale vs synced at the same state.
+- **Played run**: `cycle35-play.mjs` opens two tabs. Tab A clicks Ridge, saves,
+  then deletes the look; tab B is measured after each. Before: B stays Wave,
+  empty and quiet. After: B becomes Ridge, URL `motif=ridge`, toast exact,
+  gallery gains `Aegean Ridge` and clears on delete with the gallery toast;
+  undo is disabled by the reset history.
+- **Tests**: failing-first `other tabs update this one through storage events`;
+  suite 160/160.
+- **Release**: v0.7.3.
