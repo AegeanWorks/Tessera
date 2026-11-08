@@ -170,6 +170,13 @@ test("deleting a saved look keeps keyboard focus in the gallery", () => {
   assert.match(app, /\(focusTarget \|\| saveLookButton\)\?\.focus\(\)/);
 });
 
+test("range drags persist once", () => {
+  const app = read("src/ui/app.js");
+  const bindRange = app.slice(app.indexOf("function bindRange"), app.indexOf("function bindSwitch"));
+  assert.match(bindRange, /addEventListener\("input"[\s\S]*?update\(\{ persist: false, url: false \}\)/);
+  assert.match(bindRange, /addEventListener\("change"[\s\S]*?commitHistory\(\);\s*update\(\)/);
+});
+
 test("the gallery can be backed up and restored", () => {
   const html = read("index.html");
   const app = read("src/ui/app.js");

@@ -874,9 +874,12 @@ function bindRange(input, key) {
   if (!input) return;
   input.addEventListener("input", () => {
     state = normalizeState({ ...state, [key]: input.value });
+    update({ persist: false, url: false });
+  });
+  input.addEventListener("change", () => {
+    commitHistory();
     update();
   });
-  input.addEventListener("change", () => commitHistory());
 }
 
 function bindSwitch(input, key) {

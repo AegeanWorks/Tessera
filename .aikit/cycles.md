@@ -990,3 +990,28 @@ the committed proof.
 - **Tests**: failing-first `the gallery can be backed up and restored`;
   suite 163/163.
 - **Release**: v0.7.6.
+
+## Cycle 39 — Slider drags persisted on every input event
+
+- **Area**: performance/resource optimization. `bindRange` called the full
+  `update()` on every `input`, so a drag performed a synchronous localStorage
+  write and `history.replaceState` per movement even though only the final value
+  needs persisting.
+- **Evidence before**: old-build worktree `da9f69e` served on port 4430,
+  `cycle39-before-after-drag-1440.png`: a real Warp drag reached 82 and wrote
+  storage 7 times and the URL 7 times.
+- **Fix**: `input` now calls `update({ persist: false, url: false })` so the
+  stage, badge and motif previews stay live; `change` calls
+  `commitHistory(); update();`, committing one history step and writing storage
+  and the URL once on release.
+- **Evidence after**: `cycle39-after-after-drag-1440.png` shows the same Warp 82
+  pattern; `-after-drag-320.png` fits. The final state is identical across
+  builds (same stage hash `-581406591`, 9 previews, stored warp 82 and the same
+  URL); the played counts differ 7/7 → 1/1. Same-build pair: before-drag vs
+  after-drag at 1440.
+- **Played run**: `cycle39-play.mjs` drags `#warp` with a real pointer and
+  counts `Storage.prototype.setItem` and `history.replaceState`. Before: 7
+  storage and 7 URL writes. After: 1 and 1; warp 82, stored 82, URL `warp=82`,
+  stage hash changed, 9 previews, 320 `overflowX: 0`.
+- **Tests**: failing-first `range drags persist once`; suite 164/164.
+- **Release**: v0.7.7.
