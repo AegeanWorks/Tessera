@@ -1338,3 +1338,28 @@ the committed proof.
 - **Tests**: failing-first `an external gallery update keeps an open rename
   draft`; suite 179/179.
 - **Release**: v0.7.18.
+
+## Cycle 51 — An 80-character saved-look name spilled out of the 320px row and toast
+
+- **Area**: UI readability, gallery layout at narrow widths. The 360px
+  `.gallery-name` rule set `overflow: visible` and `white-space: normal` but not
+  `overflow-wrap`, so an unbroken custom name (the rename accepts 80 chars)
+  needed 545px inside an 84px box and painted over the row buttons. The toast's
+  unbroken name needed 609px inside a 292px box and ran off the viewport.
+- **Evidence before**: old-build worktree `006786d` served on port 4434;
+  `cycle51-play.mjs` renamed a look to 80 `X`s at 320. Before: name
+  `scrollWidth` 545 vs `clientWidth` 84 (height 14), toast 609 vs 292, row
+  height 44; `cycle51-before-long-name-320.png` shows the spill.
+- **Fix**: add `overflow-wrap: anywhere` to `.gallery-name` in the
+  `@media (max-width: 360px)` block and to `.toast`; long names wrap inside the
+  row and the toast. The 80-character cap and all data formats are unchanged.
+- **Evidence after**: `cycle51-after-long-name-320.png` shows the name wrapped
+  over seven lines (`scrollWidth` 84, height 100, row 114) and the toast wrapped
+  (158px wide, 135 tall); no overlap, `overflowX: 0`.
+- **Played run**: `cycle51-play.mjs` saves a look, renames it to 80 `X`s, sets
+  the 320px viewport and reads the name/toast overflow and row growth. Before:
+  545/609 overflow. After: 84/158 wrapped, name length still 80, row grows from
+  44 to 114, 320 `overflowX: 0`.
+- **Tests**: failing-first `long saved names wrap on narrow screens and in
+  toasts`; suite 180/180.
+- **Release**: v0.7.19.

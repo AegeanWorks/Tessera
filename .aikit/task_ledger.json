@@ -5,7 +5,7 @@
     "last_phase": "in_progress",
     "active_phase": 4,
     "status": "in_progress",
-    "updated_at": 1794115738.1285858,
+    "updated_at": 1794116238.9073055,
     "owner": "opencode:tessera-cycles",
     "started_by": "opencode:tessera-cycles",
     "continuations": []
@@ -99,17 +99,6 @@
         "mitigation": "Add failing pure/static tests first, keep each diff limited to one area, and verify with the same seeded 1440x900 CDP run before and after; the full npm, static-contract and AIKit gates run before every commit."
       },
       "plan_digest": "b52931f5bf547c94ec3e16856135270a70e51c91ea93d8a89d84384b3c7117fc"
-    },
-    {
-      "task_id": "tessera-quality-cycles-v1",
-      "phase": "in_progress",
-      "phase_num": 4,
-      "description": "[38] Cycle 37 (extension) shipped: external gallery sync focus. The cross-tab gallery refresh now captures the focused open or delete id, rebuilds the rows, restores the matching control, or focuses Save look when the entry disappeared; galleryRovingId follows the focused row. Failing-first static guard. 162/162 tests, verify:static OK, aikit check 4/4. Two-tab play: before focus fell to BODY after A saved Bloom and deleted Ridge; after the same Ridge row stayed focused after the save and Save look after the delete, gallery 2 to 1, sync toast. checklists: passed",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1794105965.8565905,
-      "timestamp_str": "2026-11-08 05:46:05",
-      "agent": "opencode:tessera-cycles"
     },
     {
       "task_id": "tessera-quality-cycles-v1",
@@ -252,6 +241,17 @@
       "status": "in_progress",
       "timestamp": 1794115738.1285858,
       "timestamp_str": "2026-11-08 08:28:58",
+      "agent": "opencode:tessera-cycles"
+    },
+    {
+      "task_id": "tessera-quality-cycles-v1",
+      "phase": "in_progress",
+      "phase_num": 4,
+      "description": "[52] Cycle 51 (extension) shipped: long saved names wrap. @media (max-width: 360px) .gallery-name gets overflow-wrap: anywhere; .toast gets overflow-wrap: anywhere; README note. Failing-first static guard. 180/180 tests, verify:static OK, aikit check 4/4. Played 320 run: 80 X name before scrollWidth 545/client 84, toast 609/292, row 44; after 84/84, name height 100, row 114, toast 158/158 height 135, overflowX 0. checklists: passed",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794116238.9073055,
+      "timestamp_str": "2026-11-08 08:37:18",
       "agent": "opencode:tessera-cycles"
     }
   ]

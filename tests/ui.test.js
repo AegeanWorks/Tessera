@@ -420,6 +420,14 @@ test("320px layout keeps preset names and topbar actions readable", () => {
   assert.match(narrow, /\.gallery-name\s*\{[^}]*white-space:\s*normal/);
 });
 
+test("long saved names wrap on narrow screens and in toasts", () => {
+  const styles = read("src/styles.css");
+  const narrow = styles.slice(styles.indexOf("@media (max-width: 360px)"));
+  assert.match(narrow, /\.gallery-name\s*\{[^}]*overflow-wrap:\s*anywhere/);
+  const toast = styles.slice(styles.indexOf(".toast"));
+  assert.match(toast, /overflow-wrap:\s*anywhere/);
+});
+
 test("external gallery sync keeps keyboard focus", () => {
   const app = read("src/ui/app.js");
   assert.ok(app.includes("focusId"));

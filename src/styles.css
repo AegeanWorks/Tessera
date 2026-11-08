@@ -1226,6 +1226,7 @@ select:hover {
   box-shadow: var(--shadow-soft);
   font-size: 12.5px;
   text-align: center;
+  overflow-wrap: anywhere;
   opacity: 0;
   pointer-events: none;
   transform: translate(-50%, 8px);
@@ -1451,6 +1452,7 @@ select:hover {
 
   .gallery-name {
     overflow: visible;
+    overflow-wrap: anywhere;
     line-height: 1.3;
     white-space: normal;
   }
