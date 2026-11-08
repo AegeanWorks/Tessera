@@ -113,6 +113,8 @@ let galleryIssue = null;
 let galleryRovingId = "";
 let clearArmed = false;
 let clearTimer = 0;
+let deleteArmedId = "";
+let deleteTimer = 0;
 let statePersisted = true;
 let stateReadFailed = false;
 let stateIssue = null;
@@ -411,6 +413,7 @@ function buildPngSizes() {
 
 function renderGallery() {
   if (!galleryList) return;
+  disarmDelete();
   syncClearButton();
   galleryList.replaceChildren();
   if (!gallery.entries.length) {
@@ -464,7 +467,7 @@ function renderGallery() {
     remove.setAttribute("aria-label", `Delete ${entry.name}`);
     remove.title = `Delete ${entry.name}`;
     remove.textContent = "×";
-    remove.addEventListener("click", () => deleteLook(entry.id));
+    remove.addEventListener("click", () => armDelete(entry.id));
 
     const rename = document.createElement("button");
     rename.type = "button";
@@ -548,6 +551,7 @@ function syncClearButton() {
 
 function armClear() {
   if (!gallery.entries.length || !clearGalleryButton) return;
+  disarmDelete();
   clearArmed = true;
   clearGalleryButton.classList.add("is-armed");
   clearGalleryButton.textContent = "Confirm clear all";
@@ -717,9 +721,55 @@ function focusGalleryRename(entryId) {
   target?.focus({ preventScroll: true });
 }
 
+function disarmDelete() {
+  const armedId = deleteArmedId;
+  deleteArmedId = "";
+  window.clearTimeout(deleteTimer);
+  deleteTimer = 0;
+  if (!armedId || !galleryList) return;
+  const button = [...galleryList.querySelectorAll(".gallery-delete")].find(
+    (item) => item.dataset.galleryDelete === armedId,
+  );
+  if (!button) return;
+  button.classList.remove("is-armed");
+  button.textContent = "×";
+  const entry = gallery.entries.find((item) => item.id === armedId);
+  const label = entry ? `Delete ${entry.name}` : "Delete saved look";
+  button.setAttribute("aria-label", label);
+  button.title = label;
+}
+
+function armDelete(id) {
+  const entry = gallery.entries.find((item) => item.id === id);
+  if (!entry) return;
+  if (deleteArmedId === id) {
+    deleteLook(id);
+    return;
+  }
+  disarmDelete();
+  disarmClear();
+  deleteArmedId = id;
+  const button = galleryList
+    ? [...galleryList.querySelectorAll(".gallery-delete")].find(
+        (item) => item.dataset.galleryDelete === id,
+      )
+    : null;
+  if (button) {
+    button.classList.add("is-armed");
+    button.textContent = "✓";
+    const label = `Confirm delete ${entry.name}`;
+    button.setAttribute("aria-label", label);
+    button.title = label;
+  }
+  announce(`Press delete again to remove ${entry.name}.`);
+  window.clearTimeout(deleteTimer);
+  deleteTimer = window.setTimeout(() => disarmDelete(), 4000);
+}
+
 function deleteLook(id) {
   const entry = gallery.entries.find((item) => item.id === id);
   if (!entry) return;
+  disarmDelete();
   const focusId = neighborEntryId(gallery, id);
   galleryRovingId = focusId || "";
   gallery = removeEntry(gallery, id);

@@ -1190,3 +1190,34 @@ the committed proof.
 - **Tests**: failing-first `forced-colors mode keeps switch and selection
   cues`; suite 174/174.
 - **Release**: v0.7.13.
+
+## Cycle 46 — Deleting one saved look was a single-click irreversible action
+
+- **Area**: progression/saves, destructive actions. Clear all required a
+  confirming second press, but the × on a gallery row deleted the look
+  immediately. The gallery is the only copy and gallery edits are outside undo.
+- **Evidence before**: old-build worktree `fa2cf83` served on port 4434;
+  `cycle46-play.mjs` saved two looks and clicked the first × once. Before, the
+  row count drops 2 → 1, the toast says `Removed …`, and there is no armed
+  state; `cycle46-before-first-click-1440.png` shows one row left and the 320
+  capture shows an empty gallery.
+- **Fix**: the first press arms only that row: the × becomes a pink ✓, its
+  accessible label and title become `Confirm delete <name>`, and the toast says
+  `Press delete again to remove <name>.` A second press within 4 seconds
+  deletes; arming another row or Clear all, re-rendering the gallery, or the
+  timeout disarms. Deleting still moves focus to the neighbour or Save look.
+  ADR-020 records the contract; README documents the second press.
+- **Evidence after**: `cycle46-after-first-click-1440.png` keeps both rows and
+  shows the pink ✓ with the focus ring; `-confirmed-1440.png` shows one row and
+  focus on Wave after the second click; `-first-click-320.png` keeps the armed
+  ✓ and fits.
+- **Played run**: `cycle46-play.mjs` saves Ridge and Wave, clicks the first ×
+  once, reads the armed text/label/title/toast/focus, clicks it again, waits
+  out the 4-second timeout on the remaining row, and repeats once at 320.
+  Before: first click removes the look (2 → 1). After: first click keeps 2 rows
+  and arms (`✓`, `Confirm delete …`, `Press delete again …`), the second click
+  removes it and focuses the neighbour, the timeout disarms to `×`/`Delete …`,
+  and 320 `overflowX: 0`.
+- **Tests**: failing-first `deleting a saved look asks for a second press`;
+  suite 175/175.
+- **Release**: v0.7.14.

@@ -144,3 +144,10 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Context**: In forced-colors mode the UA maps author backgrounds to Canvas, so the switches lost their thumb and checked track, and the active preset and active saved look lost the border and glow that name them. State was still exposed to assistive technology, but not visually.
 - **Decision**: Under `@media (forced-colors: active)`, draw the switch track with Canvas/CanvasText, the checked track with Highlight/HighlightText, disable the switch transition, and give `.preset-button.is-active` and `.gallery-item.is-active .gallery-open` a 2px Highlight outline. The stage keeps its authored palette because the pattern is the content.
 - **Consequences**: High-contrast users see the thumb, the checked state, the active preset and the active saved look, with colors that follow the OS theme; the decorative stage keeps the studio palette. No state, storage, dependency or save-format change.
+
+### ADR-020: Deleting one saved look asks for a second press
+- **Date**: 2026-11-08
+- **Status**: Accepted
+- **Context**: Clear all already required a second press, but the × on a gallery row deleted the look immediately. The gallery is the only copy and gallery edits are outside undo, so a misclick lost a look permanently.
+- **Decision**: The first press arms only that row: the button becomes a pink ✓, its accessible label becomes `Confirm delete <name>`, and a toast says `Press delete again to remove <name>.` A second press within 4 seconds deletes; arming another row, arming Clear all, re-rendering the gallery, or the timeout disarms. Deleting still moves focus to the neighbour or Save look. No modal.
+- **Consequences**: Single deletes match Clear all's safety, and keyboard and screen-reader users get the state and instruction through the button label and live toast. The extra press is friction for intentional deletes; the 4-second timeout keeps the arm from lingering. No storage or save-format change.

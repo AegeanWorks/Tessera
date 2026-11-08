@@ -170,6 +170,17 @@ test("deleting a saved look keeps keyboard focus in the gallery", () => {
   assert.match(app, /\(focusTarget \|\| saveLookButton\)\?\.focus\(\)/);
 });
 
+test("deleting a saved look asks for a second press", () => {
+  const app = read("src/ui/app.js");
+  const styles = read("src/styles.css");
+  const arm = app.slice(app.indexOf("function armDelete"), app.indexOf("function deleteLook"));
+  assert.ok(arm.includes("deleteArmedId === id"));
+  assert.ok(arm.includes("deleteLook(id)"));
+  assert.ok(arm.includes("Press delete again to remove"));
+  assert.ok(app.includes('remove.addEventListener("click", () => armDelete(entry.id))'));
+  assert.ok(styles.includes(".gallery-delete.is-armed"));
+});
+
 test("range drags persist once", () => {
   const app = read("src/ui/app.js");
   const bindRange = app.slice(app.indexOf("function bindRange"), app.indexOf("function bindSwitch"));

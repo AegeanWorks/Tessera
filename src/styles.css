@@ -1016,6 +1016,11 @@ select:hover {
   color: var(--text);
 }
 
+.gallery-delete.is-armed {
+  border-color: var(--pink);
+  color: var(--pink);
+}
+
 .gallery-rename {
   position: absolute;
   top: 4px;
