@@ -68,7 +68,7 @@ Every pattern is one tile drawn in a `100 × 100` coordinate space and repeated 
 | Loom | A woven lattice of over-and-under bands |
 | Drift | Dotted currents on a sine field |
 
-Each motif reads three arguments — a seeded random source, a line weight and a warp amount — and returns a list of primitive elements. Colors are palette *roles* (`ink`, `accent`, `highlight`, `paper`, `bg`), so a palette swap recolors props without touching geometry. Settings live in a versioned localStorage record under `tessera.studio.v1`, mirrored in the URL query so a look can be shared or captured. Tile transforms rotate the geometry in 90° steps and mirror it inside the tile; rectangular motifs swap their repeat dimensions at 90° and 270°, so the pattern stays seamless. PNG export draws the same SVG into a canvas at a stated wallpaper, phone or square size; the SVG stays the editable master.
+Each motif reads three arguments — a seeded random source, a line weight and a warp amount — and returns a list of primitive elements. Colors are palette *roles* (`ink`, `accent`, `highlight`, `paper`, `bg`), so a palette swap recolors props without touching geometry. Settings live in a versioned localStorage record under `tessera.studio.v1`, mirrored in the URL query so a look can be shared or captured. If the browser rejects a settings write, a note above the controls says the change lasts for this session only. Tile transforms rotate the geometry in 90° steps and mirror it inside the tile; rectangular motifs swap their repeat dimensions at 90° and 270°, so the pattern stays seamless. PNG export draws the same SVG into a canvas at a stated wallpaper, phone or square size; the SVG stays the editable master.
 
 ## Saved Looks
 

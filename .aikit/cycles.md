@@ -695,3 +695,29 @@ the committed proof.
 - **Tests**: failing-first `readGallery distinguishes empty, corrupt and unavailable stores`
   plus a corrupt-gallery static guard; suite 143/143.
 - **Release**: v0.6.17.
+
+## Cycle 28 — Pattern edits pretended to persist when storage rejected writes
+
+- **Area**: studio settings persistence. `update()` discarded the boolean from
+  `saveState()`, so quota or private-mode failures changed the stage and URL
+  silently; a reload reverted the look. Gallery writes already warned, so the
+  studio settings record was the last silent persistence path.
+- **Evidence before**: old-build worktree `cb99845` served on port 4419,
+  `cycle28-before-refused-save-1440.png` / `-320.png`: with `setItem` rejecting
+  only `tessera.studio.v1`, clicking Ridge produces the new pattern with no
+  note or toast; the key stays absent and a reload returns to Wave.
+- **Fix**: track the `saveState` result, show a persistent `#storage-note` at
+  the top of the Controls column on the first rejected write, announce it once
+  through the existing toast, suppress repeats, and hide the note if a later
+  write succeeds. The note uses the pink warning accent and theme tokens.
+- **Evidence after**: `cycle28-after-refused-save-1440.png` / `-320.png` at the
+  same state show the note above Motif and the toast; the 320 capture wraps
+  within the column with `overflowX: 0`.
+- **Played run**: `cycle28-play.mjs` injects a scoped `Storage.prototype.setItem`
+  failure before load, clicks Ridge, then Nocturne. Before: no note, no toast,
+  `studioKey: null`; after: note visible, exact toast, repeat change not
+  re-announced; 320 fits. Dropping the URL state and reloading returns both
+  builds to Wave, proving the warning was truthful.
+- **Tests**: failing-first `pattern changes warn when the browser rejects storage writes`;
+  suite 144/144.
+- **Release**: v0.6.18.

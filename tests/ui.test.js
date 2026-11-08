@@ -328,6 +328,19 @@ test("a refused gallery record is surfaced in the gallery", () => {
   assert.ok(app.includes("Saved looks could not be read"));
 });
 
+test("pattern changes warn when the browser rejects storage writes", () => {
+  const html = read("index.html");
+  const app = read("src/ui/app.js");
+  assert.match(
+    html,
+    /id="storage-note"[^>]*hidden[^>]*>Browser storage is unavailable, so pattern changes last for this session only\.</,
+  );
+  assert.ok(app.includes("storageNote"));
+  assert.ok(app.includes("syncStorageNote"));
+  assert.ok(app.includes("saveState(storage(), state)"));
+  assert.ok(app.includes("Browser storage is unavailable, so pattern changes last for this session only."));
+});
+
 test("theme.css is the only stylesheet with raw color values", () => {
   const styles = read("src/styles.css");
   assert.ok(!/#[0-9a-f]{3,8}\b/i.test(styles), "styles.css should use theme tokens");

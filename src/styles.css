@@ -418,6 +418,17 @@ input:focus-visible {
   align-items: start;
 }
 
+.storage-note {
+  margin: 0;
+  padding: 10px 12px;
+  border-left: 2px solid var(--pink);
+  border-radius: var(--radius-sm);
+  background: var(--panel-soft);
+  color: var(--text-soft);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
 .control-block {
   padding: 18px;
   border: 1px solid var(--line);

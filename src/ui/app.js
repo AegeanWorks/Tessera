@@ -69,6 +69,7 @@ const galleryList = document.getElementById("gallery-list");
 const saveLookButton = document.getElementById("save-look");
 const copyLinkButton = document.getElementById("copy-link");
 const clearGalleryButton = document.getElementById("clear-gallery");
+const storageNote = document.getElementById("storage-note");
 const toast = document.getElementById("toast");
 
 let state = normalizeState(DEFAULTS);
@@ -80,6 +81,7 @@ let galleryIssue = null;
 let galleryRovingId = "";
 let clearArmed = false;
 let clearTimer = 0;
+let statePersisted = true;
 let toastTimer = 0;
 
 function storage() {
@@ -107,6 +109,15 @@ function announce(message) {
 function persistedNotice(message, persisted) {
   if (persisted) return message;
   return `${message.replace(/\.$/, "")}. Browser storage is unavailable, so this lasts for this session only.`;
+}
+
+function syncStorageNote(persisted) {
+  if (persisted === statePersisted) return;
+  statePersisted = persisted;
+  if (storageNote) storageNote.hidden = persisted;
+  if (!persisted) {
+    announce("Browser storage is unavailable, so pattern changes last for this session only.");
+  }
 }
 
 function motifOptions() {
@@ -549,7 +560,7 @@ function update(options = {}) {
   syncSelection();
   syncGallerySelection();
   renderStage();
-  if (options.persist !== false) saveState(storage(), state);
+  if (options.persist !== false) syncStorageNote(saveState(storage(), state));
   if (options.url !== false) syncUrl();
 }
 

@@ -5,7 +5,7 @@
     "last_phase": "in_progress",
     "active_phase": 4,
     "status": "in_progress",
-    "updated_at": 1794100020.10898,
+    "updated_at": 1794100838.5353942,
     "owner": "opencode:tessera-cycles",
     "started_by": "opencode:tessera-cycles",
     "continuations": []
@@ -99,17 +99,6 @@
         "mitigation": "Add failing pure/static tests first, keep each diff limited to one area, and verify with the same seeded 1440x900 CDP run before and after; the full npm, static-contract and AIKit gates run before every commit."
       },
       "plan_digest": "b52931f5bf547c94ec3e16856135270a70e51c91ea93d8a89d84384b3c7117fc"
-    },
-    {
-      "task_id": "tessera-quality-cycles-v1",
-      "phase": "implementation",
-      "phase_num": 4,
-      "description": "[16] Cycle 15 (extension) shipped: legacy clipboard fallback now restores the pre-copy focus with preventScroll, so Copy link keeps its keyboard place after execCommand; failing-first static guard; 125/125 tests, verify:static OK, aikit check 4/4. Forced fallback: old build moved focus to BODY; new build returns to copy-link with a visible ring, toast still 'Share link copied to the clipboard.' checklists: passed",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1794087971.844626,
-      "timestamp_str": "2026-11-08 00:46:11",
-      "agent": "opencode:tessera-cycles"
     },
     {
       "task_id": "tessera-quality-cycles-v1",
@@ -252,6 +241,17 @@
       "status": "in_progress",
       "timestamp": 1794100020.10898,
       "timestamp_str": "2026-11-08 04:07:00",
+      "agent": "opencode:tessera-cycles"
+    },
+    {
+      "task_id": "tessera-quality-cycles-v1",
+      "phase": "in_progress",
+      "phase_num": 4,
+      "description": "[29] Cycle 28 (extension) shipped: rejected studio-state writes now show a persistent storage note at the top of Controls, announce once, suppress repeats and hide on recovery; failing-first static guard; 144/144 tests, verify:static OK, aikit check 4/4. Scoped setItem failure play: before no note/toast and reload reverted Ridge to Wave; after note+toast, no repeat on the second change, 320 fits, reload still Wave proves the warning. checklists: passed",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794100838.5353942,
+      "timestamp_str": "2026-11-08 04:20:38",
       "agent": "opencode:tessera-cycles"
     }
   ]
