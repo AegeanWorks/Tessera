@@ -4,6 +4,7 @@ import {
   DEFAULT_EXPORT_SIZE,
   EXPORT_SIZES,
   exportSize,
+  formatExportResult,
   pngName,
   renderExportSvg,
 } from "../src/studio/export.js";
@@ -34,6 +35,13 @@ test("exportSize returns a known size and falls back to the default", () => {
   assert.equal(exportSize("missing").id, DEFAULT_EXPORT_SIZE);
   assert.equal(exportSize().id, DEFAULT_EXPORT_SIZE);
   assert.equal(exportSize(null).id, DEFAULT_EXPORT_SIZE);
+});
+
+test("formatExportResult names the size and payload of the last PNG", () => {
+  assert.equal(formatExportResult(exportSize("uhd"), 406290), "3840 × 2160 · 397 KB");
+  assert.equal(formatExportResult(exportSize("wallpaper"), 622949), "2560 × 1440 · 608 KB");
+  assert.equal(formatExportResult(exportSize("square"), 0), "1080 × 1080");
+  assert.equal(formatExportResult(exportSize("phone"), "nope"), "1170 × 2532");
 });
 
 test("pngName carries the look, the seed and the pixel size", () => {

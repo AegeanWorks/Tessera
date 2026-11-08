@@ -644,3 +644,26 @@ the committed proof.
 - **Tests**: failing-first `320px layout keeps preset names and topbar actions readable`;
   suite 140/140.
 - **Release**: v0.6.15.
+
+## Cycle 26 — Large PNG exports reported only a filename
+
+- **Area**: 4K and wallpaper PNG export feedback. The file was correct, but the
+  persistent status line named only the filename, so the output dimensions and
+  actual payload were not visible after a large export.
+- **Evidence before**: old-build worktree `1c5929a` served on port 4417,
+  `cycle26-before-4k-1440.png` / `-wallpaper-320.png`: real 3840×2160 and
+  2560×1440 downloads succeed, but the status reads only
+  `Last export: tessera-…-3840x2160.png`.
+- **Fix**: add `formatExportResult(size, byteLength)` and include the pixel size
+  and real PNG payload in the success status, e.g.
+  `Last export: 3840 × 2160 · 397 KB · tessera-…png`. The downloaded files and
+  raster path are unchanged.
+- **Evidence after**: `cycle26-after-4k-1440.png` and
+  `cycle26-after-wallpaper-320.png` at the same states show the richer status;
+  the 320 line wraps within three lines and stays inside the viewport.
+- **Played run**: `cycle26-play.mjs` selects 4K (real keyboard Home + Down twice)
+  and Wallpaper, downloads both real PNGs, waits past the toast, and reads the
+  status. 4K: 3840×2160, 397 KB; wallpaper: 2560×1440, 608 KB; both fit.
+- **Tests**: failing-first `formatExportResult names the size and payload of the last PNG`;
+  suite 141/141.
+- **Release**: v0.6.16.

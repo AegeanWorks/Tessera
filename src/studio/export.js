@@ -38,3 +38,10 @@ export function renderExportSvg(state, sizeId = DEFAULT_EXPORT_SIZE, options = {
 export function describeExportSize(size) {
   return `${size.label} ${size.width} × ${size.height}`;
 }
+
+export function formatExportResult(size, byteLength) {
+  const pixels = `${size.width} × ${size.height}`;
+  const bytes = Number(byteLength);
+  if (!Number.isFinite(bytes) || bytes <= 0) return pixels;
+  return `${pixels} · ${Math.max(1, Math.round(bytes / 1024))} KB`;
+}

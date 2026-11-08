@@ -7,6 +7,7 @@ import {
   EXPORT_SIZES,
   describeExportSize,
   exportSize,
+  formatExportResult,
   pngName,
   renderExportSvg,
 } from "../studio/export.js";
@@ -662,7 +663,7 @@ async function exportPng() {
     link.click();
     link.remove();
     window.setTimeout(() => URL.revokeObjectURL(url), 1000);
-    if (exportStatus) exportStatus.textContent = `Last export: ${link.download}`;
+    if (exportStatus) exportStatus.textContent = `Last export: ${formatExportResult(size, png.size)} · ${link.download}`;
     announce(`Exported ${link.download}.`);
   } catch (error) {
     if (exportStatus) exportStatus.textContent = "Last export failed. PNG export is unavailable in this browser.";
