@@ -81,8 +81,10 @@ export function addEntry(record, state, savedAt = new Date().toISOString()) {
   const base = normalizeGalleryRecord(record);
   const entry = normalizeEntry({ state, savedAt });
   if (!entry) return base;
+  const existing = base.entries.find((item) => item.id === entry.id);
+  const next = existing ? { ...entry, name: existing.name } : entry;
   return normalizeGalleryRecord({
-    entries: [entry, ...base.entries.filter((item) => item.id !== entry.id)],
+    entries: [next, ...base.entries.filter((item) => item.id !== entry.id)],
   });
 }
 

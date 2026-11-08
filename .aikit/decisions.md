@@ -151,3 +151,10 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Context**: Clear all already required a second press, but the × on a gallery row deleted the look immediately. The gallery is the only copy and gallery edits are outside undo, so a misclick lost a look permanently.
 - **Decision**: The first press arms only that row: the button becomes a pink ✓, its accessible label becomes `Confirm delete <name>`, and a toast says `Press delete again to remove <name>.` A second press within 4 seconds deletes; arming another row, arming Clear all, re-rendering the gallery, or the timeout disarms. Deleting still moves focus to the neighbour or Save look. No modal.
 - **Consequences**: Single deletes match Clear all's safety, and keyboard and screen-reader users get the state and instruction through the button label and live toast. The extra press is friction for intentional deletes; the 4-second timeout keeps the arm from lingering. No storage or save-format change.
+
+### ADR-021: Re-saving a saved look keeps its custom name
+- **Date**: 2026-11-08
+- **Status**: Accepted
+- **Context**: `addEntry` rebuilt every save from the visual state, so pressing Save look on an already-saved, renamed look replaced the custom name with the auto name and announced the auto name. Renaming was effectively lost on the next save.
+- **Decision**: When `addEntry` finds an existing entry with the same visual signature, it keeps that entry's name while refreshing `savedAt` and moving it to the front. New signatures still get the auto name; backups still merge through `mergeEntry` and keep their names.
+- **Consequences**: Custom names survive repeated saves of the same look, and the toast names the look the user sees. Renaming a look that is not currently saved still creates a new auto-named entry when saved; the name is display metadata only, and the signature remains the identity. No storage or save-format change.

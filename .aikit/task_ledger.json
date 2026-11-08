@@ -5,7 +5,7 @@
     "last_phase": "in_progress",
     "active_phase": 4,
     "status": "in_progress",
-    "updated_at": 1794114250.1317642,
+    "updated_at": 1794114708.8358123,
     "owner": "opencode:tessera-cycles",
     "started_by": "opencode:tessera-cycles",
     "continuations": []
@@ -99,17 +99,6 @@
         "mitigation": "Add failing pure/static tests first, keep each diff limited to one area, and verify with the same seeded 1440x900 CDP run before and after; the full npm, static-contract and AIKit gates run before every commit."
       },
       "plan_digest": "b52931f5bf547c94ec3e16856135270a70e51c91ea93d8a89d84384b3c7117fc"
-    },
-    {
-      "task_id": "tessera-quality-cycles-v1",
-      "phase": "in_progress",
-      "phase_num": 4,
-      "description": "[35] Cycle 34 (extension) shipped: coarse-pointer keyboard reference target. The footer summary was 18px tall under pointer coarse; a media rule now gives it min-height 44px, padding, radius and panel background while fine pointers stay 18px. Failing-first CSS guard. 159/159 tests, verify:static OK, aikit check 4/4. Touch-emulated 320 play: before 18px, after 44px width 139, real touch tap opens and closes the 13-row panel, no overflow, fine pointer still 18px. checklists: passed",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1794104334.6040573,
-      "timestamp_str": "2026-11-08 05:18:54",
-      "agent": "opencode:tessera-cycles"
     },
     {
       "task_id": "tessera-quality-cycles-v1",
@@ -252,6 +241,17 @@
       "status": "in_progress",
       "timestamp": 1794114250.1317642,
       "timestamp_str": "2026-11-08 08:04:10",
+      "agent": "opencode:tessera-cycles"
+    },
+    {
+      "task_id": "tessera-quality-cycles-v1",
+      "phase": "in_progress",
+      "phase_num": 4,
+      "description": "[49] Cycle 48 (extension) shipped: re-saving a saved look keeps its custom name. addEntry now finds the existing entry by visual signature and preserves its name while refreshing savedAt and moving it to the front; new signatures still auto-name; mergeEntry/backups unchanged; ADR-021; README. Failing-first pure gallery test. 177/177 tests, verify:static OK, aikit check 4/4. Played run: saved a look, renamed Studio Ridge, clicked Save look again; before the row reverted to Aegean Wave and the toast Moved Aegean Wave; after the row stayed Studio Ridge and the toast Moved Studio Ridge to the front; a new Ridge look was auto-named; 320 no overflow. checklists: passed",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794114708.8358123,
+      "timestamp_str": "2026-11-08 08:11:48",
       "agent": "opencode:tessera-cycles"
     }
   ]

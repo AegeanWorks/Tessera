@@ -1250,3 +1250,29 @@ the committed proof.
 - **Tests**: failing-first `an empty saved-look name is refused with a
   message`; suite 176/176.
 - **Release**: v0.7.15.
+
+## Cycle 48 — Saving a renamed look again forgot its custom name
+
+- **Area**: progression/saves, naming continuity. `addEntry` rebuilt every save
+  from the visual state, so pressing Save look on an already-saved renamed look
+  replaced the custom name with the auto name and announced the auto name.
+- **Evidence before**: old-build worktree `42525ba` served on port 4434;
+  `cycle48-play.mjs` saved a look, renamed it to `Studio Ridge`, then clicked
+  Save look again. Before: the row reverts to
+  `Aegean Wave · seed 7 · r6 w3 v42` and the toast says
+  `Moved Aegean Wave … to the front.`; `cycle48-before-resaved-1440.png`.
+- **Fix**: `addEntry` finds the existing entry with the same visual signature
+  and keeps its name while refreshing `savedAt` and moving it to the front. New
+  signatures still get the auto name; `mergeEntry` and backups are unchanged.
+  ADR-021 records the refinement; README notes the name is kept.
+- **Evidence after**: `cycle48-after-resaved-1440.png` keeps `Studio Ridge` and
+  the toast says `Moved Studio Ridge to the front.` at the same state and
+  viewport; `-new-look-1440.png` shows the new Ridge look auto-named while
+  `Studio Ridge` remains; `-gallery-320.png` fits.
+- **Played run**: `cycle48-play.mjs` saves, renames, re-saves, then adds a Ridge
+  look. Before: the re-save reverts the name and the toast. After: both the row
+  and toast keep `Studio Ridge`, the new look still gets its auto name, and 320
+  `overflowX: 0`.
+- **Tests**: failing-first `addEntry keeps a custom name when the same look is
+  saved again`; suite 177/177.
+- **Release**: v0.7.16.

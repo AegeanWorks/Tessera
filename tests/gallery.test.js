@@ -116,6 +116,15 @@ test("addEntry puts the newest look first and collapses a duplicate", () => {
   assert.equal(again.entries[1].name, "Kilim Wave · seed 13 · r5 w2 v72");
 });
 
+test("addEntry keeps a custom name when the same look is saved again", () => {
+  const first = addEntry(emptyGallery(), LOOK);
+  const renamed = renameEntry(first, first.entries[0].id, "Studio Ridge");
+  const again = addEntry(renamed, LOOK);
+  assert.equal(again.entries.length, 1);
+  assert.equal(again.entries[0].id, first.entries[0].id);
+  assert.equal(again.entries[0].name, "Studio Ridge");
+});
+
 test("the gallery keeps at most twelve looks, newest first", () => {
   let gallery = emptyGallery();
   for (let seed = 1; seed <= GALLERY_LIMIT + 3; seed += 1) {
