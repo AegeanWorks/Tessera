@@ -1363,3 +1363,21 @@ the committed proof.
 - **Tests**: failing-first `long saved names wrap on narrow screens and in
   toasts`; suite 180/180.
 - **Release**: v0.7.19.
+
+## Cycle 52 — Dry FIND (no change)
+
+- **Audit**: residual surfaces after cycles 1–51: the delete-arm blur, export
+  and print custom names, a light color scheme, and the recently touched sync,
+  long-name, print and forced-colors paths.
+- **Dead ends**: Delete-arm blur: `cycle52-audit.mjs` arms the row, tabs away
+  and reads the armed ✓, label and toast still visible; the 4-second timeout
+  disarms (`armed: null`). The state is visible and timed, and render/sync paths
+  disarm; Clear all's blur is specific to its single button. No lost data,
+  focus or state. Export/print custom names: the auto pattern name is the
+  canonical unique descriptor; saved names are local gallery metadata, so
+  substituting or prefixing them is a design feature, not a verified
+  improvement. Light theme: a new feature, not a defect. No screenshot or
+  played run reproduced a failure in the residual paths.
+- **Result**: zero verified improvements; the loop stops under the goal's
+  dry-cycle condition. Gates remain 180/180, verify:static `[OK]`, aikit check
+  4/4.
