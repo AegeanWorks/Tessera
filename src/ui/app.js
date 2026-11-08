@@ -114,6 +114,7 @@ let statePersisted = true;
 let stateReadFailed = false;
 let stateIssue = null;
 let toastTimer = 0;
+let settleTimer = 0;
 
 function storage() {
   try {
@@ -192,7 +193,7 @@ function undo() {
   futureStates = step.future;
   state = step.state;
   historyBaseline = state;
-  update();
+  update({ settle: true });
   announce("Undid the last change.");
 }
 
@@ -204,21 +205,21 @@ function redo() {
   futureStates = step.future;
   state = step.state;
   historyBaseline = state;
-  update();
+  update({ settle: true });
   announce("Redid the last change.");
 }
 
 function randomizeLook() {
   state = randomizeState(state, Math.random);
   commitHistory();
-  update();
+  update({ settle: true });
   announce("A new pattern, picked at random.");
 }
 
 function reseedLook() {
   state = reseedState(state, Math.random);
   commitHistory();
-  update();
+  update({ settle: true });
   announce(`Seed ${state.seed}.`);
 }
 
@@ -258,7 +259,7 @@ function buildMotifButtons() {
     button.addEventListener("click", () => {
       state = normalizeState({ ...state, motif: motif.id });
       commitHistory();
-      update();
+      update({ settle: true });
     });
     motifGrid.appendChild(button);
   }
@@ -315,7 +316,7 @@ function buildPaletteButtons() {
     button.addEventListener("click", () => {
       state = normalizeState({ ...state, palette: palette.id });
       commitHistory();
-      update();
+      update({ settle: true });
     });
     paletteGrid.appendChild(button);
   }
@@ -354,7 +355,7 @@ function buildPresetButtons() {
     button.addEventListener("click", () => {
       state = applyPreset(preset.id, state);
       commitHistory();
-      update();
+      update({ settle: true });
       announce(`Loaded the ${preset.name} preset.`);
     });
     presetList.appendChild(button);
@@ -601,7 +602,7 @@ function loadLook(id) {
   if (!entry) return;
   state = restoreEntry(entry, state);
   commitHistory();
-  update();
+  update({ settle: true });
   announce(`Loaded ${entry.name}.`);
 }
 
@@ -721,6 +722,15 @@ function syncUrl() {
   }
 }
 
+function settleStage() {
+  if (!stage) return;
+  window.clearTimeout(settleTimer);
+  stage.classList.remove("is-settling");
+  void stage.offsetWidth;
+  stage.classList.add("is-settling");
+  settleTimer = window.setTimeout(() => stage.classList.remove("is-settling"), 380);
+}
+
 function update(options = {}) {
   const nextThumbKey = thumbKey(state);
   if (nextThumbKey !== lastThumbKey) {
@@ -731,6 +741,7 @@ function update(options = {}) {
   syncSelection();
   syncGallerySelection();
   renderStage();
+  if (options.settle) settleStage();
   if (options.persist !== false) syncStorageNote(saveState(storage(), state));
   if (options.url !== false) syncUrl();
   syncHistoryButtons();
@@ -896,7 +907,7 @@ function bindSelect(input, key) {
   input.addEventListener("change", () => {
     state = normalizeState({ ...state, [key]: input.value });
     commitHistory();
-    update();
+    update({ settle: true });
   });
 }
 
@@ -987,7 +998,7 @@ function bindStorageSync() {
       historyBaseline = state;
       pastStates = [];
       futureStates = [];
-      update({ persist: false });
+      update({ persist: false, settle: true });
       announce("Settings updated from another tab.");
     } else if (event.key === GALLERY_KEY) {
       const active = document.activeElement;
@@ -1104,7 +1115,7 @@ function mount() {
     const persisted = clearState(storage());
     state = normalizeState(DEFAULTS);
     commitHistory();
-    update();
+    update({ settle: true });
     announce(persistedNotice("Reset the pattern to its defaults.", persisted));
   });
 }

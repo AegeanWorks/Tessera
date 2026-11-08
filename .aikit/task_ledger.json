@@ -5,7 +5,7 @@
     "last_phase": "in_progress",
     "active_phase": 4,
     "status": "in_progress",
-    "updated_at": 1794107710.2313654,
+    "updated_at": 1794109004.3619032,
     "owner": "opencode:tessera-cycles",
     "started_by": "opencode:tessera-cycles",
     "continuations": []
@@ -99,17 +99,6 @@
         "mitigation": "Add failing pure/static tests first, keep each diff limited to one area, and verify with the same seeded 1440x900 CDP run before and after; the full npm, static-contract and AIKit gates run before every commit."
       },
       "plan_digest": "b52931f5bf547c94ec3e16856135270a70e51c91ea93d8a89d84384b3c7117fc"
-    },
-    {
-      "task_id": "tessera-quality-cycles-v1",
-      "phase": "implementation",
-      "phase_num": 4,
-      "description": "[27] Cycle 26 (extension) shipped: export status now shows pixel dimensions and real PNG payload via formatExportResult, e.g. '3840 \u00d7 2160 \u00b7 397 KB'; failing-first export test; 141/141 tests, verify:static OK, aikit check 4/4. Real 4K (3840x2160, 397 KB) and wallpaper (2560x1440, 608 KB) downloads verified; status fits at 1440 and wraps within 3 lines at 320. checklists: passed",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1794099117.8152115,
-      "timestamp_str": "2026-11-08 03:51:57",
-      "agent": "opencode:tessera-cycles"
     },
     {
       "task_id": "tessera-quality-cycles-v1",
@@ -252,6 +241,17 @@
       "status": "in_progress",
       "timestamp": 1794107710.2313654,
       "timestamp_str": "2026-11-08 06:15:10",
+      "agent": "opencode:tessera-cycles"
+    },
+    {
+      "task_id": "tessera-quality-cycles-v1",
+      "phase": "in_progress",
+      "phase_num": 4,
+      "description": "[41] Cycle 40 (extension) shipped: stage settle transition. Discrete look changes add an is-settling class for a 320ms opacity and scale animation on the stage SVG; sliders, switches, mount and gallery-only updates skip it; reduced-motion duration collapses; the first-frame dim under reduce is noted for cycle 41. ADR-016. Failing-first static guard. 165/165 tests, verify:static OK, aikit check 4/4. Played real clicks: after settling class true/tessera-settle 0.32s/opacity 0.905, settled opacity 1; before no class/animation; reduced duration 1e-05s; state Ridge/Nocturne; 320 no overflow. checklists: passed",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794109004.3619032,
+      "timestamp_str": "2026-11-08 06:36:44",
       "agent": "opencode:tessera-cycles"
     }
   ]

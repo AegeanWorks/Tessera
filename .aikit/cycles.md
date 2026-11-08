@@ -1015,3 +1015,32 @@ the committed proof.
   stage hash changed, 9 previews, 320 `overflowX: 0`.
 - **Tests**: failing-first `range drags persist once`; suite 164/164.
 - **Release**: v0.7.7.
+
+## Cycle 40 — Discrete look changes hard-swapped the stage
+
+- **Area**: graphics/effects. Motif, palette, preset, randomize, load, undo and
+  transform changes replaced the stage instantly; the studio already had Glow
+  drift and reduced-motion handling, so a short settle could signal the change.
+- **Evidence before**: old-build worktree `e5c1395` served on port 4431,
+  `cycle40-before-settling-1440.png`: after choosing Ridge the stage has no
+  `is-settling` class, `animationName: none`, opacity 1 and looks identical to
+  the settled frame.
+- **Fix**: add `settleStage()` and a `settle` option to `update`; discrete look
+  changes add `is-settling` to the stage for a 320ms opacity/scale animation on
+  the stage SVG. Slider drags, switches, the initial mount and gallery-only
+  updates do not settle. Slider input stays immediate. ADR-016 records the
+  effect and scope.
+- **Evidence after**: `cycle40-after-settling-1440.png` (class true,
+  `animationName: tessera-settle`, 0.32s, opacity 0.905, scale 0.989) vs
+  `-settled-1440.png` (class removed, opacity 1); `-reduced-1440.png` shows the
+  reduced-motion duration collapsed to 1e-05s (the computed first frame is
+  still visible, which cycle 41 tightens); `-settling-320.png` fits at 320. The
+  before/after cross-build pair shows the instant vs settling stage.
+- **Played run**: `cycle40-play.mjs` clicks Ridge, reads the class/computed
+  animation at 50ms, waits 400ms, then emulates reduce and clicks Nocturne.
+  Before: no class/animation at either point. After: `is-settling` with
+  `tessera-settle` 0.32s and opacity 0.905, settled at opacity 1; reduced
+  duration 1e-05s; state Ridge/Nocturne; 320 `overflowX: 0`.
+- **Tests**: failing-first `discrete look changes settle the stage`; suite
+  165/165.
+- **Release**: v0.7.8.

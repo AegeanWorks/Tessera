@@ -116,3 +116,10 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Context**: The gallery is local-only and capped at 12; clearing site data or moving to another browser loses every saved look, and there was no export/import path.
 - **Decision**: `Backup` downloads a JSON envelope `{ app: "tessera", version: GALLERY_VERSION, exported_at, entries }`. `Restore` accepts only that envelope, normalizes its entries through `normalizeGalleryRecord`, merges them through `addEntry` in reverse to preserve newest-first order, deduplicates by visual signature and respects the 12-look cap. Invalid files are refused with a toast, and Backup is disabled when the gallery is empty. No new storage key or dependency.
 - **Consequences**: Collections are portable between builds with the same gallery version; a future version change needs a migration or refuses older backups. Live state and preferences are not included, and merging can evict the oldest looks at the cap.
+
+### ADR-016: Discrete look changes settle the stage
+- **Date**: 2026-11-08
+- **Status**: Accepted
+- **Context**: Motif, palette, preset, randomize, load, undo and transform changes replaced the stage instantly. The studio already had Glow drift and a reduced-motion rule, so a short settle could make a deliberate change legible without touching state or storage.
+- **Decision**: Add `settleStage()` and a `settle` option to `update`. Discrete look changes add an `is-settling` class for a 320ms opacity/scale animation on the stage SVG. Slider drags, switches, the initial mount and gallery-only updates do not settle. The existing reduced-motion media rule collapses the animation.
+- **Consequences**: Look changes feel deliberate and restart cleanly when changed rapidly. Slider drags stay immediate; reduced-motion users see the final frame with no motion; the effect is CSS-only, adds no dependency and changes no save format.

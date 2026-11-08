@@ -270,6 +270,15 @@ test("the preset rail marks the active preset", () => {
   assert.match(styles, /\.preset-button\.is-active\s*\{/);
 });
 
+test("discrete look changes settle the stage", () => {
+  const app = read("src/ui/app.js");
+  const styles = read("src/styles.css");
+  assert.ok(app.includes("settleStage"));
+  assert.ok(app.includes('classList.add("is-settling")'));
+  assert.match(styles, /@keyframes tessera-settle/);
+  assert.match(styles, /\.stage\.is-settling svg\s*\{[^}]*animation:\s*tessera-settle/);
+});
+
 test("the stage badge shows the active transform", () => {
   const html = read("index.html");
   const app = read("src/ui/app.js");
