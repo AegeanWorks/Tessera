@@ -862,3 +862,26 @@ the committed proof.
   unavailable stores` plus the `a refused settings record is surfaced` guard;
   suite 158/158.
 - **Release**: v0.7.1.
+
+## Cycle 34 — The keyboard reference was an 18px touch target
+
+- **Area**: UI/accessibility, coarse-pointer target on the shortcut summary.
+  Cycle 31 added an interactive `<summary>`; at 320 with `pointer: coarse` it
+  measured 18px tall, below the studio's 44px touch-target rule.
+- **Evidence before**: old-build worktree `fe7285c` served on port 4425,
+  `cycle34-before-coarse-320.png`: touch-emulated 320 viewport, summary height
+  18px, min-height 0.
+- **Fix**: add a `@media (pointer: coarse)` rule for `.shortcuts summary` with
+  `min-height: 44px`, padding, radius and panel background; the fine-pointer
+  layout stays 18px.
+- **Evidence after**: `cycle34-after-coarse-320.png` shows the 44px summary
+  pill; `cycle34-after-fine-320.png` shows the 18px fine-pointer layout
+  unchanged; `cycle34-after-open-320.png` shows the reference open after a real
+  touch tap. All at 320x844 with the same state.
+- **Played run**: `cycle34-play.mjs` enables touch emulation, taps the summary,
+  and toggles it twice. Before: 18px, tap opens/closes. After: 44px, width 139,
+  tap opens/closes with 13 rows and `overflowX: 0`; disabling touch restores
+  18px.
+- **Tests**: failing-first `the keyboard reference meets the coarse pointer
+  target`; suite 159/159.
+- **Release**: v0.7.2.

@@ -1287,6 +1287,13 @@ select:hover {
     min-height: 44px;
   }
 
+  .shortcuts summary {
+    min-height: 44px;
+    padding: 13px 12px;
+    border-radius: var(--radius-sm);
+    background: var(--panel-soft);
+  }
+
   select {
     min-height: 44px;
   }

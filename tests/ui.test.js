@@ -228,6 +228,13 @@ test("coarse pointers get 44px targets", () => {
   assert.match(coarse, /\.gallery-delete\s*\{[^}]*width:\s*44px[^}]*height:\s*44px/);
 });
 
+test("the keyboard reference meets the coarse pointer target", () => {
+  const styles = read("src/styles.css");
+  const coarse = styles.slice(styles.indexOf("@media (pointer: coarse)"));
+  assert.ok(coarse && coarse !== styles, "missing coarse-pointer block");
+  assert.match(coarse, /\.shortcuts summary\s*\{[^}]*min-height:\s*44px/);
+});
+
 test("preset buttons show a visual preview", () => {
   const app = read("src/ui/app.js");
   const styles = read("src/styles.css");
