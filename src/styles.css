@@ -328,6 +328,17 @@ input:focus-visible {
   bottom: 16px;
 }
 
+.stage-badge-metric {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2px;
+}
+
+.stage-badge-prefix {
+  color: var(--muted-dim);
+  font-size: 9px;
+}
+
 .stage-effects {
   position: absolute;
   bottom: 16px;

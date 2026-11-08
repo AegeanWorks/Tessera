@@ -259,6 +259,14 @@ test("the stage badge shows the active transform", () => {
   assert.ok(app.includes("stageTransform"));
 });
 
+test("the stage badge labels repeat and seed", () => {
+  const html = read("index.html");
+  assert.match(html, /class="stage-badge-prefix">r</);
+  assert.match(html, /class="stage-badge-prefix">s</);
+  assert.ok(html.includes('id="stage-repeat"'));
+  assert.ok(html.includes('id="stage-seed"'));
+});
+
 test("the stage surfaces active tile guides and glow drift", () => {
   const html = read("index.html");
   const app = read("src/ui/app.js");

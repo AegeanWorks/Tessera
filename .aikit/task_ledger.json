@@ -5,7 +5,7 @@
     "last_phase": "in_progress",
     "active_phase": 4,
     "status": "in_progress",
-    "updated_at": 1794104852.2285428,
+    "updated_at": 1794105285.255476,
     "owner": "opencode:tessera-cycles",
     "started_by": "opencode:tessera-cycles",
     "continuations": []
@@ -99,17 +99,6 @@
         "mitigation": "Add failing pure/static tests first, keep each diff limited to one area, and verify with the same seeded 1440x900 CDP run before and after; the full npm, static-contract and AIKit gates run before every commit."
       },
       "plan_digest": "b52931f5bf547c94ec3e16856135270a70e51c91ea93d8a89d84384b3c7117fc"
-    },
-    {
-      "task_id": "tessera-quality-cycles-v1",
-      "phase": "implementation",
-      "phase_num": 4,
-      "description": "[23b] Cycle 22 gate follow-up: strict guideline check flagged README tree drift for new navigation.js and navigation.test.js; both entries added, full gate set re-ran (npm test 136/136, verify:static OK, aikit 4/4). checklists: passed",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1794095768.8697965,
-      "timestamp_str": "2026-11-08 02:56:08",
-      "agent": "opencode:tessera-cycles"
     },
     {
       "task_id": "tessera-quality-cycles-v1",
@@ -252,6 +241,17 @@
       "status": "in_progress",
       "timestamp": 1794104852.2285428,
       "timestamp_str": "2026-11-08 05:27:32",
+      "agent": "opencode:tessera-cycles"
+    },
+    {
+      "task_id": "tessera-quality-cycles-v1",
+      "phase": "in_progress",
+      "phase_num": 4,
+      "description": "[37] Cycle 36 (extension) shipped: stage badge readability. Repeat and seed are now wrapped in stage-badge-metric pairs with r and s prefixes and a middle dot, so the badge reads R6 dot S7 and still appends the transform; values keep updating through the existing IDs; README documents it. Failing-first static guard. 161/161 tests, verify:static OK, aikit check 4/4. Played ArrowRight twice and New seed: before 6 x 7 to 8 x 7 to 8 x 4335; after R6 dot S7 to R8 dot S7 to R8 dot S9126; seed matches output; 320 badge right 287, no overflow. checklists: passed",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794105285.255476,
+      "timestamp_str": "2026-11-08 05:34:45",
       "agent": "opencode:tessera-cycles"
     }
   ]

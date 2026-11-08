@@ -912,3 +912,25 @@ the committed proof.
 - **Tests**: failing-first `other tabs update this one through storage events`;
   suite 160/160.
 - **Release**: v0.7.3.
+
+## Cycle 36 — The stage badge read like grid dimensions
+
+- **Area**: UI readability. The stage badge showed `6 × 7` for repeat and seed
+  without labels; the `×` suggested grid dimensions, and the rest of the studio
+  uses r/w/v shorthand in export and gallery names.
+- **Evidence before**: old-build worktree `8b19399` served on port 4427,
+  `cycle36-before-badge-close-1440.png`: the badge reads `6 × 7`.
+- **Fix**: wrap repeat and seed in `.stage-badge-metric` pairs with `r`/`s`
+  prefixes and a `·` divider, so the badge reads `R6 · S7` and still appends the
+  transform; the value IDs keep updating. The README controls row documents it.
+- **Evidence after**: same-build close-ups `cycle36-after-badge-close-1440.png`
+  (`R6 · S7`), `-badge-changed-close-1440.png` (`R8 · S7`) and
+  `-badge-seeded-close-1440.png` (`R8 · S9126`);
+  `cycle36-after-badge-close-320.png` fits. The before/after cross-build pair is
+  `6 × 7` vs `R6 · S7` at the same state and viewport.
+- **Played run**: `cycle36-play.mjs` presses ArrowRight twice on Repeat and
+  clicks New seed. Before: `6 × 7 → 8 × 7 → 8 × 4335`; after:
+  `R6 · S7 → R8 · S7 → R8 · S9126`. The badge seed matches the seed output, and
+  320 fits with badge right 287 and `overflowX: 0`.
+- **Tests**: failing-first `the stage badge labels repeat and seed`; suite 161/161.
+- **Release**: v0.7.4.
