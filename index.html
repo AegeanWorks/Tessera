@@ -193,6 +193,11 @@
         </button>
       </div>
       <div class="gallery-list" id="gallery-list"></div>
+      <div class="gallery-backup">
+        <button class="btn btn-small" id="backup-gallery" type="button" data-ui="backup-gallery" aria-label="Download saved looks" disabled>Backup</button>
+        <button class="btn btn-small" id="restore-gallery" type="button" data-ui="restore-gallery" aria-label="Restore saved looks">Restore</button>
+        <input id="restore-file" type="file" accept="application/json,.json" aria-label="Restore saved looks file" hidden>
+      </div>
       <div class="gallery-foot">
         <p class="control-note">Saved on this device only. Up to 12 looks.</p>
         <button class="gallery-clear" id="clear-gallery" type="button" data-ui="clear-gallery" disabled>
@@ -205,7 +210,7 @@
 
 <footer class="footer">
   <p>Runs entirely on this device. No uploads, no tracking, no network.</p>
-  <p class="footer-meta">Tessera <span id="version">0.7.5</span> · AL-1.1</p>
+  <p class="footer-meta">Tessera <span id="version">0.7.6</span> · AL-1.1</p>
   <details class="shortcuts" id="shortcuts">
     <summary id="shortcuts-summary">Keyboard shortcuts</summary>
     <dl class="shortcut-list">

@@ -960,3 +960,33 @@ the committed proof.
 - **Tests**: failing-first `external gallery sync keeps keyboard focus`;
   suite 162/162.
 - **Release**: v0.7.5.
+
+## Cycle 38 — The gallery had no backup or restore
+
+- **Area**: progression/saves. The gallery is local-only and capped at 12;
+  clearing site data or moving browsers lost every saved look, and there was no
+  export/import path.
+- **Evidence before**: old-build worktree `0564e9e` served on port 4429,
+  `cycle38-before-gallery-1440.png`: two saved looks, no Backup or Restore
+  controls; no test covered a backup.
+- **Fix**: Backup downloads a versioned JSON envelope (`app`, `version`,
+  `exported_at`, `entries`); Restore accepts only that envelope, normalizes
+  entries through `normalizeGalleryRecord`, merges them through `addEntry` in
+  reverse to preserve newest-first order, deduplicates by signature and respects
+  the 12-look cap. Invalid files are refused, and Backup disables when empty.
+  ADR-015 records the format.
+- **Evidence after**: `cycle38-after-gallery-1440.png` (two looks plus
+  Backup/Restore), `-empty-1440.png` (cleared, Backup disabled),
+  `-restored-1440.png` (two looks restored with `Restored 2 saved looks.`), and
+  `-gallery-320.png` (buttons 121px, `overflowX: 0`). The before/after
+  cross-build pair shows the missing vs present controls at the same state.
+- **Played run**: `cycle38-play.mjs` saved Ridge and Bloom/Lagoon, downloaded
+  `tessera-looks.json` (822 bytes; `app: tessera`, `version: 1`, two entries),
+  cleared the gallery to 0, set the file input to the backup and dispatched
+  change, restoring both looks and the toast. The first attempt downloaded to
+  the default Downloads folder; the script now sets `Page.setDownloadBehavior`
+  on the page and falls back to the actual file, and the final run parsed the
+  backup and restored it. Before build: no controls, no backup.
+- **Tests**: failing-first `the gallery can be backed up and restored`;
+  suite 163/163.
+- **Release**: v0.7.6.

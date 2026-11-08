@@ -109,3 +109,10 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Context**: Tabs share `tessera.studio.v1` and `tessera.gallery.v1`, but each tab rendered only at load. Editing or saving in one tab left the others stale, including saved-look rows that could later be overwritten by stale saves.
 - **Decision**: Listen to `storage` events for both keys. Re-read through `readState`/`readGallery`, update the other tab without writing back, clear its undo/redo stacks on an external state change, refresh the gallery without changing the stage, and announce the sync. The writing tab is unaffected because storage events do not fire there.
 - **Consequences**: Open tabs converge on the last write, and stale gallery writes are avoided. Undo history is per-tab and resets on external edits; the URL follows the synchronized state. No save-format, dependency or sync-server change.
+
+### ADR-015: Gallery backups use a versioned file and merge on restore
+- **Date**: 2026-11-08
+- **Status**: Accepted
+- **Context**: The gallery is local-only and capped at 12; clearing site data or moving to another browser loses every saved look, and there was no export/import path.
+- **Decision**: `Backup` downloads a JSON envelope `{ app: "tessera", version: GALLERY_VERSION, exported_at, entries }`. `Restore` accepts only that envelope, normalizes its entries through `normalizeGalleryRecord`, merges them through `addEntry` in reverse to preserve newest-first order, deduplicates by visual signature and respects the 12-look cap. Invalid files are refused with a toast, and Backup is disabled when the gallery is empty. No new storage key or dependency.
+- **Consequences**: Collections are portable between builds with the same gallery version; a future version change needs a migration or refuses older backups. Live state and preferences are not included, and merging can evict the oldest looks at the cap.

@@ -170,6 +170,18 @@ test("deleting a saved look keeps keyboard focus in the gallery", () => {
   assert.match(app, /\(focusTarget \|\| saveLookButton\)\?\.focus\(\)/);
 });
 
+test("the gallery can be backed up and restored", () => {
+  const html = read("index.html");
+  const app = read("src/ui/app.js");
+  assert.ok(html.includes('id="backup-gallery"'));
+  assert.ok(html.includes('id="restore-gallery"'));
+  assert.ok(html.includes('id="restore-file"'));
+  assert.ok(app.includes("backupGallery"));
+  assert.ok(app.includes("restoreGallery"));
+  assert.ok(app.includes("tessera-looks.json"));
+  assert.ok(app.includes("normalizeGalleryRecord"));
+});
+
 test("the gallery offers a confirmed clear-all action", () => {
   const html = read("index.html");
   const app = read("src/ui/app.js");

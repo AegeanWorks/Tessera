@@ -29,12 +29,14 @@ import {
   transformLabel,
 } from "../studio/state.js";
 import {
+  GALLERY_VERSION,
   activeEntryId,
   addEntry,
   emptyGallery,
   evictionCandidate,
   isSaved,
   neighborEntryId,
+  normalizeGalleryRecord,
   removeEntry,
   restoreEntry,
 } from "../studio/gallery.js";
@@ -82,6 +84,9 @@ const galleryList = document.getElementById("gallery-list");
 const saveLookButton = document.getElementById("save-look");
 const copyLinkButton = document.getElementById("copy-link");
 const clearGalleryButton = document.getElementById("clear-gallery");
+const backupGalleryButton = document.getElementById("backup-gallery");
+const restoreGalleryButton = document.getElementById("restore-gallery");
+const restoreFileInput = document.getElementById("restore-file");
 const storageNote = document.getElementById("storage-note");
 const toast = document.getElementById("toast");
 const shortcutPanel = document.getElementById("shortcuts");
@@ -491,6 +496,7 @@ function syncClearButton() {
   if (!clearGalleryButton) return;
   const empty = gallery.entries.length === 0;
   clearGalleryButton.disabled = empty;
+  if (backupGalleryButton) backupGalleryButton.disabled = empty;
   if (empty) disarmClear();
 }
 
@@ -516,6 +522,60 @@ function clearAllLooks() {
   saveLookButton?.focus();
   const looks = count === 1 ? "look" : "looks";
   announce(persistedNotice(`Cleared ${count} saved ${looks}.`, persisted));
+}
+
+function backupGallery() {
+  if (!gallery.entries.length) {
+    announce("There are no saved looks to back up.");
+    return;
+  }
+  const payload = JSON.stringify(
+    {
+      app: "tessera",
+      version: GALLERY_VERSION,
+      exported_at: new Date().toISOString(),
+      entries: gallery.entries,
+    },
+    null,
+    2,
+  );
+  const blob = new Blob([payload], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "tessera-looks.json";
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+  const count = gallery.entries.length;
+  announce(`Downloaded ${count} saved ${count === 1 ? "look" : "looks"}.`);
+}
+
+async function restoreGallery(file) {
+  if (!file) return;
+  try {
+    const data = JSON.parse(await file.text());
+    if (!data || data.app !== "tessera" || data.version !== GALLERY_VERSION || !Array.isArray(data.entries)) {
+      throw new Error("shape");
+    }
+    const record = normalizeGalleryRecord({ entries: data.entries });
+    if (!record.entries.length) throw new Error("empty");
+    let next = gallery;
+    for (const entry of [...record.entries].reverse()) {
+      next = addEntry(next, entry.state, entry.savedAt);
+    }
+    gallery = next;
+    galleryIssue = null;
+    const persisted = saveGallery(storage(), gallery);
+    renderGallery();
+    const count = record.entries.length;
+    announce(persistedNotice(`Restored ${count} saved ${count === 1 ? "look" : "looks"}.`, persisted));
+  } catch {
+    announce("That file is not a Tessera looks backup.");
+  } finally {
+    if (restoreFileInput) restoreFileInput.value = "";
+  }
 }
 
 function saveLook() {
@@ -869,6 +929,9 @@ function bindActions() {
   exportButton?.addEventListener("click", exportSvg);
   exportPngButton?.addEventListener("click", exportPng);
   saveLookButton?.addEventListener("click", saveLook);
+  backupGalleryButton?.addEventListener("click", backupGallery);
+  restoreGalleryButton?.addEventListener("click", () => restoreFileInput?.click());
+  restoreFileInput?.addEventListener("change", () => restoreGallery(restoreFileInput.files?.[0]));
   copyLinkButton?.addEventListener("click", copyLink);
   clearGalleryButton?.addEventListener("click", () => {
     if (clearArmed) clearAllLooks();
