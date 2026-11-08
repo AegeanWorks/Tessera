@@ -1062,6 +1062,14 @@ select:hover {
   font-size: 12px;
 }
 
+.gallery-rename-error {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: var(--pink);
+  font-size: 10px;
+  line-height: 1.4;
+}
+
 .gallery-empty {
   margin: 0;
   color: var(--muted-dim);

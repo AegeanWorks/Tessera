@@ -1221,3 +1221,32 @@ the committed proof.
 - **Tests**: failing-first `deleting a saved look asks for a second press`;
   suite 175/175.
 - **Release**: v0.7.14.
+
+## Cycle 47 — An empty saved-look name was refused silently
+
+- **Area**: UI readability, form feedback in the gallery rename. `startRename`
+  trimmed the name and, when empty, only refocused the input. There was no
+  visible message, no `aria-invalid`, and no announcement, so a sighted or
+  screen-reader user could not tell why Save did nothing.
+- **Evidence before**: old-build worktree `2798a9f` served on port 4434;
+  `cycle47-play.mjs` saved a look, opened rename, typed three spaces and
+  clicked the real Save. Before: the form stays open with the spaces, there is
+  no error node, `aria-invalid` is null, and the toast still says `Saved …`;
+  `cycle47-before-empty-name-1440.png` shows the plain form.
+- **Fix**: create a hidden `.gallery-rename-error` paragraph in the form. On an
+  empty trimmed name, show `Enter a name for this look.`, set `aria-invalid`
+  and `aria-describedby`, refocus the input, and announce the message. The
+  input event clears the error and both attributes; valid renames are
+  unchanged. The error spans the form grid in the warning color.
+- **Evidence after**: `cycle47-after-empty-name-1440.png` shows the red inline
+  message below the input while the form stays open; `-empty-name-320.png`
+  keeps it inside the column; `-renamed-1440.png` shows the valid rename.
+- **Played run**: `cycle47-play.mjs` saves a look, opens rename, types three
+  spaces and clicks Save. Before: form open, no error, no `aria-invalid`,
+  stale toast. After: error visible with the exact text, `aria-invalid` true,
+  `aria-describedby` `gallery-rename-error`, input focused, and the toast
+  repeats the message. Typing `Studio Wave` and saving renames on both builds
+  and returns focus to the rename button; 320 `overflowX: 0`.
+- **Tests**: failing-first `an empty saved-look name is refused with a
+  message`; suite 176/176.
+- **Release**: v0.7.15.

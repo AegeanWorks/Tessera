@@ -205,6 +205,18 @@ test("renaming a saved look returns focus to its row", () => {
   assert.ok(css.includes(".gallery-rename:focus-visible"));
 });
 
+test("an empty saved-look name is refused with a message", () => {
+  const app = read("src/ui/app.js");
+  const styles = read("src/styles.css");
+  const rename = app.slice(app.indexOf("function startRename"), app.indexOf("function focusGalleryRename"));
+  assert.ok(rename.includes("gallery-rename-error"));
+  assert.ok(rename.includes("error.hidden = true"));
+  assert.ok(rename.includes("error.hidden = false"));
+  assert.ok(rename.includes('aria-invalid'));
+  assert.ok(rename.includes("Enter a name for this look."));
+  assert.ok(styles.includes(".gallery-rename-error"));
+});
+
 test("the gallery can be backed up and restored", () => {
   const html = read("index.html");
   const app = read("src/ui/app.js");

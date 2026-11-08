@@ -681,11 +681,20 @@ function startRename(id) {
   cancel.type = "button";
   cancel.className = "btn btn-small";
   cancel.textContent = "Cancel";
+  const error = document.createElement("p");
+  error.className = "gallery-rename-error";
+  error.id = "gallery-rename-error";
+  error.textContent = "Enter a name for this look.";
+  error.hidden = true;
   form.addEventListener("submit", (event) => {
     event.preventDefault();
     const name = input.value.trim();
     if (!name) {
+      error.hidden = false;
+      input.setAttribute("aria-invalid", "true");
+      input.setAttribute("aria-describedby", error.id);
       input.focus();
+      announce("Enter a name for this look.");
       return;
     }
     gallery = renameEntry(gallery, id, name);
@@ -706,7 +715,13 @@ function startRename(id) {
       focusGalleryRename(id);
     }
   });
-  form.append(input, save, cancel);
+  input.addEventListener("input", () => {
+    if (error.hidden) return;
+    error.hidden = true;
+    input.removeAttribute("aria-invalid");
+    input.removeAttribute("aria-describedby");
+  });
+  form.append(input, save, cancel, error);
   row.replaceChildren(form);
   input.focus();
   input.select();
