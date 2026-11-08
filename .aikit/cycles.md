@@ -618,3 +618,29 @@ the committed proof.
 - **Tests**: failing-first static guard `gallery rows support roving arrow navigation`;
   suite 139/139.
 - **Release**: v0.6.14.
+
+## Cycle 25 — The 320px layout clipped preset and gallery names
+
+- **Area**: 320px mobile layout, including the new preset previews, effect
+  chips, export status and gallery footer.
+- **Evidence before**: old-build worktree `bfa0191` served on port 4416,
+  `cycle25-before-default-320-full.png`: `Nocturne pinwheel` and `Ember arcade`
+  preset names overflow their title boxes, the topbar `Export SVG` wraps to two
+  lines, and a saved gallery name truncates (`Aegean Wave · seed 7 · r6…`).
+  No document-level horizontal overflow existed.
+- **Fix**: add a `max-width: 360px` layout block: tighter topbar buttons, 44px
+  preset previews with wrapping names, smaller pairing notes, and 48px gallery
+  thumbnails with wrapping saved-look names.
+- **Evidence after**: `cycle25-after-default-320-full.png` shows all eight preset
+  names and the gallery name in full, and the topbar on one line. Effect chips
+  fit above the badge without overlap, the gallery footer stays side by side,
+  and the PNG status line fits at 320.
+- **Played run**: `cycle25-play.mjs` loads at 1440 and 320, toggles Guides +
+  Glow, saves a look, selects Square and downloads a real 1080×1080 PNG, then
+  measures overflow/truncation/fit. Before: 2 preset overflows, 2 topbar lines,
+  1 gallery overflow. After: all fit, `overflowX: 0`, status and chips fit.
+  The 1440 captures are byte-identical (`40BBFC20…`) because the block only
+  targets narrow screens.
+- **Tests**: failing-first `320px layout keeps preset names and topbar actions readable`;
+  suite 140/140.
+- **Release**: v0.6.15.

@@ -311,6 +311,16 @@ test("gallery rows support roving arrow navigation", () => {
   assert.ok(app.includes(".gallery-delete"));
 });
 
+test("320px layout keeps preset names and topbar actions readable", () => {
+  const styles = read("src/styles.css");
+  const narrow = styles.slice(styles.indexOf("@media (max-width: 360px)"));
+  assert.ok(narrow && narrow !== styles, "missing 360px layout block");
+  assert.match(narrow, /\.topbar-actions \.btn\s*\{[^}]*font-size:\s*12px/);
+  assert.match(narrow, /\.preset-button\s*\{[^}]*grid-template-columns:\s*44px/);
+  assert.match(narrow, /\.preset-name\s*\{[^}]*white-space:\s*normal/);
+  assert.match(narrow, /\.gallery-name\s*\{[^}]*white-space:\s*normal/);
+});
+
 test("theme.css is the only stylesheet with raw color values", () => {
   const styles = read("src/styles.css");
   assert.ok(!/#[0-9a-f]{3,8}\b/i.test(styles), "styles.css should use theme tokens");

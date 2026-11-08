@@ -5,7 +5,7 @@
     "last_phase": "implementation",
     "active_phase": 4,
     "status": "in_progress",
-    "updated_at": 1794097195.1988266,
+    "updated_at": 1794098182.6239374,
     "owner": "opencode:tessera-cycles",
     "started_by": "opencode:tessera-cycles",
     "continuations": []
@@ -99,17 +99,6 @@
         "mitigation": "Add failing pure/static tests first, keep each diff limited to one area, and verify with the same seeded 1440x900 CDP run before and after; the full npm, static-contract and AIKit gates run before every commit."
       },
       "plan_digest": "b52931f5bf547c94ec3e16856135270a70e51c91ea93d8a89d84384b3c7117fc"
-    },
-    {
-      "task_id": "tessera-quality-cycles-v1",
-      "phase": "implementation",
-      "phase_num": 4,
-      "description": "[13] Cycle 12 (extension) shipped: stage badge now names the active transform via transformLabel, hidden for 0/none; failing-first state test and markup guard; 121/121 tests, verify:static OK, aikit check 4/4. Keyboard run changed Rotate 0->90 and Flip none->x: old build badge stayed '6 x 7'; new build shows '6 x 7 - 90deg - Flip X' at 1440 and 390, clears on return to 0/none, no overflow. checklists: passed",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1794085856.5654066,
-      "timestamp_str": "2026-11-08 00:10:56",
-      "agent": "opencode:tessera-cycles"
     },
     {
       "task_id": "tessera-quality-cycles-v1",
@@ -252,6 +241,17 @@
       "status": "in_progress",
       "timestamp": 1794097195.1988266,
       "timestamp_str": "2026-11-08 03:19:55",
+      "agent": "opencode:tessera-cycles"
+    },
+    {
+      "task_id": "tessera-quality-cycles-v1",
+      "phase": "implementation",
+      "phase_num": 4,
+      "description": "[26] Cycle 25 (extension) shipped: max-width 360 layout tightens topbar buttons, preset previews/name wrapping and gallery thumb/name wrapping; failing-first CSS guard; 140/140 tests, verify:static OK, aikit check 4/4. 320 audit: preset overflow 2->0, topbar Export lines 2->1, gallery name overflow 1->0; effect chips/footer/export status fit, overflowX 0; 1440 captures byte-identical. checklists: passed",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794098182.6239374,
+      "timestamp_str": "2026-11-08 03:36:22",
       "agent": "opencode:tessera-cycles"
     }
   ]
