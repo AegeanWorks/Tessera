@@ -130,3 +130,10 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Context**: Gallery entries are auto-named from the palette, motif, seed and geometry. The stored entry already includes a `name` and backups include it, but there was no rename path and the restore recomputed the auto name through `addEntry`.
 - **Decision**: Add `renameEntry` (rename by signature, trim and limit to 80, ignore empty names) and `mergeEntry` (normalize and place an imported entry first, preserving its name). The gallery row gets a ✎ button that swaps the row for an inline input with Save/Cancel; Enter submits, Escape cancels. New saves keep auto names; the visual signature stays the identity. Backups restore through `mergeEntry` so custom names survive.
 - **Consequences**: Names are display metadata; the saved look's visual identity and dedupe are unchanged. Custom names persist locally and travel in backups; an empty name is refused; the 12-look cap still applies.
+
+### ADR-018: Sound cues are optional and synthesized locally
+- **Date**: 2026-11-08
+- **Status**: Accepted
+- **Context**: The studio is silent; feedback is visual and toast-only. Any sound must not add assets, network requests or autoplay.
+- **Decision**: Add a `sound` preference (off by default) to the studio state and URL, a “Sound cues” switch, and a lazy WebAudio context with a short sine/gain envelope on motif, palette, preset or gallery-load selection, save and export. The gallery signature ignores sound; presets and restores preserve the preference. Audio is best-effort and silent when WebAudio is unavailable or blocked.
+- **Consequences**: Cues are opt-in, local and file-free; the preference persists and travels in share links; the silent default preserves the current experience; no dependency or save-version change.

@@ -180,6 +180,13 @@ test("neighborEntryId keeps keyboard focus near the deleted row", () => {
   assert.equal(neighborEntryId(one, one.entries[0].id), null);
 });
 
+test("restoreEntry keeps the current sound preference", () => {
+  const entry = addEntry(emptyGallery(), LOOK).entries[0];
+  const restored = restoreEntry(entry, normalizeState({ ...LOOK, sound: true }));
+  assert.equal(restored.sound, true);
+  assert.equal(restored.seed, LOOK.seed);
+});
+
 test("restoreEntry brings back the look and keeps the current toggles", () => {
   const current = normalizeState({ ...LOOK, motif: "comb", guides: true, motion: true });
   const restored = restoreEntry(

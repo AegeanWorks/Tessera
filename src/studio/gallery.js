@@ -144,5 +144,6 @@ export function restoreEntry(entry, current = DEFAULTS) {
     ...normalized.state,
     guides: base.guides,
     motion: base.motion,
+    sound: base.sound,
   });
 }

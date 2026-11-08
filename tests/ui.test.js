@@ -318,6 +318,17 @@ test("the stage surfaces active tile guides and glow drift", () => {
   assert.ok(app.includes('stage.dataset.guides'));
 });
 
+test("sound cues are optional and synthesized", () => {
+  const html = read("index.html");
+  const app = read("src/ui/app.js");
+  assert.ok(html.includes('id="sound"'));
+  assert.ok(html.includes("Sound cues"));
+  assert.ok(app.includes("function cue("));
+  assert.ok(app.includes("AudioContext"));
+  assert.ok(app.includes('cue("select")'));
+  assert.ok(app.includes('cue("save")'));
+});
+
 test("reset names the pattern and reports storage failures", () => {
   const html = read("index.html");
   const app = read("src/ui/app.js");

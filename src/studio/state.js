@@ -23,6 +23,7 @@ export const DEFAULTS = Object.freeze({
   flip: "none",
   guides: false,
   motion: false,
+  sound: false,
 });
 
 export const PRESETS = Object.freeze([
@@ -93,6 +94,7 @@ const STATE_KEYS = Object.freeze([
   "flip",
   "guides",
   "motion",
+  "sound",
 ]);
 
 function clampInteger(value, min, max, fallback) {
@@ -125,6 +127,7 @@ export function normalizeState(raw = {}) {
     flip,
     guides: toBoolean(source.guides, DEFAULTS.guides),
     motion: toBoolean(source.motion, DEFAULTS.motion),
+    sound: toBoolean(source.sound, DEFAULTS.sound),
   });
 }
 
@@ -170,6 +173,7 @@ export function applyPreset(id, current = DEFAULTS) {
     ...preset,
     guides: base.guides,
     motion: base.motion,
+    sound: base.sound,
     rotate: base.rotate,
     flip: base.flip,
   });

@@ -72,6 +72,7 @@ const seedValue = document.getElementById("seed-value");
 const motionInput = document.getElementById("motion");
 const motionNote = document.getElementById("motion-note");
 const guidesInput = document.getElementById("guides");
+const soundInput = document.getElementById("sound");
 const stageMotif = document.getElementById("stage-motif");
 const stagePalette = document.getElementById("stage-palette");
 const stageRepeat = document.getElementById("stage-repeat");
@@ -124,6 +125,30 @@ function storage() {
   } catch {
     return null;
   }
+}
+
+let audioContext = null;
+
+function cue(kind) {
+  if (!state.sound) return;
+  try {
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContextClass) return;
+    if (!audioContext) audioContext = new AudioContextClass();
+    if (audioContext.state === "suspended") audioContext.resume();
+    const now = audioContext.currentTime;
+    const oscillator = audioContext.createOscillator();
+    const gain = audioContext.createGain();
+    oscillator.type = "sine";
+    oscillator.frequency.setValueAtTime(kind === "save" ? 660 : kind === "export" ? 880 : 520, now);
+    gain.gain.setValueAtTime(0.0001, now);
+    gain.gain.exponentialRampToValueAtTime(0.035, now + 0.01);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.09);
+    oscillator.connect(gain);
+    gain.connect(audioContext.destination);
+    oscillator.start(now);
+    oscillator.stop(now + 0.1);
+  } catch {}
 }
 
 function announce(message) {
@@ -216,6 +241,7 @@ function randomizeLook() {
   commitHistory();
   update({ settle: true });
   announce("A new pattern, picked at random.");
+  cue("select");
 }
 
 function reseedLook() {
@@ -223,6 +249,7 @@ function reseedLook() {
   commitHistory();
   update({ settle: true });
   announce(`Seed ${state.seed}.`);
+  cue("select");
 }
 
 function motifOptions() {
@@ -262,6 +289,7 @@ function buildMotifButtons() {
       state = normalizeState({ ...state, motif: motif.id });
       commitHistory();
       update({ settle: true });
+      cue("select");
     });
     motifGrid.appendChild(button);
   }
@@ -319,6 +347,7 @@ function buildPaletteButtons() {
       state = normalizeState({ ...state, palette: palette.id });
       commitHistory();
       update({ settle: true });
+      cue("select");
     });
     paletteGrid.appendChild(button);
   }
@@ -359,6 +388,7 @@ function buildPresetButtons() {
       commitHistory();
       update({ settle: true });
       announce(`Loaded the ${preset.name} preset.`);
+      cue("select");
     });
     presetList.appendChild(button);
   }
@@ -610,6 +640,7 @@ function saveLook() {
       ? `Saved ${entry.name}. Removed the oldest look, ${evicted.name}.`
       : `Saved ${entry.name}.`;
   announce(persistedNotice(message, persisted));
+  cue("save");
 }
 
 function loadLook(id) {
@@ -619,6 +650,7 @@ function loadLook(id) {
   commitHistory();
   update({ settle: true });
   announce(`Loaded ${entry.name}.`);
+  cue("select");
 }
 
 function startRename(id) {
@@ -701,6 +733,7 @@ function syncInputs() {
   if (seedValue) seedValue.textContent = String(state.seed);
   if (motionInput) motionInput.checked = state.motion;
   if (guidesInput) guidesInput.checked = state.guides;
+  if (soundInput) soundInput.checked = state.sound;
   if (stageMotif) stageMotif.textContent = getMotif(state.motif).name;
   if (stagePalette) stagePalette.textContent = getPalette(state.palette).name;
   if (stageRepeat) stageRepeat.textContent = String(state.repeat);
@@ -879,6 +912,7 @@ function exportSvg() {
   link.remove();
   window.setTimeout(() => URL.revokeObjectURL(url), 1000);
   announce(`Exported ${link.download}.`);
+  cue("export");
 }
 
 function createCanvas(width, height) {
@@ -934,6 +968,7 @@ async function exportPng() {
     window.setTimeout(() => URL.revokeObjectURL(url), 1000);
     if (exportStatus) exportStatus.textContent = `Last export: ${formatExportResult(size, png.size)} · ${link.download}`;
     announce(`Exported ${link.download}.`);
+    cue("export");
   } catch (error) {
     if (exportStatus) exportStatus.textContent = "Last export failed. PNG export is unavailable in this browser.";
     announce("PNG export is unavailable in this browser.");
@@ -1025,6 +1060,10 @@ function bindActions() {
   bindSelect(flipInput, "flip");
   bindSwitch(motionInput, "motion");
   bindSwitch(guidesInput, "guides");
+  bindSwitch(soundInput, "sound");
+  soundInput?.addEventListener("change", () => {
+    if (soundInput.checked) cue("select");
+  });
   bindGridNavigation(motifGrid);
   bindGridNavigation(paletteGrid);
   bindGridNavigation(presetList);

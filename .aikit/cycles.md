@@ -1099,3 +1099,32 @@ the committed proof.
   empty name`, `mergeEntry keeps a custom name through a backup restore`, and
   the `saved looks can be renamed` guard; suite 169/169.
 - **Release**: v0.7.10.
+
+## Cycle 43 — The studio gave no audible feedback
+
+- **Area**: audio cues. The studio was silent; feedback was visual and
+  toast-only. There was no sound preference, URL key or shared state.
+- **Evidence before**: old-build worktree `5aa3854` served on port 4434,
+  `cycle43-before-sound-off-1440.png`: the Seed block has only Glow drift and
+  Tile guides, no Sound cues switch; the URL has no `sound`; a counting
+  `AudioContext` stays at 0 cues for every interaction.
+- **Fix**: add `sound` (off by default) to `DEFAULTS`/`STATE_KEYS` and
+  `normalizeState`, preserve it through `applyPreset` and `restoreEntry`, and
+  add a Sound cues switch. A lazy WebAudio `cue()` plays a short sine envelope
+  on motif, palette, preset, randomize, reseed, load, save and export; the
+  switch confirms once when turned on. Audio is best-effort and silent when
+  WebAudio is unavailable. The gallery signature ignores sound. ADR-018
+  records the contract.
+- **Evidence after**: `cycle43-after-sound-off-1440.png` (switch row,
+  unchecked) vs `-sound-on-1440.png` (checked, Ridge selected, cue counted) at
+  the same state/viewport; `-sound-off-again-1440.png` shows the switch off
+  and no cue on Wave; `-sound-reloaded-1440.png` keeps `sound=1` and the
+  checked switch; `-sound-320.png` fits.
+- **Played run**: `cycle43-play.mjs` injects a counting fake `AudioContext`,
+  clicks the real switch, clicks Ridge (1 cue), turns sound off and clicks
+  Wave (0 cues), turns it on, reloads, and reads the persisted preference;
+  320 `overflowX: 0`. The before build has no control and 0 cues throughout.
+- **Tests**: failing-first `sound is a normalized, shared preference`,
+  `restoreEntry keeps the current sound preference`, and the `sound cues are
+  optional and synthesized` guard; suite 172/172.
+- **Release**: v0.7.11.

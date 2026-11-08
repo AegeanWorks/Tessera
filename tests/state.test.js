@@ -79,6 +79,14 @@ test("normalizeState accepts only known rotations and flips", () => {
   assert.deepEqual(FLIPS, ["none", "x", "y"]);
 });
 
+test("sound is a normalized, shared preference", () => {
+  assert.equal(normalizeState({}).sound, false);
+  assert.equal(normalizeState({ sound: "1" }).sound, true);
+  const preset = applyPreset("iris-drift", normalizeState({ sound: true }));
+  assert.equal(preset.sound, true);
+  assert.equal(decodeSearch(encodeState({ ...DEFAULTS, sound: true })).state.sound, true);
+});
+
 test("thumbKey changes with every field a motif picker previews", () => {
   const base = normalizeState(DEFAULTS);
   const key = thumbKey(base);

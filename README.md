@@ -43,6 +43,7 @@ Tessera is a zero-dependency static studio. Nine motifs and nine palettes genera
 | Rotate / Flip | Turn the tile by 90° steps or mirror it horizontally or vertically; the stage badge names the active transform |
 | New seed | Reroll the generated variation without changing the motif |
 | Glow drift / Tile guides | Animate hue subtly, or overlay the repeating tile grid; active effects are named on the stage. When the system prefers reduced motion, Glow is marked paused and a note explains why |
+| Sound cues | Off by default; a quiet synthesized tone confirms look selection, save and export. No audio files or network. |
 | Presets | Load a curated look; the matching preset is outlined until you edit it |
 | Reset pattern | Return the live pattern to the studio defaults; saved looks stay in the gallery |
 | Randomize `R` | Jump to a new motif, palette and seed |
